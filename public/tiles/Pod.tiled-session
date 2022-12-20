@@ -1,0 +1,77 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "BlackTile.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "FenceCyber.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Outdoor.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map.json": {
+            "scale": 2.983,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 208.17968488099228,
+                "y": 200.13409319477037
+            }
+        },
+        "map.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 224.5,
+                "y": 164.5
+            }
+        },
+        "map.tmx#BlackTile": {
+            "scaleInDock": 1
+        },
+        "map.tmx#FenceCyber": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "//wsl.localhost/Ubuntu-20.04/home/kodk2807/Work/Dwarves/pod-verse/public/tiles",
+    "last.imagePath": "C:/Users/Mashiro/Downloads/tiled-pod",
+    "map.height": 100,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 100,
+    "openFiles": [
+        "FenceCyber.tsx",
+        "BlackTile.tsx",
+        "map.tmx"
+    ],
+    "project": "Pod.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "FenceCyber.tsx",
+        "BlackTile.tsx",
+        "map.tmx",
+        "map.json",
+        "Outdoor.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
