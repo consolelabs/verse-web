@@ -2,7 +2,8 @@ import Phaser from "phaser";
 
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private player!: Phaser.Physics.Arcade.Sprite;
+  private player!: any;
+  private keys!: any;
 
   constructor() {
     super("game");
@@ -10,6 +11,10 @@ export default class Game extends Phaser.Scene {
 
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.keys = this.input.keyboard.addKeys("W,A,S,D");
+
+    // @ts-ignore
+    this.load.spine("ghost", "assets/skeleton.json", "assets/skeleton.atlas");
   }
 
   create() {
@@ -27,52 +32,17 @@ export default class Game extends Phaser.Scene {
     const wallsLayer = map.createLayer("Tile Layer 2", fenceTileset, 0, 0);
     wallsLayer.setCollisionByProperty({ collides: true });
 
-    const debugGraphics = this.add.graphics().setAlpha(0.7);
-    wallsLayer.renderDebug(debugGraphics, {
-      tileColor: null,
-      collidingTileColor: new Phaser.Display.Color(243, 234, 48, 100),
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255),
-    });
-
-    this.player = this.physics.add.sprite(200, 200, "player", "frames/00.png");
-    this.player.scale = 3;
-    this.player.body.setSize(
-      this.player.width * 0.67,
-      this.player.height * 0.67
-    );
-
-    this.anims.create({
-      key: "player-idle",
-      frames: this.anims.generateFrameNames("player", {
-        prefix: "frames/0",
-        start: 0,
-        end: 3,
-        suffix: ".png",
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
-    this.anims.create({
-      key: "player-move",
-      frames: this.anims.generateFrameNames("player", {
-        prefix: "frames/0",
-        start: 4,
-        end: 9,
-        suffix: ".png",
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
-    this.player.anims.play("player-idle");
+    // @ts-ignore
+    this.player = this.add.spine(200, 200, "ghost", "idle", true);
+    this.player.scale = 0.3;
+    this.physics.add.existing(this.player);
 
     this.physics.add.collider(this.player, wallsLayer);
 
     this.cameras.main.startFollow(this.player, true);
   }
 
-  update(t: number, dt: number) {
+  update() {
     if (!this.cursors || !this.player) {
       return;
     }
@@ -82,29 +52,30 @@ export default class Game extends Phaser.Scene {
       this.cursors.up?.isDown ||
       this.cursors.down?.isDown ||
       this.cursors.left?.isDown ||
-      this.cursors.right?.isDown
+      this.cursors.right?.isDown ||
+      this.keys.W.isDown ||
+      this.keys.A.isDown ||
+      this.keys.S.isDown ||
+      this.keys.D.isDown
     ) {
-      this.player.anims.play("player-move", true);
-
       let horizontalVelocity = 0;
       let verticalVelocity = 0;
 
-      if (this.cursors.left?.isDown) {
+      if (this.cursors.left?.isDown || this.keys.A.isDown) {
         horizontalVelocity = -speed;
-      } else if (this.cursors.right?.isDown) {
+      } else if (this.cursors.right?.isDown || this.keys.D.isDown) {
         horizontalVelocity = speed;
       }
 
-      if (this.cursors.up?.isDown) {
+      if (this.cursors.up?.isDown || this.keys.W.isDown) {
         verticalVelocity = -speed;
-      } else if (this.cursors.down?.isDown) {
+      } else if (this.cursors.down?.isDown || this.keys.S.isDown) {
         verticalVelocity = speed;
       }
 
-      this.player.setVelocity(horizontalVelocity, verticalVelocity);
+      this.player.body.setVelocity(horizontalVelocity, verticalVelocity);
     } else {
-      this.player.anims.play("player-idle", true);
-      this.player.setVelocity(0, 0);
+      this.player.body.setVelocity(0, 0);
     }
   }
 }
