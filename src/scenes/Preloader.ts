@@ -15,6 +15,11 @@ export default class Preloader extends Phaser.Scene {
       "characters/player.png",
       "characters/player.json"
     );
+    this.load.atlas(
+      "erc",
+      "tiles/buildings/erc/atlas/erc.png",
+      "tiles/buildings/erc/atlas/erc.json"
+    );
   }
 
   create() {

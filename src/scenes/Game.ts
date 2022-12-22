@@ -27,9 +27,9 @@ export default class Game extends Phaser.Scene {
     const blackTileset = map.addTilesetImage("BlackTile", "BlackTile");
     const fenceTileset = map.addTilesetImage("FenceCyber", "FenceCyber");
 
-    map.createLayer("Tile Layer 1", blackTileset, 0, 0);
+    map.createLayer("Ground", blackTileset, 0, 0);
 
-    const wallsLayer = map.createLayer("Tile Layer 2", fenceTileset, 0, 0);
+    const wallsLayer = map.createLayer("Walls", fenceTileset, 0, 0);
     wallsLayer.setCollisionByProperty({ collides: true });
 
     // @ts-ignore
@@ -40,6 +40,24 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(this.player, wallsLayer);
 
     this.cameras.main.startFollow(this.player, true);
+
+    // Test Building
+    const building = this.add.sprite(600, 600, "erc", "frames/00.png");
+    this.anims.create({
+      key: "building-idle",
+      frames: this.anims.generateFrameNames("erc", {
+        prefix: "frames/",
+        start: 0,
+        end: 19,
+        suffix: ".png",
+        zeroPad: 2,
+      }),
+      repeat: -1,
+      duration: 3000,
+    });
+    building.anims.play("building-idle");
+    this.physics.add.existing(building, true);
+    this.physics.add.collider(building, this.player);
   }
 
   update() {
@@ -47,7 +65,7 @@ export default class Game extends Phaser.Scene {
       return;
     }
 
-    const speed = 100;
+    const speed = 200;
     if (
       this.cursors.up?.isDown ||
       this.cursors.down?.isDown ||
