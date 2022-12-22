@@ -11,8 +11,8 @@ function getBasicAnimation(state: AnimationState, dir: AnimationDirection) {
 export class Player extends Phaser.GameObjects.GameObject {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: any;
-  private instance: any;
   private dir: AnimationDirection = "front";
+  public instance: any;
 
   constructor(public characterType: CharacterType, public scene: Phaser.Scene) {
     super(scene, "player");
@@ -110,6 +110,11 @@ export class Player extends Phaser.GameObjects.GameObject {
       }
 
       this.instance.body.setVelocity(horizontalVelocity, verticalVelocity);
+
+      // FIXME: Player depth == y
+      // @ts-ignore
+      const baseTileSize = 16;
+      this.instance.setDepth(this.instance.y / baseTileSize);
     } else {
       this.instance.body.setVelocity(0, 0);
       this.instance.play(getBasicAnimation("idle", this.dir), true, true);
