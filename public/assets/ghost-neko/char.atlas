@@ -1,74 +1,74 @@
 
-skeleton.png
-size: 755,300
+ghostneko_spine.png
+size: 516, 516
 format: RGBA8888
-filter: Linear,Linear
+filter: Linear, Linear
 repeat: none
 back_body
   rotate: false
-  xy: 490, 3
+  xy: 281, 218
   size: 205, 295
   orig: 360, 360
   offset: 78, 25
   index: -1
 front_body
-  rotate: false
-  xy: 281, 2
-  size: 207, 296
+  rotate: true
+  xy: 2, 2
+  size: 205, 295
   orig: 360, 360
-  offset: 77, 25
+  offset: 78, 25
   index: -1
 front_larm
   rotate: false
-  xy: 697, 43
-  size: 42, 63
+  xy: 367, 154
+  size: 42, 62
   orig: 360, 360
-  offset: 162, 147
+  offset: 162, 148
   index: -1
 front_rarm
   rotate: false
-  xy: 697, 108
-  size: 43, 63
+  xy: 299, 27
+  size: 42, 62
   orig: 360, 360
-  offset: 164, 147
+  offset: 164, 148
   index: -1
 side_body
   rotate: false
-  xy: 2, 2
-  size: 277, 296
+  xy: 2, 209
+  size: 277, 304
   orig: 360, 360
   offset: 38, 24
   index: -1
 side_larm
   rotate: false
-  xy: 697, 173
+  xy: 299, 91
   size: 56, 59
   orig: 360, 360
   offset: 154, 141
   index: -1
 side_rarm
   rotate: false
-  xy: 697, 234
-  size: 56, 64
+  xy: 299, 152
+  size: 66, 64
   orig: 360, 360
-  offset: 152, 140
+  offset: 142, 140
   index: -1
 
-skeleton2.png
-size: 233,96
+ghostneko_spine_2.png
+size: 188, 188
 format: RGBA8888
-filter: Linear,Linear
+filter: Linear, Linear
 repeat: none
 skin/front_face
-  rotate: true
-  xy: 116, 2
-  size: 92, 115
+  rotate: false
+  xy: 2, 70
+  size: 89, 113
   orig: 360, 360
-  offset: 134, 122
+  offset: 136, 123
   index: -1
 skin/side_face
-  rotate: true
-  xy: 2, 4
+  rotate: false
+  xy: 93, 71
   size: 90, 112
   orig: 360, 360
   offset: 136, 124

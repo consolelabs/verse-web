@@ -1,0 +1,468 @@
+
+fukuro_spine.png
+size: 1088, 1088
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Barn_back_body
+  rotate: true
+  xy: 110, 6
+  size: 197, 137
+  orig: 380, 380
+  offset: 89, 60
+  index: -1
+Barn_back_head
+  rotate: true
+  xy: 459, 20
+  size: 193, 190
+  orig: 297, 297
+  offset: 51, 58
+  index: -1
+Barn_back_legup
+  rotate: true
+  xy: 748, 429
+  size: 49, 45
+  orig: 157, 157
+  offset: 52, 63
+  index: -1
+Barn_front_legup
+  rotate: true
+  xy: 748, 429
+  size: 49, 45
+  orig: 157, 157
+  offset: 52, 63
+  index: -1
+Barn_back_spread
+  rotate: true
+  xy: 504, 216
+  size: 92, 84
+  orig: 157, 157
+  offset: 32, 33
+  index: -1
+Barn_back_tail
+  rotate: true
+  xy: 54, 222
+  size: 106, 37
+  orig: 206, 206
+  offset: 48, 38
+  index: -1
+Barn_front_body
+  rotate: true
+  xy: 232, 205
+  size: 195, 139
+  orig: 380, 380
+  offset: 93, 58
+  index: -1
+Barn_front_chest
+  rotate: true
+  xy: 837, 15
+  size: 79, 42
+  orig: 380, 380
+  offset: 150, 93
+  index: -1
+Barn_front_eye
+  rotate: false
+  xy: 259, 602
+  size: 114, 47
+  orig: 297, 297
+  offset: 92, 106
+  index: -1
+Barn_front_face
+  rotate: true
+  xy: 940, 268
+  size: 158, 142
+  orig: 297, 297
+  offset: 70, 49
+  index: -1
+Barn_front_handdown
+  rotate: true
+  xy: 1014, 780
+  size: 40, 70
+  orig: 157, 157
+  offset: 58, 23
+  index: -1
+Barn_front_handmid
+  rotate: false
+  xy: 926, 21
+  size: 28, 28
+  orig: 157, 157
+  offset: 61, 72
+  index: -1
+Barn_front_handup
+  rotate: true
+  xy: 169, 211
+  size: 28, 52
+  orig: 157, 157
+  offset: 62, 78
+  index: -1
+Barn_front_head
+  rotate: true
+  xy: 651, 29
+  size: 193, 184
+  orig: 297, 297
+  offset: 52, 64
+  index: -1
+Barn_front_legdown
+  rotate: true
+  xy: 837, 190
+  size: 43, 42
+  orig: 157, 157
+  offset: 59, 32
+  index: -1
+Barn_front_legmid
+  rotate: false
+  xy: 881, 6
+  size: 43, 43
+  orig: 157, 157
+  offset: 58, 47
+  index: -1
+Barn_front_nose
+  rotate: true
+  xy: 1022, 1020
+  size: 66, 63
+  orig: 297, 297
+  offset: 116, 74
+  index: -1
+Barn_front_spread
+  rotate: false
+  xy: 995, 503
+  size: 88, 84
+  orig: 157, 157
+  offset: 32, 34
+  index: -1
+Barn_side_body
+  rotate: true
+  xy: 249, 7
+  size: 196, 153
+  orig: 380, 380
+  offset: 95, 52
+  index: -1
+Barn_side_chest
+  rotate: false
+  xy: 837, 97
+  size: 73, 45
+  orig: 380, 380
+  offset: 185, 119
+  index: -1
+Barn_side_eye
+  rotate: true
+  xy: 2, 221
+  size: 107, 50
+  orig: 297, 297
+  offset: 128, 97
+  index: -1
+Barn_side_face
+  rotate: true
+  xy: 606, 318
+  size: 148, 140
+  orig: 297, 297
+  offset: 99, 42
+  index: -1
+Barn_side_handdown
+  rotate: false
+  xy: 1014, 636
+  size: 69, 67
+  orig: 157, 157
+  offset: 40, 13
+  index: -1
+Barn_side_handmid
+  rotate: false
+  xy: 956, 27
+  size: 67, 67
+  orig: 157, 157
+  offset: 41, 38
+  index: -1
+Barn_side_handup
+  rotate: false
+  xy: 1014, 705
+  size: 69, 73
+  orig: 157, 157
+  offset: 40, 58
+  index: -1
+Barn_side_head
+  rotate: true
+  xy: 748, 235
+  size: 191, 190
+  orig: 297, 297
+  offset: 56, 58
+  index: -1
+Barn_side_legdown
+  rotate: true
+  xy: 866, 431
+  size: 47, 43
+  orig: 157, 157
+  offset: 57, 21
+  index: -1
+Barn_side_legmid
+  rotate: false
+  xy: 881, 51
+  size: 44, 44
+  orig: 157, 157
+  offset: 58, 36
+  index: -1
+Barn_side_legup
+  rotate: false
+  xy: 940, 441
+  size: 51, 37
+  orig: 157, 157
+  offset: 57, 52
+  index: -1
+Barn_side_nose
+  rotate: true
+  xy: 449, 215
+  size: 93, 53
+  orig: 297, 297
+  offset: 160, 71
+  index: -1
+Barn_side_spreadL
+  rotate: false
+  xy: 259, 402
+  size: 110, 92
+  orig: 157, 157
+  offset: 16, 31
+  index: -1
+Barn_side_spreadR
+  rotate: true
+  xy: 590, 224
+  size: 84, 74
+  orig: 157, 157
+  offset: 52, 17
+  index: -1
+Barn_side_tail
+  rotate: true
+  xy: 837, 152
+  size: 36, 37
+  orig: 206, 206
+  offset: 89, 53
+  index: -1
+skin/back/TwinKatanaBlue
+  rotate: false
+  xy: 734, 691
+  size: 278, 185
+  orig: 300, 250
+  offset: 13, 27
+  index: -1
+skin/back/TwinKatanaBlue_B
+  rotate: false
+  xy: 734, 691
+  size: 278, 185
+  orig: 300, 250
+  offset: 13, 27
+  index: -1
+skin/back/TwinKatanaBlue_S
+  rotate: false
+  xy: 2, 682
+  size: 256, 195
+  orig: 300, 250
+  offset: 26, 26
+  index: -1
+skin/cloth/0_cape
+  rotate: false
+  xy: 2, 479
+  size: 255, 201
+  orig: 300, 250
+  offset: 22, 6
+  index: -1
+skin/cloth/0_cape_2
+  rotate: false
+  xy: 379, 881
+  size: 355, 205
+  orig: 355, 273
+  offset: 0, 27
+  index: -1
+skin/cloth/0_cape_B
+  rotate: false
+  xy: 734, 480
+  size: 259, 209
+  orig: 300, 250
+  offset: 20, 16
+  index: -1
+skin/cloth/0_cape_B2
+  rotate: false
+  xy: 379, 666
+  size: 353, 213
+  orig: 353, 250
+  offset: 0, 13
+  index: -1
+skin/cloth/0_cape_S
+  rotate: false
+  xy: 736, 878
+  size: 284, 208
+  orig: 300, 250
+  offset: 10, 12
+  index: -1
+skin/cloth/0_cape_S2
+  rotate: false
+  xy: 2, 879
+  size: 375, 207
+  orig: 375, 250
+  offset: 0, 11
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt
+  rotate: true
+  xy: 623, 468
+  size: 196, 107
+  orig: 300, 246
+  offset: 52, 37
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_B
+  rotate: true
+  xy: 2, 2
+  size: 201, 106
+  orig: 300, 246
+  offset: 53, 34
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_S
+  rotate: false
+  xy: 373, 310
+  size: 231, 199
+  orig: 300, 246
+  offset: 25, 37
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_spread
+  rotate: true
+  xy: 995, 428
+  size: 73, 88
+  orig: 300, 246
+  offset: 2, 79
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_spread_B
+  rotate: true
+  xy: 995, 428
+  size: 73, 88
+  orig: 300, 246
+  offset: 2, 79
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_spread_S2
+  rotate: true
+  xy: 995, 428
+  size: 73, 88
+  orig: 300, 246
+  offset: 2, 79
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_spread_S
+  rotate: false
+  xy: 373, 212
+  size: 74, 96
+  orig: 300, 246
+  offset: 0, 68
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_up
+  rotate: true
+  xy: 995, 589
+  size: 45, 89
+  orig: 300, 246
+  offset: 33, 74
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_up_B
+  rotate: true
+  xy: 995, 589
+  size: 45, 89
+  orig: 300, 246
+  offset: 33, 74
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_up_S
+  rotate: false
+  xy: 666, 238
+  size: 79, 78
+  orig: 300, 250
+  offset: 187, 76
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shirt_up_S2
+  rotate: true
+  xy: 795, 430
+  size: 48, 69
+  orig: 300, 250
+  offset: 33, 74
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shoulder
+  rotate: true
+  xy: 260, 651
+  size: 226, 116
+  orig: 300, 246
+  offset: 37, 84
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shoulder_B
+  rotate: false
+  xy: 2, 330
+  size: 228, 147
+  orig: 300, 246
+  offset: 36, 50
+  index: -1
+skin/cloth/CyanPinkPuffJacket_shoulder_S
+  rotate: false
+  xy: 378, 511
+  size: 243, 153
+  orig: 300, 246
+  offset: 25, 83
+  index: -1
+skin/eyes/CyanPinkBarnEyes
+  rotate: false
+  xy: 259, 551
+  size: 113, 49
+  orig: 297, 297
+  offset: 92, 104
+  index: -1
+skin/eyes/CyanPinkBarnEyes_S
+  rotate: false
+  xy: 259, 496
+  size: 112, 53
+  orig: 297, 297
+  offset: 129, 96
+  index: -1
+skin/eyeswear/LibraryGlass
+  rotate: true
+  xy: 1022, 822
+  size: 196, 54
+  orig: 250, 150
+  offset: 27, 40
+  index: -1
+skin/eyeswear/LibraryGlass_S
+  rotate: true
+  xy: 404, 5
+  size: 205, 53
+  orig: 250, 150
+  offset: 29, 48
+  index: -1
+skin/hat/AxeinHead
+  rotate: true
+  xy: 93, 285
+  size: 43, 137
+  orig: 300, 250
+  offset: 129, 59
+  index: -1
+skin/hat/AxeinHead_B
+  rotate: true
+  xy: 93, 241
+  size: 42, 137
+  orig: 300, 250
+  offset: 128, 41
+  index: -1
+skin/hat/AxeinHead_S
+  rotate: true
+  xy: 940, 96
+  size: 170, 133
+  orig: 300, 250
+  offset: 16, 83
+  index: -1
+skin/inmouth/TootsiePop
+  rotate: true
+  xy: 881, 190
+  size: 43, 47
+  orig: 297, 297
+  offset: 106, 53
+  index: -1
+skin/inmouth/TootsiePop_S
+  rotate: true
+  xy: 881, 144
+  size: 44, 46
+  orig: 297, 297
+  offset: 112, 71
+  index: -1
+skin/mouth/Mustache
+  rotate: false
+  xy: 93, 208
+  size: 74, 31
+  orig: 250, 150
+  offset: 87, 15
+  index: -1
