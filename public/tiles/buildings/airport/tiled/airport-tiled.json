@@ -1,0 +1,87 @@
+{
+  "frames": {
+    "Airport Ground_Full with aircraft_32.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 1792,
+        "h": 960
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1792,
+        "h": 960
+      },
+      "sourceSize": {
+        "w": 1792,
+        "h": 960
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Airport Flight board_3.png": {
+      "frame": {
+        "x": 0,
+        "y": 960,
+        "w": 176,
+        "h": 192
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 176,
+        "h": 192
+      },
+      "sourceSize": {
+        "w": 176,
+        "h": 192
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Airport-sign-animation_0000_AS-8.png": {
+      "frame": {
+        "x": 1792,
+        "y": 0,
+        "w": 176,
+        "h": 70
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 10,
+        "w": 176,
+        "h": 70
+      },
+      "sourceSize": {
+        "w": 176,
+        "h": 80
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "airport-tiled.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1968,
+      "h": 1152
+    },
+    "scale": 1
+  }
+}

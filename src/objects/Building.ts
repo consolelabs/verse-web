@@ -1,86 +1,147 @@
 import Game from "../scenes/Game";
 
+export const buildings = [
+  {
+    key: "airport",
+    sprites: [
+      {
+        key: "building",
+        frameCount: 1,
+      },
+      {
+        key: "plane",
+        frameCount: 1,
+      },
+      {
+        key: "sign",
+        frameCount: 8,
+        duration: 1000,
+        depthOffset: 2,
+      },
+      {
+        key: "board",
+        frameCount: 1,
+      },
+    ],
+  },
+  // {
+  //   key: "bg",
+  // },
+  // {
+  //   key: "brc",
+  // },
+  // {
+  //   key: "ch",
+  // },
+  // {
+  //   key: "drc",
+  // },
+  // {
+  //   key: "erc",
+  // },
+  // {
+  //   key: "src",
+  // },
+];
+
 export class Building {
-  public staticTilesets: Phaser.Tilemaps.Tileset[] = [];
+  public tilesets: Phaser.Tilemaps.Tileset[] = [];
   public sprites: Phaser.GameObjects.Sprite[] = [];
 
   constructor({
     game,
     map,
     key,
+    sprites,
   }: {
     game: Game;
     map: Phaser.Tilemaps.Tilemap;
-    key: string;
-  }) {
-    // FIXME: We are assuming that Buildings - 0 is the floor of the building,
-    // which contains the sprite key that points to the animated part of the building
-    // We'll have to detect those tiles & work out the correct coord & size of the sprite
-    // that we want to generate
+  } & typeof buildings[0]) {
+    const spriteDict: Record<
+      string,
+      {
+        anchor: {
+          bottom: number;
+          left: number;
+        };
+      }
+    > = {};
+
+    sprites.forEach((sprite) => {
+      spriteDict[sprite.key] = {
+        anchor: {
+          bottom: 0,
+          left: 0,
+        },
+      };
+    });
+
+    // FIXME: We are assuming that Buildings - Floor is the floor of the building,
+    // which contains the sprite key that points to the part of the building
+    // that should be rendered as sprite objects. We'll have to detect those tiles
+    // & work out the correct coord & size of the sprite that we want to generate.
     //
     // We'll probably also want to move this loop & detect logic up elsewhere, because running it for multiple buildings
-    // is not performant
-    const bounding = { top: 999, left: 999, bottom: 0, right: 0 };
-    const buildingsLayer01 = map.getLayer("Buildings - 0");
-    buildingsLayer01.data.forEach((row, y) => {
+    // is not performant.
+    const buildingsLayerFloor = map.getLayer("Buildings - Floor");
+    buildingsLayerFloor.data.forEach((row, y) => {
       row.forEach((tile, x) => {
-        if (tile.properties.sprite === key) {
-          bounding.top = Math.min(bounding.top, y);
-          bounding.bottom = Math.max(bounding.bottom, y);
-          bounding.left = Math.min(bounding.left, x);
-          bounding.right = Math.max(bounding.left, x);
+        const spriteKey = tile.properties.sprite;
+
+        if (spriteKey && spriteDict[spriteKey]) {
+          spriteDict[spriteKey].anchor = {
+            bottom: y,
+            left: x,
+          };
         }
       });
     });
 
-    // FIXME: Get this from constant somewhere else
-    const baseTileSize = 16;
+    console.log(spriteDict);
 
-    // In Phaser 3 when we add a sprite, the coord will correspond to the center
-    // of the sprite, so as for where we should put the sprite, it'll be the
-    // middle point of the bottom edge
-    const building = game.add.sprite(
-      (baseTileSize * (bounding.left + bounding.right)) / 2,
-      baseTileSize * bounding.bottom,
-      key,
-      "frames/00.png"
-    );
+    sprites.forEach((sprite) => {
+      // FIXME: Get this from constant somewhere else
+      const baseTileSize = 16;
+      const anchor = spriteDict[sprite.key].anchor;
+      const combinedKey = `${key}-${sprite.key}`;
 
-    // However, we cannot just add the sprite there.
-    // 1. We should not use the default sprite size, but have to re-calculate it based on the bounding instead
-    // 2. We have to calculate for the vertical offset because the marking in the tilemap
-    //    is only for the SUPPOSED FLOOR part of the animated component
-    const trueWidth = baseTileSize * (bounding.right - bounding.left);
-    const trueHeight = (building.height * trueWidth) / building.width;
-    building.setScale(trueWidth / building.width, trueHeight / building.height);
-    building.width = trueWidth;
-    building.height = trueHeight;
+      // In Phaser 3 when we add a sprite, the coord will correspond to the center
+      // of the sprite, so as for where we should put the sprite,
+      // we should calculate it against the anchor (bottom left)
+      const spriteObject = game.matter.add.sprite(
+        (anchor.left + 1) * baseTileSize,
+        (anchor.bottom + 1) * baseTileSize,
+        `${combinedKey}-sprite`,
+        "frames (1).png",
+        { isStatic: true, isSensor: true }
+      );
 
-    const verticalOffset = building.height / 2;
-    building.y = building.y - verticalOffset;
+      const offset = {
+        width: spriteObject.width / 2,
+        height: spriteObject.height / 2,
+      };
+      spriteObject.x = spriteObject.x + offset.width;
+      spriteObject.y = spriteObject.y - offset.height;
 
-    game.anims.create({
-      key: `building-${key}-idle`,
-      frames: game.anims.generateFrameNames(key, {
-        prefix: "frames/",
-        start: 0,
-        end: 19,
-        suffix: ".png",
-        zeroPad: 2,
-      }),
-      repeat: -1,
-      duration: 3000,
+      if (sprite.frameCount > 1) {
+        game.anims.create({
+          key: `${combinedKey}-anims`,
+          frames: game.anims.generateFrameNames(`${combinedKey}-sprite`, {
+            prefix: "frame (",
+            start: 1,
+            end: sprite.frameCount,
+            suffix: ").png",
+          }),
+          repeat: -1,
+          duration: sprite.duration || 3000,
+        });
+        spriteObject.anims.play(`${combinedKey}-anims`);
+      }
+
+      spriteObject.setDepth(anchor.bottom + (sprite.depthOffset || 0));
+      this.sprites.push(spriteObject);
     });
-    building.anims.play(`building-${key}-idle`);
-    building.setDepth(bounding.bottom);
 
-    this.staticTilesets.push(
-      map.addTilesetImage(`${key}-static`, `${key}-static`)
-    );
-    this.sprites.push(building);
-
-    const render = game.add.graphics();
-    render.lineStyle(3, 0xffff37);
-    render.strokeRectShape(building.getBounds());
+    this.tilesets.push(map.addTilesetImage(`${key}-tiled`, `${key}-tiled`));
   }
 }

@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-
-export const buildings = ["erc"];
+import { buildings } from "../objects/Building";
 
 export default class Preloader extends Phaser.Scene {
   constructor() {
@@ -8,20 +7,33 @@ export default class Preloader extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("BlackTile", "tiles/BlackTile.png");
-    this.load.image("FenceCyber", "tiles/FenceCyber.png");
     this.load.tilemapTiledJSON("map", "tiles/map.json");
+    this.load.image("floor", "tiles/floor.png");
+
+    // this.load.image("airport", "tiles/buildings/airport/airport.png");
+    // this.load.json(
+    //   "airport-shapes",
+    //   "tiles/buildings/airport/airport-shapes.json"
+    // );
 
     buildings.forEach((building) => {
-      this.load.atlas(
-        building,
-        `tiles/buildings/${building}/${building}.png`,
-        `tiles/buildings/${building}/${building}.json`
-      );
+      // Load the part that are defined in Tiled
       this.load.image(
-        `${building}-static`,
-        `tiles/buildings/${building}/${building}-static.png`
+        `${building.key}-tiled`,
+        `tiles/buildings/${building.key}/tiled/${building.key}-tiled.png`
       );
+
+      // Load the part that should be rendered as (animated) sprites
+      building.sprites.forEach((sprite) => {
+        const combinedKey = `${building.key}-${sprite.key}`;
+        const path = `tiles/buildings/${building.key}/sprites/${combinedKey}`;
+
+        this.load.atlas(
+          `${combinedKey}-sprite`,
+          `${path}/${combinedKey}-sprite.png`,
+          `${path}/${combinedKey}-sprite.json`
+        );
+      });
     });
   }
 

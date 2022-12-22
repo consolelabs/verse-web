@@ -10,12 +10,6 @@ const config: Phaser.Types.Core.GameConfig = {
   width: window.innerWidth,
   height: window.innerHeight,
   backgroundColor: "black",
-  physics: {
-    default: "arcade",
-    arcade: {
-      debug: true,
-    },
-  },
   scale: {
     mode: Phaser.Scale.ENVELOP,
   },

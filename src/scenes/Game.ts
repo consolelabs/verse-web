@@ -1,14 +1,25 @@
 import Phaser from "phaser";
 import { Player } from "../characters/player";
-import { Building } from "../objects/Building";
-import { buildings } from "./Preloader";
+import { Building, buildings } from "../objects/Building";
+// import { Building } from "../objects/Building";
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
-  private buildings: Building[] = [];
+  private sprites: any[] = [];
 
   constructor() {
-    super("game");
+    super({
+      key: "game",
+      physics: {
+        matter: {
+          debug: true,
+          gravity: { y: 0 },
+          // @ts-ignore
+          debugShowBody: true,
+          debugBodyColor: 0x0000ff,
+        },
+      },
+    });
   }
 
   preload() {
@@ -22,50 +33,42 @@ export default class Game extends Phaser.Scene {
       tileHeight: 16,
     });
 
-    const blackTileset = map.addTilesetImage("BlackTile", "BlackTile");
-    const fenceTileset = map.addTilesetImage("FenceCyber", "FenceCyber");
-
-    map.createLayer("Ground", blackTileset, 0, 0);
-
-    const wallsLayer = map.createLayer("Walls", fenceTileset, 0, 0);
-    wallsLayer.setCollisionByProperty({ collides: true });
+    const floorTileset = map.addTilesetImage("floor", "floor");
+    map.createLayer("Ground", floorTileset, 0, 0);
 
     const player = this.player.spawn({
       x: 200,
       y: 200,
       scale: 0.3,
     });
-    this.physics.add.existing(player);
-    this.physics.add.collider(player, wallsLayer);
+    this.matter.add.gameObject(player);
+    player.setFixedRotation(0);
     this.cameras.main.startFollow(player, true);
 
-    // Test Building
+    // const airportTileset = map.addTilesetImage("airport", "airport");
+    // const buildingsLayer = map.createLayer("Buildings", airportTileset, 0, 0);
+    // this.matter.world.convertTilemapLayer(map.objects);
+
+    // const shapes = this.cache.json.get("airport-shapes");
+    // const object = this.matter.add.sprite(500, 500, "airport", "airport", {
+    //   // @ts-ignore
+    //   shape: shapes.airport,
+    //   isStatic: true,
+    // });
+    // object.setDepth(object.y);
+    // this.buildings.push(object);
+
+    player.body.position.y = player.body.position.y * 1.15;
+
+    // Test Buildings
     const buildingTilesets: Phaser.Tilemaps.Tileset[] = [];
-    buildings.forEach((key) => {
-      const building = new Building({ game: this, map, key });
-      buildingTilesets.push(...building.staticTilesets);
-      this.buildings.push(building);
+    buildings.forEach((building) => {
+      const object = new Building({ game: this, map, ...building });
+      buildingTilesets.push(...object.tilesets);
+      this.sprites.push(...object.sprites);
     });
-    // FIXME: 2 layer of buildings layer for now, 1 for the ground, 1 for stuff above the ground
-    // (not including the animated building sprite)
-    const buildingsLayer01 = map.createLayer(
-      "Buildings - 0",
-      buildingTilesets,
-      0,
-      0
-    );
-    const buildingsLayer02 = map.createLayer(
-      "Buildings - 1",
-      buildingTilesets,
-      0,
-      0
-    );
-    buildingsLayer01.setCollisionByProperty({ collides: true });
-    buildingsLayer02.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player.instance, [
-      buildingsLayer01,
-      buildingsLayer02,
-    ]);
+
+    map.createLayer(`Buildings - Floor`, buildingTilesets, 0, 0);
   }
 
   update() {
@@ -76,28 +79,30 @@ export default class Game extends Phaser.Scene {
     // Check player vs buildings overlap
     // FIXME: Should have some preliminary check to avoid performance struggle. We don't want
     // to check for overlap every round of render, on every building
-    this.buildings.forEach((building) => {
+    this.sprites.forEach((sprite) => {
       // https://phaser.discourse.group/t/check-collision-overlap-between-sprites-without-physics/6696/4
       const playerBounds = new Phaser.Geom.Rectangle(
-        this.player.instance.body.x,
-        this.player.instance.body.y,
-        this.player.instance.body.width,
-        this.player.instance.body.height
+        this.player.instance.x,
+        this.player.instance.y,
+        this.player.instance.width,
+        this.player.instance.height
       );
-      building.sprites.forEach((sprite) => {
-        const spriteBounds = sprite.getBounds();
 
+      try {
+        const spriteBounds = sprite.getBounds();
         if (
           Phaser.Geom.Intersects.RectangleToRectangle(
             playerBounds,
             spriteBounds
           )
         ) {
-          sprite.alpha = 0.5;
+          sprite.setAlpha(0.5);
         } else {
-          sprite.alpha = 1;
+          sprite.setAlpha(1);
         }
-      });
+      } catch {
+        // Do nothing
+      }
     });
 
     this.player.update();

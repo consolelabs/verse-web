@@ -37,11 +37,17 @@ export class Player extends Phaser.GameObjects.GameObject {
       animationName: getBasicAnimation("idle", "front"),
       loop: true,
     });
+
+    const trueWidth = this.instance.width * config.scale;
+    const trueHeight = this.instance.height * config.scale;
+    this.instance.width = trueWidth;
+    this.instance.height = trueHeight;
+
     return this.instance;
   }
 
   update() {
-    let speed = 100;
+    let speed = 1.33;
     if (
       this.cursors.up.isDown ||
       this.cursors.down.isDown ||
@@ -56,7 +62,7 @@ export class Player extends Phaser.GameObjects.GameObject {
       let verticalVelocity = 0;
 
       if (this.keys.Shift.isDown) {
-        speed = 180;
+        speed = 2;
       }
 
       if (this.cursors.left?.isDown || this.keys.A.isDown) {
@@ -109,14 +115,14 @@ export class Player extends Phaser.GameObjects.GameObject {
         );
       }
 
-      this.instance.body.setVelocity(horizontalVelocity, verticalVelocity);
+      this.instance.setVelocity(horizontalVelocity, verticalVelocity);
 
       // FIXME: Player depth == y
       // @ts-ignore
       const baseTileSize = 16;
       this.instance.setDepth(this.instance.y / baseTileSize);
     } else {
-      this.instance.body.setVelocity(0, 0);
+      this.instance.setVelocity(0, 0);
       this.instance.play(getBasicAnimation("idle", this.dir), true, true);
     }
   }
