@@ -62,8 +62,16 @@ export default class Game extends Phaser.Scene {
       this.sprites.push(...object.sprites);
     });
 
-    map.createLayer(`Buildings - Floor`, buildingTilesets, 0, 0);
+    const floorLayer = map.createLayer(
+      `Buildings - Floor`,
+      buildingTilesets,
+      0,
+      0
+    );
     map.createLayer(`Buildings - Ground`, buildingTilesets, 0, 0);
+
+    floorLayer.setCollisionByProperty({ collides: true });
+    this.matter.world.convertTilemapLayer(floorLayer);
   }
 
   update() {
