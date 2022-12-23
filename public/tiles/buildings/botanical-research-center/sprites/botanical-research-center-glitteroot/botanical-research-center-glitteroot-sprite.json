@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "botanical-research-center-glitteroot-sprite.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 130,
+				"h": 194
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "frame (1).png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 192
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 128,
+						"h": 192
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:37a31b3657c1f759a39db92291e8b910:d38ceeeb44b2a766bbc09916b70e3ca5:77a5c72502d5c31c555bdb481bb09c66$"
+	}
+}
