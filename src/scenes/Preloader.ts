@@ -28,11 +28,19 @@ export default class Preloader extends Phaser.Scene {
         const combinedKey = `${building.key}-${sprite.key}`;
         const path = `tiles/buildings/${building.key}/sprites/${combinedKey}`;
 
-        this.load.atlas(
-          `${combinedKey}-sprite`,
-          `${path}/${combinedKey}-sprite.png`,
-          `${path}/${combinedKey}-sprite.json`
-        );
+        if (sprite.count) {
+          this.load.multiatlas(
+            `${combinedKey}-sprite`,
+            `${path}/${combinedKey}-sprite.json`,
+            path
+          );
+        } else {
+          this.load.atlas(
+            `${combinedKey}-sprite`,
+            `${path}/${combinedKey}-sprite.png`,
+            `${path}/${combinedKey}-sprite.json`
+          );
+        }
       });
     });
   }

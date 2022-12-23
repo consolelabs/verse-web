@@ -1,0 +1,41 @@
+{
+  "textures": [
+    {
+      "image": "strategy-research-center-panel-sprite.png",
+      "format": "RGBA8888",
+      "size": {
+        "w": 354,
+        "h": 290
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "frame (1).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 352,
+            "h": 288
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 352,
+            "h": 288
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 352,
+            "h": 288
+          }
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "version": "3.0",
+    "smartupdate": "$TexturePacker:SmartUpdate:44bd45943907237af4d7adbe75a5dd76:8d7c7a84d86b7f5e26f3bd3f24a37a35:69df427f24646dfa9f6236f17647fa0e$"
+  }
+}
