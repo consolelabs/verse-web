@@ -69,6 +69,7 @@ export default class Game extends Phaser.Scene {
     });
 
     map.createLayer(`Buildings - Floor`, buildingTilesets, 0, 0);
+    map.createLayer(`Buildings - Ground`, buildingTilesets, 0, 0);
   }
 
   update() {

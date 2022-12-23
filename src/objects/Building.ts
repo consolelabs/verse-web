@@ -48,11 +48,25 @@ export const buildings: Array<{
       },
     ],
   },
+  {
+    key: "botanical-research-center",
+    sprites: [
+      {
+        key: "building",
+        frameCount: 1,
+      },
+      {
+        key: "tree",
+        frameCount: 1,
+      },
+      {
+        key: "glitteroot",
+        frameCount: 1,
+      },
+    ],
+  },
   // {
   //   key: "bg",
-  // },
-  // {
-  //   key: "brc",
   // },
   // {
   //   key: "ch",

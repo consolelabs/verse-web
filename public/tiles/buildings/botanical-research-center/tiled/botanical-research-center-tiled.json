@@ -1,0 +1,146 @@
+{
+	"textures": [
+		{
+			"image": "botanical-research-center-tiled.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1376,
+				"h": 1776
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Botanical Research Center Main Building_21.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1184,
+						"h": 928
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1184,
+						"h": 928
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 1184,
+						"h": 928
+					}
+				},
+				{
+					"filename": "Botanical Research Center Ground_Full_23.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1296,
+						"h": 848
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1296,
+						"h": 848
+					},
+					"frame": {
+						"x": 0,
+						"y": 928,
+						"w": 1296,
+						"h": 848
+					}
+				},
+				{
+					"filename": "Experimental tree_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 192,
+						"h": 320
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 192,
+						"h": 320
+					},
+					"frame": {
+						"x": 1184,
+						"y": 0,
+						"w": 192,
+						"h": 320
+					}
+				},
+				{
+					"filename": "Crystal Enhanced Growing Plots_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 160,
+						"h": 160
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 160,
+						"h": 160
+					},
+					"frame": {
+						"x": 1184,
+						"y": 320,
+						"w": 160,
+						"h": 160
+					}
+				},
+				{
+					"filename": "Experimental Glitteroot_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 192
+					},
+					"frame": {
+						"x": 1184,
+						"y": 480,
+						"w": 128,
+						"h": 192
+					}
+				},
+				{
+					"filename": "Water Filtering Machine.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 96,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 96,
+						"h": 80
+					},
+					"frame": {
+						"x": 1184,
+						"y": 672,
+						"w": 96,
+						"h": 80
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:9c0fce29b7824f64a3a2df8f2bec91fc:08e4dc776e58e8144d4320ec48d5e2cc:b2caf9ba7421b5595b8319adf15670be$"
+	}
+}
