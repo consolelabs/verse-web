@@ -13,26 +13,34 @@ export class Player extends Phaser.GameObjects.GameObject {
   private keys!: any;
   private dir: AnimationDirection = "front";
   public instance: any;
+  public characterType: CharacterType = "neko";
 
-  constructor(public characterType: CharacterType, public scene: Phaser.Scene) {
+  constructor(public scene: Phaser.Scene, characterType?: CharacterType) {
     super(scene, "player");
+    if (characterType) {
+      this.characterType = characterType;
+    }
+    this.load();
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys("W,A,S,D,Shift");
-
-    // @ts-ignore
-    scene.load.spine(
-      "player",
-      `assets/${characterType}/char.json`,
-      `assets/${characterType}/char.atlas`
-    );
   }
 
-  spawn(config: any) {
-    if (this.instance) return this.instance;
-    // @ts-ignore
+  load() {
+    ["fukuro", "ghost-neko", "neko", "tv-head"].forEach((char) => {
+      this.scene.load.spine(
+        `${char}-character`,
+        `assets/${char}/char.json`,
+        `assets/${char}/char.atlas`
+      );
+    });
+  }
+
+  spawn(config: any = {}) {
+    this.characterType = config.character ?? this.characterType;
+    this.instance?.destroy();
     this.instance = this.scene.make.spine({
       ...config,
-      key: "player",
+      key: `${this.characterType}-character`,
       skinName: "char_default",
       animationName: getBasicAnimation("idle", "front"),
       loop: true,

@@ -18,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
       {
         key: "SpinePlugin",
-        plugin: (window as any).SpinePlugin,
+        plugin: window.SpinePlugin,
         mapping: "spine",
       },
     ],

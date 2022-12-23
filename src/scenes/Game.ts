@@ -6,6 +6,7 @@ import { Building, buildings } from "../objects/Building";
 export default class Game extends Phaser.Scene {
   private player!: Player;
   private sprites: any[] = [];
+  private keys!: any;
 
   constructor() {
     super({
@@ -22,8 +23,23 @@ export default class Game extends Phaser.Scene {
     });
   }
 
+  spawnPlayer(character?: string) {
+    const player = this.player.spawn({
+      x: 200,
+      y: 200,
+      scale: 0.3,
+      character,
+    });
+    this.matter.add.gameObject(player);
+    player.setFixedRotation(0);
+    this.cameras.main.startFollow(player, true);
+
+    player.body.position.y = player.body.position.y * 1.15;
+  }
+
   preload() {
-    this.player = new Player("neko", this);
+    this.player = new Player(this);
+    this.keys = this.input.keyboard.addKeys("H,J,K,L");
   }
 
   create() {
@@ -36,31 +52,9 @@ export default class Game extends Phaser.Scene {
     const floorTileset = map.addTilesetImage("floor", "floor");
     map.createLayer("Ground", floorTileset, 0, 0);
 
-    const player = this.player.spawn({
-      x: 200,
-      y: 200,
-      scale: 0.3,
-    });
-    this.matter.add.gameObject(player);
-    player.setFixedRotation(0);
-    this.cameras.main.startFollow(player, true);
+    this.spawnPlayer();
 
-    // const airportTileset = map.addTilesetImage("airport", "airport");
-    // const buildingsLayer = map.createLayer("Buildings", airportTileset, 0, 0);
-    // this.matter.world.convertTilemapLayer(map.objects);
-
-    // const shapes = this.cache.json.get("airport-shapes");
-    // const object = this.matter.add.sprite(500, 500, "airport", "airport", {
-    //   // @ts-ignore
-    //   shape: shapes.airport,
-    //   isStatic: true,
-    // });
-    // object.setDepth(object.y);
-    // this.buildings.push(object);
-
-    player.body.position.y = player.body.position.y * 1.15;
-
-    // Test Buildings
+    // Buildings
     const buildingTilesets: Phaser.Tilemaps.Tileset[] = [];
     buildings.forEach((building) => {
       const object = new Building({ game: this, map, ...building });
@@ -75,6 +69,16 @@ export default class Game extends Phaser.Scene {
   update() {
     if (!this.player) {
       return;
+    }
+
+    if (this.keys.H.isDown) {
+      this.spawnPlayer("neko");
+    } else if (this.keys.J.isDown) {
+      this.spawnPlayer("fukuro");
+    } else if (this.keys.K.isDown) {
+      this.spawnPlayer("ghost-neko");
+    } else if (this.keys.L.isDown) {
+      this.spawnPlayer("tv-head");
     }
 
     // Check player vs buildings overlap
