@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "energy-research-center-tiled.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1300,
+				"h": 1796
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "ERC-Frames_0000_ERC-20.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1008,
+						"h": 944
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1008,
+						"h": 944
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1008,
+						"h": 944
+					}
+				},
+				{
+					"filename": "Energy Research Center Ground_Full_22.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1232,
+						"h": 848
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1232,
+						"h": 848
+					},
+					"frame": {
+						"x": 1,
+						"y": 947,
+						"w": 1232,
+						"h": 848
+					}
+				},
+				{
+					"filename": "Red Crystal Reactor Device_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 288,
+						"h": 304
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 288,
+						"h": 304
+					},
+					"frame": {
+						"x": 1011,
+						"y": 1,
+						"w": 288,
+						"h": 304
+					}
+				},
+				{
+					"filename": "ERC Namesign_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 288,
+						"h": 176
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 288,
+						"h": 176
+					},
+					"frame": {
+						"x": 1011,
+						"y": 307,
+						"w": 288,
+						"h": 176
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:2077b50fb0265878193a987dfa160d33:f5871e3572d6dae579b6a3ab5bdb2f20:6c06ed739eb03cb1b2c6cd42ea28d4a7$"
+	}
+}
