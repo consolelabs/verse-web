@@ -4,8 +4,8 @@
 			"image": "strategy-research-center-tiled.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 1540,
-				"h": 802
+				"w": 1428,
+				"h": 1412
 			},
 			"scale": 1,
 			"frames": [
@@ -31,6 +31,27 @@
 					}
 				},
 				{
+					"filename": "SRC-Animation_0000_SRC-5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1072,
+						"h": 608
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1072,
+						"h": 608
+					},
+					"frame": {
+						"x": 1,
+						"y": 803,
+						"w": 1072,
+						"h": 608
+					}
+				},
+				{
 					"filename": "Duel Device_6.png",
 					"rotated": false,
 					"trimmed": false,
@@ -45,8 +66,8 @@
 						"h": 288
 					},
 					"frame": {
-						"x": 1187,
-						"y": 1,
+						"x": 1075,
+						"y": 803,
 						"w": 352,
 						"h": 288
 					}
@@ -57,6 +78,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:7076f1ff41b1a2d9a258a753212d8b8e:c5c0e474a950656389333a3049059581:db2b1d2708ec7f7e624c340fb867bfca$"
+		"smartupdate": "$TexturePacker:SmartUpdate:11c93c0ab8df870e91cfcccba1e48abe:a8775480cb6be5321c0c6c4fa242f742:db2b1d2708ec7f7e624c340fb867bfca$"
 	}
 }

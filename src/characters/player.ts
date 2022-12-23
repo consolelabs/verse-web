@@ -55,7 +55,7 @@ export class Player extends Phaser.GameObjects.GameObject {
   }
 
   update() {
-    let speed = 1.33;
+    let speed = 50;
     if (
       this.cursors.up.isDown ||
       this.cursors.down.isDown ||

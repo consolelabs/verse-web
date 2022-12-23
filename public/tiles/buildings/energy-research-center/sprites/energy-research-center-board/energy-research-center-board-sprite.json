@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "energy-research-center-board-sprite.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 290,
+				"h": 178
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "ERC Namesign_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 288,
+						"h": 176
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 288,
+						"h": 176
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 288,
+						"h": 176
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:ab19e0c6bb1aa5bef00d7e2bfec25761:74659e45a27212e1c2aad7a517923a88:d038414b23607f6f79cd33c279c2c59a$"
+	}
+}
