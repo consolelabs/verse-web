@@ -1,0 +1,136 @@
+{
+  "textures": [
+    {
+      "image": "strategy-research-center-building-sprite-0.png",
+      "format": "RGBA8888",
+      "size": {
+        "w": 1074,
+        "h": 1830
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "frame (1).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1072,
+            "h": 608
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1072,
+            "h": 608
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 1072,
+            "h": 608
+          }
+        },
+        {
+          "filename": "frame (3).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1072,
+            "h": 608
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1072,
+            "h": 608
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 1072,
+            "h": 608
+          }
+        },
+        {
+          "filename": "frame (2).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1072,
+            "h": 608
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1072,
+            "h": 608
+          },
+          "frame": {
+            "x": 1,
+            "y": 611,
+            "w": 1072,
+            "h": 608
+          }
+        },
+        {
+          "filename": "frame (4).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1072,
+            "h": 608
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1072,
+            "h": 608
+          },
+          "frame": {
+            "x": 1,
+            "y": 1221,
+            "w": 1072,
+            "h": 608
+          }
+        }
+      ]
+    },
+    {
+      "image": "strategy-research-center-building-sprite-1.png",
+      "format": "RGBA8888",
+      "size": {
+        "w": 1074,
+        "h": 610
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "frame (5).png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1072,
+            "h": 608
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1072,
+            "h": 608
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 1072,
+            "h": 608
+          }
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "version": "3.0",
+    "smartupdate": "$TexturePacker:SmartUpdate:fd1bcaeab78fbc16bcee730c146f7bf5:7692ab62a0556c878421b186b7fe6cda:575c6e362b2d59eebf9943eb115584ec$"
+  }
+}

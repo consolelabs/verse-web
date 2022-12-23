@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "strategy-research-center-tiled.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1540,
+				"h": 802
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Strategy Research Center Ground_Full_21.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1184,
+						"h": 800
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1184,
+						"h": 800
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1184,
+						"h": 800
+					}
+				},
+				{
+					"filename": "Duel Device_6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 352,
+						"h": 288
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 352,
+						"h": 288
+					},
+					"frame": {
+						"x": 1187,
+						"y": 1,
+						"w": 352,
+						"h": 288
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7076f1ff41b1a2d9a258a753212d8b8e:c5c0e474a950656389333a3049059581:db2b1d2708ec7f7e624c340fb867bfca$"
+	}
+}

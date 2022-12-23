@@ -1,6 +1,15 @@
 import Game from "../scenes/Game";
 
-export const buildings = [
+export const buildings: Array<{
+  key: string;
+  sprites: Array<{
+    key: string;
+    count?: number;
+    frameCount: number;
+    duration?: number;
+    depthOffset?: number;
+  }>;
+}> = [
   {
     key: "airport",
     sprites: [
@@ -24,6 +33,21 @@ export const buildings = [
       },
     ],
   },
+  {
+    key: "strategy-research-center",
+    sprites: [
+      {
+        key: "building",
+        count: 2,
+        frameCount: 5,
+        duration: 1000,
+      },
+      {
+        key: "panel",
+        frameCount: 1,
+      },
+    ],
+  },
   // {
   //   key: "bg",
   // },
@@ -38,9 +62,6 @@ export const buildings = [
   // },
   // {
   //   key: "erc",
-  // },
-  // {
-  //   key: "src",
   // },
 ];
 
@@ -68,7 +89,7 @@ export class Building {
     > = {};
 
     sprites.forEach((sprite) => {
-      spriteDict[sprite.key] = {
+      spriteDict[`${key}-${sprite.key}`] = {
         anchor: {
           bottom: 0,
           left: 0,
@@ -102,7 +123,7 @@ export class Building {
     sprites.forEach((sprite) => {
       // FIXME: Get this from constant somewhere else
       const baseTileSize = 16;
-      const anchor = spriteDict[sprite.key].anchor;
+      const anchor = spriteDict[`${key}-${sprite.key}`].anchor;
       const combinedKey = `${key}-${sprite.key}`;
 
       // In Phaser 3 when we add a sprite, the coord will correspond to the center
