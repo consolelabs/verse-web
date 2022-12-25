@@ -221,7 +221,11 @@ export class Building {
           spriteObject.anims.play(`${combinedKey}-anims`);
         }
 
-        spriteObject.setDepth(anchor.bottom + (sprite.depthOffset || 0));
+        spriteObject.setDepth(
+          anchor.bottom -
+            (spriteObject.height - spriteObject.displayOriginY) / baseTileSize +
+            (sprite.depthOffset || 0)
+        );
         this.sprites.push(spriteObject);
       });
     });
