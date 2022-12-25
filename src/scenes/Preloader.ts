@@ -10,12 +10,6 @@ export default class Preloader extends Phaser.Scene {
     this.load.tilemapTiledJSON("map", "tiles/map.json");
     this.load.image("floor", "tiles/floor.png");
 
-    // this.load.image("airport", "tiles/buildings/airport/airport.png");
-    // this.load.json(
-    //   "airport-shapes",
-    //   "tiles/buildings/airport/airport-shapes.json"
-    // );
-
     buildings.forEach((building) => {
       // Load the part that are defined in Tiled
       this.load.image(
@@ -43,6 +37,7 @@ export default class Preloader extends Phaser.Scene {
         }
       });
     });
+    this.load.json("building-shapes", "tiles/buildings/building-shapes.json");
   }
 
   create() {
