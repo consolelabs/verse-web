@@ -49,7 +49,7 @@ export class Player extends Phaser.GameObjects.GameObject {
     const trueWidth = this.instance.width * config.scale;
     const trueHeight = this.instance.height * config.scale;
     this.instance.width = trueWidth;
-    this.instance.height = trueHeight;
+    this.instance.height = trueHeight / 5;
 
     return this.instance;
   }

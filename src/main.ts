@@ -11,7 +11,7 @@ const config: Phaser.Types.Core.GameConfig = {
   height: window.innerHeight,
   backgroundColor: "black",
   scale: {
-    mode: Phaser.Scale.ENVELOP,
+    mode: Phaser.Scale.RESIZE,
   },
   scene: [Preloader, Game],
   plugins: {

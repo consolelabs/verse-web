@@ -30,11 +30,11 @@ export default class Game extends Phaser.Scene {
       scale: 0.3,
       character,
     });
+
     this.matter.add.gameObject(player);
+
     player.setFixedRotation(0);
     this.cameras.main.startFollow(player, true);
-
-    player.body.position.y = player.body.position.y * 1.15;
   }
 
   preload() {
