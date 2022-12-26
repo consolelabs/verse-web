@@ -13,7 +13,7 @@ export default class Boot extends Phaser.Scene {
 
   preload() {
     this.load.tilemapTiledJSON("map", "/map.json");
-    this.load.json("building-shapes", "/buildings/building-shapes.json");
+    this.load.json("shapes", "/shapes.json");
   }
 
   create() {

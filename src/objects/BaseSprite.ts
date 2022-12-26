@@ -17,7 +17,7 @@ export class BaseSprite {
     animated?: boolean;
     duration?: number;
   }) {
-    const shapes = game.cache.json.get("building-shapes");
+    const shapes = game.cache.json.get("shapes");
 
     const spriteObject = game.matter.add.sprite(
       anchor.left * TILE_SIZE,
