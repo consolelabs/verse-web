@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { CDN_PATH } from "../constants";
 
 type CharacterType = "neko" | "rabby" | "fukuro" | "ghost-neko" | "tv-head";
 type AnimationState = "idle" | "walk" | "run";
@@ -26,16 +27,18 @@ export class Player extends Phaser.GameObjects.GameObject {
   }
 
   load() {
+    this.scene.load.setBaseURL(`${CDN_PATH}/characters`);
     ["fukuro", "ghost-neko", "neko", "tv-head"].forEach((char) => {
       this.scene.load.spine(
         `${char}-character`,
-        `assets/${char}/char.json`,
-        `assets/${char}/char.atlas`
+        `/${char}/char.json`,
+        `/${char}/char.atlas`
       );
     });
   }
 
   spawn(config: any = {}) {
+    this.dir = "front";
     this.characterType = config.character ?? this.characterType;
     this.instance?.destroy();
     this.instance = this.scene.make.spine({

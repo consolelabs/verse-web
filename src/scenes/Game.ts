@@ -1,11 +1,10 @@
 import Phaser from "phaser";
 import { Player } from "../characters/player";
-import { Building, buildings } from "../objects/Building";
-// import { Building } from "../objects/Building";
+import { TILE_SIZE } from "../constants";
+import { BaseSprite } from "../objects/BaseSprite";
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
-  private sprites: any[] = [];
   private keys!: any;
 
   constructor() {
@@ -45,33 +44,54 @@ export default class Game extends Phaser.Scene {
   create() {
     const map = this.make.tilemap({
       key: "map",
-      tileWidth: 16,
-      tileHeight: 16,
+      tileWidth: TILE_SIZE,
+      tileHeight: TILE_SIZE,
     });
 
-    const floorTileset = map.addTilesetImage("floor", "floor");
-    map.createLayer("Ground", floorTileset, 0, 0);
+    const { layers = [], tilesets = [] } = map;
 
+    tilesets.forEach((tileset) => map.addTilesetImage(tileset.name));
+
+    layers.forEach((layer) => {
+      const isStatic =
+        // @ts-ignore
+        layer.properties.find((p) => p.name === "static")?.value ?? false;
+      const tilesets =
+        // @ts-ignore
+        layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
+
+      //
+      if (isStatic) {
+        const createdLayer = map.createLayer(
+          layer.name,
+          tilesets.split(","),
+          0,
+          0
+        );
+        createdLayer.setCollisionByProperty({ collides: true });
+        this.matter.world.convertTilemapLayer(createdLayer);
+      } else {
+        layer.data.forEach((row, y) => {
+          row.forEach((tile, x) => {
+            const spriteJSON = tile.properties.spriteJSON ?? "";
+            const spriteKey = spriteJSON.split("/").pop()?.slice(0, -5);
+            if (spriteJSON) {
+              const atlas = this.textures.get(spriteKey);
+              // phaser auto add a "BASE" frame so we need to subtract 1 more
+              const animated = atlas.frameTotal - 1 > 1;
+              new BaseSprite({
+                game: this,
+                key: spriteKey,
+                anchor: { left: x, bottom: y },
+                animated,
+                duration: Number(tile.properties.duration),
+              });
+            }
+          });
+        });
+      }
+    });
     this.spawnPlayer();
-
-    // Buildings
-    const buildingTilesets: Phaser.Tilemaps.Tileset[] = [];
-    buildings.forEach((building) => {
-      const object = new Building({ game: this, map, ...building });
-      buildingTilesets.push(...object.tilesets);
-      this.sprites.push(...object.sprites);
-    });
-
-    const floorLayer = map.createLayer(
-      `Buildings - Floor`,
-      buildingTilesets,
-      0,
-      0
-    );
-    map.createLayer(`Buildings - Ground`, buildingTilesets, 0, 0);
-
-    floorLayer.setCollisionByProperty({ collides: true });
-    this.matter.world.convertTilemapLayer(floorLayer);
   }
 
   update() {

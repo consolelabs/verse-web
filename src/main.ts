@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import "phaser/plugins/spine/dist/SpinePlugin";
 
+import Boot from "./scenes/Boot";
 import Game from "./scenes/Game";
 import Preloader from "./scenes/Preloader";
 
@@ -13,7 +14,8 @@ const config: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.RESIZE,
   },
-  scene: [Preloader, Game],
+  // load map -> load assets in map -> game
+  scene: [Boot, Preloader, Game],
   plugins: {
     scene: [
       {

@@ -175,212 +175,32 @@
   </tile>
   <tile id="8145">
    <properties>
-    <property name="sprite" value="airport-board"/>
+    <property name="spriteImage" type="file" value="buildings/airport/sprites/airport-board/airport-board-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/airport/sprites/airport-board/airport-board-sprite.json"/>
    </properties>
   </tile>
   <tile id="8705">
    <properties>
-    <property name="sprite" value="airport-sign"/>
+    <property name="duration" type="int" value="1000"/>
+    <property name="spriteImage" type="file" value="buildings/airport/sprites/airport-sign/airport-sign-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/airport/sprites/airport-sign/airport-sign-sprite.json"/>
    </properties>
   </tile>
   <tile id="11249">
    <properties>
-    <property name="sprite" value="airport-plane"/>
+    <property name="spriteImage" type="file" value="buildings/airport/sprites/airport-plane/airport-plane-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/airport/sprites/airport-plane/airport-plane-sprite.json"/>
    </properties>
   </tile>
   <tile id="13552">
    <properties>
-    <property name="sprite" value="airport-building"/>
+    <property name="spriteImage" type="file" value="buildings/airport/sprites/airport-building/airport-building-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/airport/sprites/airport-building/airport-building-sprite.json"/>
    </properties>
   </tile>
  </tileset>
  <tileset firstgid="13746" name="strategy-research-center-tiled" tilewidth="16" tileheight="16" tilecount="7832" columns="89">
   <image source="buildings/strategy-research-center/tiled/strategy-research-center-tiled.png" width="1428" height="1412"/>
-  <tile id="2232">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2233">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2234">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2235">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2236">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2237">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2238">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2239">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2240">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2241">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2242">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2243">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2244">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2245">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2246">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2247">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2248">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2249">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2250">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2251">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2252">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2253">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2321">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2322">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2323">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2324">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2325">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2326">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2327">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2328">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2329">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2330">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2331">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2332">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2333">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2334">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2335">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="2336">
    <properties>
     <property name="collides" type="bool" value="true"/>
@@ -391,137 +211,12 @@
     <property name="collides" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="2338">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2339">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2340">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2341">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2342">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2410">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2411">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2412">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2413">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2414">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2415">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2416">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2417">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2418">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2419">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2420">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2421">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2422">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2423">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2424">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="2425">
    <properties>
     <property name="collides" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="2426">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2427">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2428">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2429">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2430">
-   <properties>
-    <property name="collides" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="2431">
    <properties>
     <property name="collides" type="bool" value="true"/>
    </properties>
@@ -2178,12 +1873,15 @@
   </tile>
   <tile id="6119">
    <properties>
-    <property name="sprite" value="strategy-research-center-panel"/>
+    <property name="spriteImage" type="file" value="buildings/strategy-research-center/sprites/strategy-research-center-panel/strategy-research-center-panel-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/strategy-research-center/sprites/strategy-research-center-panel/strategy-research-center-panel-sprite.json"/>
    </properties>
   </tile>
   <tile id="7743">
    <properties>
-    <property name="sprite" value="strategy-research-center-building"/>
+    <property name="duration" type="int" value="1000"/>
+    <property name="multiatlas" type="bool" value="true"/>
+    <property name="spriteJSON" type="file" value="buildings/strategy-research-center/sprites/strategy-research-center-building/strategy-research-center-building-sprite.json"/>
    </properties>
   </tile>
  </tileset>
@@ -2191,17 +1889,20 @@
   <image source="buildings/botanical-research-center/tiled/botanical-research-center-tiled.png" width="1376" height="1776"/>
   <tile id="1708">
    <properties>
-    <property name="sprite" value="botanical-research-center-tree"/>
+    <property name="spriteImage" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-tree/botanical-research-center-tree-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-tree/botanical-research-center-tree-sprite.json"/>
    </properties>
   </tile>
   <tile id="3600">
    <properties>
-    <property name="sprite" value="botanical-research-center-glitteroot"/>
+    <property name="spriteImage" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-glitteroot/botanical-research-center-glitteroot-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-glitteroot/botanical-research-center-glitteroot-sprite.json"/>
    </properties>
   </tile>
   <tile id="4902">
    <properties>
-    <property name="sprite" value="botanical-research-center-building"/>
+    <property name="spriteImage" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-building/botanical-research-center-building-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/botanical-research-center/sprites/botanical-research-center-building/botanical-research-center-building-sprite.json"/>
    </properties>
   </tile>
   <tile id="8547">
@@ -2759,17 +2460,21 @@
   <image source="buildings/energy-research-center/tiled/energy-research-center-tiled.png" width="1300" height="1796"/>
   <tile id="1521">
    <properties>
-    <property name="sprite" value="energy-research-center-crystal"/>
+    <property name="spriteImage" type="file" value="buildings/energy-research-center/sprites/energy-research-center-crystal/energy-research-center-crystal-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/energy-research-center/sprites/energy-research-center-crystal/energy-research-center-crystal-sprite.json"/>
    </properties>
   </tile>
   <tile id="2412">
    <properties>
-    <property name="sprite" value="energy-research-center-board"/>
+    <property name="spriteImage" type="file" value="buildings/energy-research-center/sprites/energy-research-center-board/energy-research-center-board-sprite.png"/>
+    <property name="spriteJSON" type="file" value="buildings/energy-research-center/sprites/energy-research-center-board/energy-research-center-board-sprite.json"/>
    </properties>
   </tile>
   <tile id="4698">
    <properties>
-    <property name="sprite" value="energy-research-center-building"/>
+    <property name="duration" type="int" value="2000"/>
+    <property name="multiatlas" type="bool" value="true"/>
+    <property name="spriteJSON" type="file" value="buildings/energy-research-center/sprites/energy-research-center-building/energy-research-center-building-sprite.json"/>
    </properties>
   </tile>
   <tile id="6973">
@@ -2954,6 +2659,10 @@
   </tile>
  </tileset>
  <layer id="26" name="Ground" width="400" height="400">
+  <properties>
+   <property name="static" type="bool" value="true"/>
+   <property name="tilesets" value="floor"/>
+  </properties>
   <data encoding="csv">
 1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,15,16,17,18,10,11,12,13,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -3358,6 +3067,10 @@
 </data>
  </layer>
  <layer id="27" name="Buildings - Floor" width="400" height="400">
+  <properties>
+   <property name="static" type="bool" value="true"/>
+   <property name="tilesets" value="airport-tiled,botanical-research-center-tiled,energy-research-center-tiled,strategy-research-center-tiled"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -3762,6 +3475,10 @@
 </data>
  </layer>
  <layer id="28" name="Buildings - Ground" width="400" height="400">
+  <properties>
+   <property name="static" type="bool" value="true"/>
+   <property name="tilesets" value="botanical-research-center-tiled"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

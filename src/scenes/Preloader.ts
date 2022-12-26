@@ -1,43 +1,55 @@
 import Phaser from "phaser";
-import { buildings } from "../objects/Building";
+import { CDN_PATH, TILE_SIZE } from "../constants";
 
 export default class Preloader extends Phaser.Scene {
   constructor() {
-    super("preloader");
+    super({
+      key: "preloader",
+      loader: {
+        baseURL: `${CDN_PATH}/tiles`,
+      },
+    });
   }
 
   preload() {
-    this.load.tilemapTiledJSON("map", "tiles/map.json");
-    this.load.image("floor", "tiles/floor.png");
+    const tilesetSource = Object.fromEntries(
+      this.cache.tilemap
+        .get("map")
+        ?.data.tilesets.map((ts: any) => [ts.name, ts.image]) ?? []
+    );
+    const map = this.make.tilemap({
+      key: "map",
+      tileWidth: TILE_SIZE,
+      tileHeight: TILE_SIZE,
+    });
+    console.log(map);
+    const { layers = [], tilesets = [] } = map;
 
-    buildings.forEach((building) => {
-      // Load the part that are defined in Tiled
-      this.load.image(
-        `${building.key}-tiled`,
-        `tiles/buildings/${building.key}/tiled/${building.key}-tiled.png`
-      );
+    // load tiled tilesets
+    tilesets.forEach((tileset) => {
+      this.load.image(tileset.name, tilesetSource[tileset.name]);
+    });
 
-      // Load the part that should be rendered as (animated) sprites
-      building.sprites.forEach((sprite) => {
-        const combinedKey = `${building.key}-${sprite.key}`;
-        const path = `tiles/buildings/${building.key}/sprites/${combinedKey}`;
-
-        if (sprite.count) {
-          this.load.multiatlas(
-            `${combinedKey}-sprite`,
-            `${path}/${combinedKey}-sprite.json`,
-            path
-          );
-        } else {
-          this.load.atlas(
-            `${combinedKey}-sprite`,
-            `${path}/${combinedKey}-sprite.png`,
-            `${path}/${combinedKey}-sprite.json`
-          );
-        }
+    // load the sprite in each layer
+    layers.forEach((layer) => {
+      layer.data.forEach((row) => {
+        row.forEach((tile) => {
+          const spriteImage = tile.properties.spriteImage;
+          const spriteJSON = tile.properties.spriteJSON ?? "";
+          const spriteKey = spriteJSON.split("/").pop()?.slice(0, -5);
+          const isMultiAtlas = tile.properties.multiatlas ?? false;
+          if (spriteKey && spriteJSON) {
+            if (isMultiAtlas) {
+              const path = spriteJSON.split("/");
+              path.pop();
+              this.load.multiatlas(spriteKey, spriteJSON, path.join("/"));
+            } else {
+              this.load.atlas(spriteKey, spriteImage, spriteJSON);
+            }
+          }
+        });
       });
     });
-    this.load.json("building-shapes", "tiles/buildings/building-shapes.json");
   }
 
   create() {
