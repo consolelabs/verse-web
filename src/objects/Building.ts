@@ -10,7 +10,6 @@ export const buildings: Array<{
     count?: number;
     frameCount: number;
     duration?: number;
-    depthOffset?: number;
   }>;
 }> = [
   {
@@ -28,7 +27,6 @@ export const buildings: Array<{
         key: "sign",
         frameCount: 8,
         duration: 1000,
-        depthOffset: 2,
       },
       {
         key: "board",
@@ -164,11 +162,12 @@ export class Building {
           anchor.left * baseTileSize,
           (anchor.bottom + 1) * baseTileSize,
           `${combinedKey}-sprite`,
-          "frame (1).png",
+          undefined,
           {
             isStatic: true,
+            isSensor: true,
             // @ts-ignore
-            shape: shapes[`${combinedKey}`],
+            shape: shapes[combinedKey],
           }
         );
 
@@ -209,12 +208,7 @@ export class Building {
         if (sprite.frameCount > 1) {
           game.anims.create({
             key: `${combinedKey}-anims`,
-            frames: game.anims.generateFrameNames(`${combinedKey}-sprite`, {
-              prefix: "frame (",
-              start: 1,
-              end: sprite.frameCount,
-              suffix: ").png",
-            }),
+            frames: game.anims.generateFrameNames(`${combinedKey}-sprite`),
             repeat: -1,
             duration: sprite.duration || 3000,
           });
@@ -223,8 +217,10 @@ export class Building {
 
         spriteObject.setDepth(
           anchor.bottom -
-            (spriteObject.height - spriteObject.displayOriginY) / baseTileSize +
-            (sprite.depthOffset || 0)
+            (shapes[combinedKey]
+              ? (spriteObject.height - spriteObject.displayOriginY) /
+                baseTileSize
+              : 0)
         );
         this.sprites.push(spriteObject);
       });
