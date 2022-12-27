@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 434,
+				"h": 706
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Non interactive house A_6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 432,
+						"h": 704
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 432,
+						"h": 704
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 432,
+						"h": 704
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:9764c7e0a9cab0dac2beeca394ca0dac:be5d089dbcadb02e11cd08145e9caba5:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

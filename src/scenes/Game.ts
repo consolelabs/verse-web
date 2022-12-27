@@ -43,21 +43,20 @@ export default class Game extends Phaser.Scene {
       const isStatic =
         // @ts-ignore
         layer.properties.find((p) => p.name === "static")?.value ?? false;
+
       const tilesets =
         // @ts-ignore
         layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
-
+      const createdLayer = map.createLayer(
+        layer.name,
+        tilesets.split(","),
+        0,
+        0
+      );
+      createdLayer.setCollisionByProperty({ collides: true });
+      this.matter.world.convertTilemapLayer(createdLayer);
       //
-      if (isStatic) {
-        const createdLayer = map.createLayer(
-          layer.name,
-          tilesets.split(","),
-          0,
-          0
-        );
-        createdLayer.setCollisionByProperty({ collides: true });
-        this.matter.world.convertTilemapLayer(createdLayer);
-      } else {
+      if (!isStatic) {
         layer.data.forEach((row, y) => {
           row.forEach((tile, x) => {
             const spriteJSON = tile.properties.spriteJSON ?? "";
@@ -80,9 +79,9 @@ export default class Game extends Phaser.Scene {
     });
 
     this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
-      x: 200,
-      y: 200,
-      scale: 0.3,
+      x: 5000,
+      y: 5600,
+      scale: 0.4,
     });
   }
 

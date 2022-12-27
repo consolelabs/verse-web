@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 50,
+				"h": 114
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "fence-bottom-right.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 48,
+						"h": 112
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 48,
+						"h": 112
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 48,
+						"h": 112
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:130f5282b7f0202b243355072110e4f5:1dc8f7cf915628b1620d58f0a0b143f8:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

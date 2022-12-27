@@ -55,7 +55,12 @@ export class Player extends Phaser.GameObjects.GameObject {
     });
 
     // Follow the last character
-    this.scene.cameras.main.startFollow(this.characters[0].instance, true);
+    this.scene.cameras.main.startFollow(
+      this.characters[0].instance,
+      true,
+      0.1,
+      0.1
+    );
   }
 
   update() {
@@ -79,7 +84,7 @@ export class Player extends Phaser.GameObjects.GameObject {
       let animDirection: AnimationDirection = "front";
 
       if (this.keys.Shift.isDown) {
-        speed = 10;
+        speed = 7;
       }
 
       if (this.cursors.left?.isDown || this.keys.A.isDown) {
@@ -124,8 +129,10 @@ export class Player extends Phaser.GameObjects.GameObject {
 
       // Reduce velocity if both horizontal & vertical velocity are not 0
       if (horizontalVelocity && verticalVelocity) {
-        horizontalVelocity = Math.sign(horizontalVelocity) * Math.sqrt(speed);
-        verticalVelocity = Math.sign(verticalVelocity) * Math.sqrt(speed);
+        horizontalVelocity =
+          Math.sign(horizontalVelocity) * Math.sqrt(speed) ** 1.4;
+        verticalVelocity =
+          Math.sign(verticalVelocity) * Math.sqrt(speed) ** 1.4;
       }
 
       leadCharacter.directions = directions;

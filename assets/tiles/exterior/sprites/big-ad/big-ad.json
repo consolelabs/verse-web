@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "walls-0.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 496,
+				"h": 304
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Advertisement board_7.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 496,
+						"h": 304
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 496,
+						"h": 304
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 496,
+						"h": 304
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:da2ce9526b25289b691b25416433e3f3:12e04cceaab0d23ede58a5c3d1a9f242:30cdd2cd92984a71bf21b219f2022bcf$"
+	}
+}

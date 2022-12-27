@@ -18,7 +18,7 @@ export class Button extends Phaser.GameObjects.Container {
     key?: string;
     text: string;
     textStyle?: Phaser.GameObjects.TextStyle;
-    onClick: () => void;
+    onClick?: () => void;
   }) {
     const {
       scene,
@@ -31,7 +31,9 @@ export class Button extends Phaser.GameObjects.Container {
       textStyle = {
         fontSize: "28px",
       },
-      onClick,
+      onClick = () => {
+        return;
+      },
     } = props;
 
     super(scene);
@@ -63,7 +65,7 @@ export class Button extends Phaser.GameObjects.Container {
     buttonText.x -= buttonText.width / 2;
     buttonText.y -= buttonText.height / 2;
 
-    button.on("pointerdown", onClick);
+    button.on("pointerup", onClick);
 
     this.add(button);
     this.add(buttonText);

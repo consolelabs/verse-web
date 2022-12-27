@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 66,
+				"h": 130
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Plant pod G_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 64,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 64,
+						"h": 128
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 64,
+						"h": 128
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:0812a993b51de5d19d7fc0472372e787:89e58737d9d622233ecde8d643283885:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

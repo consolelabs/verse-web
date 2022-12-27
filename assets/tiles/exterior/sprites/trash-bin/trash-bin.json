@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 82,
+				"h": 130
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Trash bin_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 128
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 80,
+						"h": 128
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:914db3566805da7036a9c25fe6d68267:6e1502704cb16c038e83c70f9e5995a7:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

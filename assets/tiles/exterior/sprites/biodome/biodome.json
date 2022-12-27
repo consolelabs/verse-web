@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 642,
+				"h": 594
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Biodome_9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 640,
+						"h": 592
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 640,
+						"h": 592
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 640,
+						"h": 592
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:dc5692162b615b9fe78233c04c2afe0f:b13d1f201f84d191bb082fa00ef21a6a:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

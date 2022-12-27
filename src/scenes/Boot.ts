@@ -27,17 +27,8 @@ export default class Boot extends Phaser.Scene {
       y: window.innerHeight / 2,
       text: "START GAME",
       onClick: () => {
-        // Fade out & prepare for scene transition
-        this.cameras.main.fadeOut(500, 0, 0, 0);
+        this.scene.start("world-loader");
       },
     });
-
-    // Start scene transition when camera is fully fade out
-    this.cameras.main.once(
-      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-      () => {
-        this.scene.start("world-loader");
-      }
-    );
   }
 }

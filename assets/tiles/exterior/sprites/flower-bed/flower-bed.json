@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 370,
+				"h": 434
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Futuristic Big flower bed_5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 368,
+						"h": 432
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 368,
+						"h": 432
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 368,
+						"h": 432
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:60f6a5cd389771cfafe1f7bd4d34e316:8a95aa7b77b069b8a8c828598ac9a951:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}

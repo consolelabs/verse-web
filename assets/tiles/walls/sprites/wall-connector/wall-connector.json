@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "walls-0.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 80,
+				"h": 496
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "City big wall connector horizontal_01.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 496
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 496
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 496
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:8ded0db76300162b23c0ccf5359092ef:88a90f7f8542ee785a688b99454a5089:30cdd2cd92984a71bf21b219f2022bcf$"
+	}
+}

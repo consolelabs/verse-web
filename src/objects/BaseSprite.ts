@@ -17,7 +17,17 @@ export class BaseSprite {
     animated?: boolean;
     duration?: number;
   }) {
-    const shapes = game.cache.json.get("shapes");
+    const shapes = Object.entries(game.cache.json.entries.entries).reduce<
+      Record<string, any>
+    >((acc, c) => {
+      if (c[0].endsWith("-shapes")) {
+        return {
+          ...acc,
+          ...c[1],
+        };
+      }
+      return acc;
+    }, {});
 
     const spriteObject = game.matter.add.sprite(
       anchor.left * TILE_SIZE,
@@ -26,7 +36,7 @@ export class BaseSprite {
       undefined,
       {
         isStatic: true,
-        // isSensor: true,
+        isSensor: true,
         // @ts-ignore
         shape: shapes[key],
       }

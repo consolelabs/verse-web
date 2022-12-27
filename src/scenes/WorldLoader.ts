@@ -13,17 +13,21 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   preload() {
-    this.load.json("shapes", "/shapes.json");
+    this.load.json("config", "/config.json");
     this.load.tilemapTiledJSON("map", "/map.json");
 
     // Still show title scene
     new TitleBg({ scene: this });
-
-    // Fade in
-    this.cameras.main.fadeIn(500, 0, 0, 0);
   }
 
   create() {
+    const { shapes: shapeFiles = {} } = this.cache.json.get("config");
+
+    // this.load.tilemapTiledJSON("map", mapFile);
+    Object.entries<string>(shapeFiles).forEach((sf) => {
+      this.load.json(`${sf[0]}-shapes`, sf[1]);
+    });
+
     // Now load assets
     const tilesetSource = Object.fromEntries(
       this.cache.tilemap
@@ -38,7 +42,6 @@ export default class WorldLoader extends Phaser.Scene {
     // console.log(map);
     const { layers = [], tilesets = [] } = map;
 
-    // load tiled tilesets
     tilesets.forEach((tileset) => {
       this.load.image(tileset.name, tilesetSource[tileset.name]);
     });
