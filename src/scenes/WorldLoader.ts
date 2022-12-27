@@ -1,10 +1,11 @@
 import Phaser from "phaser";
 import { CDN_PATH, TILE_SIZE } from "../constants";
+import { TitleBg } from "../objects/TitleBg";
 
-export default class Preloader extends Phaser.Scene {
+export default class WorldLoader extends Phaser.Scene {
   constructor() {
     super({
-      key: "preloader",
+      key: "world-loader",
       loader: {
         baseURL: `${CDN_PATH}/tiles`,
       },
@@ -12,6 +13,18 @@ export default class Preloader extends Phaser.Scene {
   }
 
   preload() {
+    this.load.json("shapes", "/shapes.json");
+    this.load.tilemapTiledJSON("map", "/map.json");
+
+    // Still show title scene
+    new TitleBg({ scene: this });
+
+    // Fade in
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+  }
+
+  create() {
+    // Now load assets
     const tilesetSource = Object.fromEntries(
       this.cache.tilemap
         .get("map")
@@ -22,7 +35,7 @@ export default class Preloader extends Phaser.Scene {
       tileWidth: TILE_SIZE,
       tileHeight: TILE_SIZE,
     });
-    console.log(map);
+    // console.log(map);
     const { layers = [], tilesets = [] } = map;
 
     // load tiled tilesets
@@ -50,9 +63,20 @@ export default class Preloader extends Phaser.Scene {
         });
       });
     });
-  }
 
-  create() {
-    this.scene.start("game");
+    this.load.once("complete", () => {
+      // Fade out & prepare for scene transition
+      this.cameras.main.fadeOut(500, 0, 0, 0);
+    });
+
+    this.load.start();
+
+    // Start scene transition when camera is fully fade out
+    this.cameras.main.once(
+      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+      () => {
+        this.scene.start("game");
+      }
+    );
   }
 }

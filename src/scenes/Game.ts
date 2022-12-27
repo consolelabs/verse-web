@@ -42,6 +42,9 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    // Fade in
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+
     const map = this.make.tilemap({
       key: "map",
       tileWidth: TILE_SIZE,
