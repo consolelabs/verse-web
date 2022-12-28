@@ -15,7 +15,11 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.RESIZE,
   },
   // Boot screen -> Load world & world assets -> Game
-  scene: [Boot, WorldLoader, Game],
+  scene: [
+    // Boot,
+    WorldLoader,
+    Game,
+  ],
   plugins: {
     scene: [
       {

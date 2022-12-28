@@ -26,7 +26,7 @@ export class BaseSprite {
       undefined,
       {
         isStatic: true,
-        isSensor: true,
+        // isSensor: true,
         // @ts-ignore
         shape: shapes[key],
       }

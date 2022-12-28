@@ -1,26 +1,15 @@
 import Phaser from "phaser";
-import { CDN_PATH } from "../constants";
-
-type CharacterType = "neko" | "rabby" | "fukuro" | "ghost-neko" | "tv-head";
-type AnimationState = "idle" | "walk" | "run";
-type AnimationDirection = "front" | "behind" | "left" | "right";
-
-function getBasicAnimation(state: AnimationState, dir: AnimationDirection) {
-  return `anim_${state}_${dir}`;
-}
+import { CDN_PATH, TILE_SIZE } from "../constants";
+import { AnimationDirection, CharacterType } from "../types/character";
+import { Character } from "./character";
 
 export class Player extends Phaser.GameObjects.GameObject {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: any;
-  private dir: AnimationDirection = "front";
-  public instance: any;
-  public characterType: CharacterType = "neko";
+  public characters: Character[] = [];
 
-  constructor(public scene: Phaser.Scene, characterType?: CharacterType) {
+  constructor(public scene: Phaser.Scene) {
     super(scene, "player");
-    if (characterType) {
-      this.characterType = characterType;
-    }
     this.load();
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys("W,A,S,D,Shift");
@@ -37,28 +26,59 @@ export class Player extends Phaser.GameObjects.GameObject {
     });
   }
 
-  spawn(config: any = {}) {
-    this.dir = "front";
-    this.characterType = config.character ?? this.characterType;
-    this.instance?.destroy();
-    this.instance = this.scene.make.spine({
-      ...config,
-      key: `${this.characterType}-character`,
-      skinName: "char_default",
-      animationName: getBasicAnimation("idle", "front"),
-      loop: true,
+  loadCharacters(
+    characters: CharacterType[],
+    spriteConfig: SpineGameObjectConfig = {}
+  ) {
+    this.characters = characters.reduce((result, current, currentIndex) => {
+      return [
+        ...result,
+        new Character({
+          scene: this.scene,
+          type: current,
+          follower: currentIndex > 0 ? result[currentIndex - 1] : undefined,
+          spriteConfig,
+        }),
+      ];
+    }, [] as Character[]);
+
+    // Loop and add extra logic
+    this.characters.forEach((character) => {
+      // Add physic object to each character
+      this.scene.matter.add.gameObject(character.instance);
+      character.instance.setFixedRotation();
+
+      // Set collision filter so that characters will not collide with themselves
+      // but still collide with everything else
+      character.instance.setCollisionGroup(-1);
+      character.instance.setCollidesWith(-1);
     });
 
-    const trueWidth = this.instance.width * config.scale;
-    const trueHeight = this.instance.height * config.scale;
-    this.instance.width = trueWidth;
-    this.instance.height = trueHeight / 5;
+    // Follow the last character
+    this.scene.cameras.main.startFollow(this.characters[0].instance, true);
 
-    return this.instance;
+    // this.scene.tweens.addCounter({
+    //   from: 0,
+    //   to: 200,
+    //   duration: 1000,
+    //   ease: Phaser.Math.Easing.Sine.InOut,
+    //   repeat: -1,
+    //   yoyo: true,
+    //   onUpdate: (_, target) => {
+    //     const y = 0 + target.value;
+    //     const dy = y - this.characters[0].instance.y;
+    //     this.characters[0].instance.y = y;
+    //     this.characters[0].instance.setVelocityY(dy);
+    //   },
+    // });
   }
 
   update() {
-    let speed = 1.33;
+    const leadCharacter = this.characters[0];
+    const directions: AnimationDirection[] = [];
+
+    let speed = 2;
+
     if (
       this.cursors.up.isDown ||
       this.cursors.down.isDown ||
@@ -71,6 +91,7 @@ export class Player extends Phaser.GameObjects.GameObject {
     ) {
       let horizontalVelocity = 0;
       let verticalVelocity = 0;
+      let animDirection: AnimationDirection = "front";
 
       if (this.keys.Shift.isDown) {
         speed = 10;
@@ -78,63 +99,58 @@ export class Player extends Phaser.GameObjects.GameObject {
 
       if (this.cursors.left?.isDown || this.keys.A.isDown) {
         horizontalVelocity = -speed;
-        this.dir = "right";
+        directions.push("right");
         if (
           !this.cursors.up.isDown &&
           !this.keys.W.isDown &&
           !this.cursors.down.isDown &&
           !this.keys.S.isDown
         ) {
-          this.instance.play(
-            getBasicAnimation(this.keys.Shift.isDown ? "run" : "walk", "right"),
-            true,
-            true
-          );
+          animDirection = "right";
         }
       } else if (this.cursors.right?.isDown || this.keys.D.isDown) {
         horizontalVelocity = speed;
-        this.dir = "left";
+        directions.push("left");
         if (
           !this.cursors.up.isDown &&
           !this.keys.W.isDown &&
           !this.cursors.down.isDown &&
           !this.keys.S.isDown
         ) {
-          this.instance.play(
-            getBasicAnimation(this.keys.Shift.isDown ? "run" : "walk", "left"),
-            true,
-            true
-          );
+          animDirection = "left";
         }
       }
 
       if (this.cursors.up?.isDown || this.keys.W.isDown) {
         verticalVelocity = -speed;
-        this.dir = "behind";
-        this.instance.play(
-          getBasicAnimation(this.keys.Shift.isDown ? "run" : "walk", "behind"),
-          true,
-          true
-        );
+        directions.push("behind");
+        animDirection = "behind";
       } else if (this.cursors.down?.isDown || this.keys.S.isDown) {
         verticalVelocity = speed;
-        this.dir = "front";
-        this.instance.play(
-          getBasicAnimation(this.keys.Shift.isDown ? "run" : "walk", "front"),
-          true,
-          true
-        );
+        directions.push("front");
+        animDirection = "front";
       }
 
-      this.instance.setVelocity(horizontalVelocity, verticalVelocity);
+      // Play animation
+      leadCharacter.playAnimation(
+        this.keys.Shift.isDown ? "run" : "walk",
+        animDirection
+      );
 
-      // FIXME: Player depth == y
-      // @ts-ignore
-      const baseTileSize = 16;
-      this.instance.setDepth(this.instance.y / baseTileSize);
+      // Reduce velocity if both horizontal & vertical velocity are not 0
+      if (horizontalVelocity && verticalVelocity) {
+        horizontalVelocity = Math.sign(horizontalVelocity) * Math.sqrt(speed);
+        verticalVelocity = Math.sign(verticalVelocity) * Math.sqrt(speed);
+      }
+
+      leadCharacter.directions = directions;
+      leadCharacter.setVelocity(horizontalVelocity, verticalVelocity);
+      leadCharacter.instance.setDepth(leadCharacter.instance.y / TILE_SIZE);
+      leadCharacter.update();
     } else {
-      this.instance.setVelocity(0, 0);
-      this.instance.play(getBasicAnimation("idle", this.dir), true, true);
+      leadCharacter.setVelocity(0, 0);
+      leadCharacter.playAnimation("idle", leadCharacter.directions[0]);
+      leadCharacter.update();
     }
   }
 }
