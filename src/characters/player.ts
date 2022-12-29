@@ -56,21 +56,6 @@ export class Player extends Phaser.GameObjects.GameObject {
 
     // Follow the last character
     this.scene.cameras.main.startFollow(this.characters[0].instance, true);
-
-    // this.scene.tweens.addCounter({
-    //   from: 0,
-    //   to: 200,
-    //   duration: 1000,
-    //   ease: Phaser.Math.Easing.Sine.InOut,
-    //   repeat: -1,
-    //   yoyo: true,
-    //   onUpdate: (_, target) => {
-    //     const y = 0 + target.value;
-    //     const dy = y - this.characters[0].instance.y;
-    //     this.characters[0].instance.y = y;
-    //     this.characters[0].instance.setVelocityY(dy);
-    //   },
-    // });
   }
 
   update() {

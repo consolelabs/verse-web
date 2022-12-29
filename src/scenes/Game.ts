@@ -5,7 +5,6 @@ import { BaseSprite } from "../objects/BaseSprite";
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
-  private keys!: any;
 
   constructor() {
     super({
@@ -24,7 +23,6 @@ export default class Game extends Phaser.Scene {
 
   preload() {
     this.player = new Player(this);
-    this.keys = this.input.keyboard.addKeys("H,J,K,L");
   }
 
   create() {
@@ -81,7 +79,7 @@ export default class Game extends Phaser.Scene {
       }
     });
 
-    this.player.loadCharacters(["neko", "ghost-neko", "fukuro"], {
+    this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
       x: 200,
       y: 200,
       scale: 0.3,

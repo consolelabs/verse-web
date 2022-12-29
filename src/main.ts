@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import "phaser/plugins/spine/dist/SpinePlugin";
 
-import Boot from "./scenes/Boot";
+// import Boot from "./scenes/Boot";
 import Game from "./scenes/Game";
 import WorldLoader from "./scenes/WorldLoader";
 
