@@ -1,0 +1,125 @@
+{
+	"textures": [
+		{
+			"image": "airport-tiled.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1794,
+				"h": 1956
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Airport Ground_Full with aircraft_32.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1792,
+						"h": 960
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1792,
+						"h": 960
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1792,
+						"h": 960
+					}
+				},
+				{
+					"filename": "Airport Building_14.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 784,
+						"h": 992
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 784,
+						"h": 992
+					},
+					"frame": {
+						"x": 1,
+						"y": 963,
+						"w": 784,
+						"h": 992
+					}
+				},
+				{
+					"filename": "Aircaft_Landed_9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 512,
+						"h": 656
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 512,
+						"h": 656
+					},
+					"frame": {
+						"x": 787,
+						"y": 963,
+						"w": 512,
+						"h": 656
+					}
+				},
+				{
+					"filename": "Airport Flight board_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 176,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 176,
+						"h": 192
+					},
+					"frame": {
+						"x": 1301,
+						"y": 963,
+						"w": 176,
+						"h": 192
+					}
+				},
+				{
+					"filename": "Airport-sign-animation_0000_AS-8.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 176,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 176,
+						"h": 80
+					},
+					"frame": {
+						"x": 1301,
+						"y": 1157,
+						"w": 176,
+						"h": 80
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:aec083e08a61e5a2277e91f1ae984cb8:44dfef4e7b47b67ded28c1cabef55391:cad50d13b30383ff043f3bbd3f6ac5c3$"
+	}
+}

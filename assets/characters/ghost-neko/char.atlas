@@ -1,0 +1,75 @@
+
+ghostneko_spine.png
+size: 516, 516
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+back_body
+  rotate: false
+  xy: 281, 218
+  size: 205, 295
+  orig: 360, 360
+  offset: 78, 25
+  index: -1
+front_body
+  rotate: true
+  xy: 2, 2
+  size: 205, 295
+  orig: 360, 360
+  offset: 78, 25
+  index: -1
+front_larm
+  rotate: false
+  xy: 367, 154
+  size: 42, 62
+  orig: 360, 360
+  offset: 162, 148
+  index: -1
+front_rarm
+  rotate: false
+  xy: 299, 27
+  size: 42, 62
+  orig: 360, 360
+  offset: 164, 148
+  index: -1
+side_body
+  rotate: false
+  xy: 2, 209
+  size: 277, 304
+  orig: 360, 360
+  offset: 38, 24
+  index: -1
+side_larm
+  rotate: false
+  xy: 299, 91
+  size: 56, 59
+  orig: 360, 360
+  offset: 154, 141
+  index: -1
+side_rarm
+  rotate: false
+  xy: 299, 152
+  size: 66, 64
+  orig: 360, 360
+  offset: 142, 140
+  index: -1
+
+ghostneko_spine_2.png
+size: 188, 188
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+skin/front_face
+  rotate: false
+  xy: 2, 70
+  size: 89, 113
+  orig: 360, 360
+  offset: 136, 123
+  index: -1
+skin/side_face
+  rotate: false
+  xy: 93, 71
+  size: 90, 112
+  orig: 360, 360
+  offset: 136, 124
+  index: -1

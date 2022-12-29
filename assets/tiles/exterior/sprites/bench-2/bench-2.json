@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "small-ad.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 146,
+				"h": 66
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Futuristic bench B Horizontal_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 144,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 144,
+						"h": 64
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 144,
+						"h": 64
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:75e3e43310b31d8e08d1c8749507ebe8:39b12c35ae462e8e8c42f9d6dd632ed0:b22f413dc60f6f9148b6b87308addd02$"
+	}
+}
