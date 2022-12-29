@@ -5,7 +5,6 @@ import { BaseSprite } from "../objects/BaseSprite";
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
-  private keys!: any;
 
   constructor() {
     super({
@@ -22,23 +21,8 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  spawnPlayer(character?: string) {
-    const player = this.player.spawn({
-      x: 200,
-      y: 200,
-      scale: 0.3,
-      character,
-    });
-
-    this.matter.add.gameObject(player);
-
-    player.setFixedRotation(0);
-    this.cameras.main.startFollow(player, true);
-  }
-
   preload() {
     this.player = new Player(this);
-    this.keys = this.input.keyboard.addKeys("H,J,K,L");
   }
 
   create() {
@@ -94,22 +78,17 @@ export default class Game extends Phaser.Scene {
         });
       }
     });
-    this.spawnPlayer();
+
+    this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
+      x: 200,
+      y: 200,
+      scale: 0.3,
+    });
   }
 
   update() {
     if (!this.player) {
       return;
-    }
-
-    if (this.keys.H.isDown) {
-      this.spawnPlayer("neko");
-    } else if (this.keys.J.isDown) {
-      this.spawnPlayer("fukuro");
-    } else if (this.keys.K.isDown) {
-      this.spawnPlayer("ghost-neko");
-    } else if (this.keys.L.isDown) {
-      this.spawnPlayer("tv-head");
     }
 
     // Check player vs buildings overlap
