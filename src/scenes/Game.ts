@@ -35,7 +35,14 @@ export default class Game extends Phaser.Scene {
       tileHeight: TILE_SIZE,
     });
 
-    const { layers = [], tilesets = [] } = map;
+    const { objects = [], layers = [], tilesets = [] } = map;
+
+    objects.forEach((layer) => {
+      const gameObjects = map.createFromObjects(layer.name, {});
+      gameObjects.forEach((_go) => {
+        // add the game object to the matter physics world and set the collide group to be the same with the player's (default is 0)
+      });
+    });
 
     tilesets.forEach((tileset) => map.addTilesetImage(tileset.name));
 
@@ -47,14 +54,9 @@ export default class Game extends Phaser.Scene {
       const tilesets =
         // @ts-ignore
         layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
-      const createdLayer = map.createLayer(
-        layer.name,
-        tilesets.split(","),
-        0,
-        0
-      );
-      createdLayer.setCollisionByProperty({ collides: true });
-      this.matter.world.convertTilemapLayer(createdLayer);
+
+      map.createLayer(layer.name, tilesets.split(","), 0, 0);
+
       //
       if (!isStatic) {
         layer.data.forEach((row, y) => {
