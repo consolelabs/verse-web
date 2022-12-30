@@ -35,6 +35,7 @@ export default class Game extends Phaser.Scene {
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
+    // Load the map & the sprites
     const map = this.make.tilemap({
       key: "map",
       tileWidth: TILE_SIZE,
@@ -99,35 +100,6 @@ export default class Game extends Phaser.Scene {
     if (!this.player) {
       return;
     }
-
-    // Check player vs buildings overlap
-    // FIXME: Should have some preliminary check to avoid performance struggle. We don't want
-    // to check for overlap every round of render, on every building
-    // this.sprites.forEach((sprite) => {
-    //   // https://phaser.discourse.group/t/check-collision-overlap-between-sprites-without-physics/6696/4
-    //   const playerBounds = new Phaser.Geom.Rectangle(
-    //     this.player.instance.x,
-    //     this.player.instance.y,
-    //     this.player.instance.width,
-    //     this.player.instance.height
-    //   );
-
-    //   try {
-    //     const spriteBounds = sprite.getBounds();
-    //     if (
-    //       Phaser.Geom.Intersects.RectangleToRectangle(
-    //         playerBounds,
-    //         spriteBounds
-    //       )
-    //     ) {
-    //       sprite.setAlpha(0.5);
-    //     } else {
-    //       sprite.setAlpha(1);
-    //     }
-    //   } catch {
-    //     // Do nothing
-    //   }
-    // });
 
     this.player.update();
 

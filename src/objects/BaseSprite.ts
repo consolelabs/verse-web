@@ -29,18 +29,28 @@ export class BaseSprite {
       return acc;
     }, {});
 
-    const spriteObject = game.matter.add.sprite(
-      anchor.left * TILE_SIZE,
-      (anchor.bottom + 1) * TILE_SIZE,
-      key,
-      undefined,
-      {
-        isStatic: true,
-        isSensor: true,
-        // @ts-ignore
-        shape: shapes[key],
-      }
-    );
+    let spriteObject: any;
+
+    if (animated || shapes[key]) {
+      spriteObject = game.matter.add.sprite(
+        anchor.left * TILE_SIZE,
+        (anchor.bottom + 1) * TILE_SIZE,
+        key,
+        undefined,
+        {
+          isStatic: true,
+          // @ts-ignore
+          shape: shapes[key],
+        }
+      );
+    } else {
+      spriteObject = game.add.image(
+        anchor.left * TILE_SIZE,
+        (anchor.bottom + 1) * TILE_SIZE,
+        key
+      );
+    }
+
     const bodyOriginOffset = {
       x: spriteObject.originX - 0.5,
       y: spriteObject.originY - 0.5,
