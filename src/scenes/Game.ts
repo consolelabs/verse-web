@@ -2,6 +2,12 @@ import Phaser from "phaser";
 import { Player } from "../characters/player";
 import { TILE_SIZE } from "../constants";
 import { BaseSprite } from "../objects/BaseSprite";
+import Stats from "stats.js";
+
+// FPS Counter
+const stats = new Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
@@ -11,8 +17,8 @@ export default class Game extends Phaser.Scene {
       key: "game",
       physics: {
         matter: {
-          debug: true,
           gravity: { y: 0 },
+          debug: true,
           // @ts-ignore
           debugShowBody: true,
           debugBodyColor: 0x0000ff,
@@ -57,7 +63,6 @@ export default class Game extends Phaser.Scene {
 
       map.createLayer(layer.name, tilesets.split(","), 0, 0);
 
-      //
       if (!isStatic) {
         layer.data.forEach((row, y) => {
           row.forEach((tile, x) => {
@@ -80,6 +85,7 @@ export default class Game extends Phaser.Scene {
       }
     });
 
+    // Load characters
     this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
       x: 5000,
       y: 5600,
@@ -88,6 +94,8 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
+    stats.begin();
+
     if (!this.player) {
       return;
     }
@@ -122,5 +130,7 @@ export default class Game extends Phaser.Scene {
     // });
 
     this.player.update();
+
+    stats.end();
   }
 }
