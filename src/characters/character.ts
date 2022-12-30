@@ -54,7 +54,7 @@ export class Character extends Phaser.GameObjects.GameObject {
     if (spriteConfig?.scale && typeof spriteConfig?.scale === "number") {
       const trueWidth = this.instance.width * spriteConfig.scale;
       const trueHeight = this.instance.height * spriteConfig.scale;
-      this.instance.width = trueWidth / 2;
+      this.instance.width = trueWidth;
       this.instance.height = trueHeight / 5;
     }
 

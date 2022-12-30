@@ -1,16 +1,16 @@
 {
 	"textures": [
 		{
-			"image": "walls-0.png",
+			"image": "wall.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 80,
-				"h": 496
+				"w": 82,
+				"h": 498
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "City big wall default horizontal_01.png",
+					"filename": "wall-default.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -24,8 +24,8 @@
 						"h": 496
 					},
 					"frame": {
-						"x": 0,
-						"y": 0,
+						"x": 1,
+						"y": 1,
 						"w": 80,
 						"h": 496
 					}
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:28c2b15d632312d4879e72953bb88bb4:da6e0ed28a544497e4a8a85300f51944:30cdd2cd92984a71bf21b219f2022bcf$"
+		"smartupdate": "$TexturePacker:SmartUpdate:4d62d1d19fe6a5128adbcbef96097efe:da6e0ed28a544497e4a8a85300f51944:fac4f515bf266e4f4ed746fa4fe7351a$"
 	}
 }
