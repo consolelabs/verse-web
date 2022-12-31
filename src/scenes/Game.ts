@@ -46,23 +46,17 @@ export default class Game extends Phaser.Scene {
 
     objects.forEach((layer) => {
       layer.objects.forEach((object) => {
-        if (object.rectangle) {
-          const body = this.matter.add.rectangle(
-            0,
-            0,
-            object.width ?? 0,
-            object.height ?? 0,
-            {
-              isStatic: true,
-            }
-          );
+        const x = object.x ?? 0;
+        const y = object.y ?? 0;
+        const w = object.width ?? 0;
+        const h = object.height ?? 0;
 
-          this.matter.alignBody(
-            body,
-            object.x!,
-            object.y!,
-            Phaser.Display.Align.TOP_LEFT
-          );
+        if (object.rectangle) {
+          const body = this.matter.add.rectangle(0, 0, w, h, {
+            isStatic: true,
+          });
+
+          this.matter.alignBody(body, x, y, Phaser.Display.Align.TOP_LEFT);
         } else if (object.polygon) {
           // When converting Tiled polygon objects to game objects with MatterJS.Bodies.fromVertices method,
           // Phaser will recalculate the vertices' positions based on the object position. That means,
@@ -73,9 +67,12 @@ export default class Game extends Phaser.Scene {
           // the polygon points' positions will be relative to the polygon object's position.
           // First, we need to get the original (absolute) coordinates of all vertices.
           const vertices = object.polygon.map((point) => {
+            const pX = point.x ?? 0;
+            const pY = point.y ?? 0;
+
             return {
-              x: point.x! + object.x!,
-              y: point.y! + object.y!,
+              x: pX + x,
+              y: pY + y,
             };
           });
 
@@ -92,14 +89,9 @@ export default class Game extends Phaser.Scene {
           };
 
           // Create the body
-          const body = this.matter.add.fromVertices(
-            object.x || 0,
-            object.y || 0,
-            object.polygon,
-            {
-              isStatic: true,
-            }
-          );
+          const body = this.matter.add.fromVertices(x, y, object.polygon, {
+            isStatic: true,
+          });
 
           // Now calculate the offset between the created body & the original bounds
           const offset = {
