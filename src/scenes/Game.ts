@@ -46,9 +46,8 @@ export default class Game extends Phaser.Scene {
 
     objects.forEach((layer) => {
       layer.objects.forEach((object) => {
-        let body: MatterJS.BodyType | null = null;
         if (object.rectangle) {
-          body = this.matter.add.rectangle(
+          const body = this.matter.add.rectangle(
             0,
             0,
             object.width ?? 0,
@@ -57,23 +56,61 @@ export default class Game extends Phaser.Scene {
               isStatic: true,
             }
           );
-        } else if (object.polygon) {
-          body = this.matter.add.fromVertices(0, 0, object.polygon, {
-            isStatic: true,
-          });
-        }
-        if (body) {
-          const x = object.x ?? 0;
-          const y = object.y ?? 0;
 
-          if (object.polygon) {
-            // TODO: okay so the first point of the polygon when drawn in tiled will be the origin
-            // so depending on where the origin is, we will have to set the proper align e.g TOP_LEFT, BOTTOM_RIGHT, etc...
-            // which is ridiculously nonsense so I don't know what 🤷
-          } else {
-            // otherwise recangle origin is alwasy the top left so we're good
-            this.matter.alignBody(body, x, y, Phaser.Display.Align.TOP_LEFT);
-          }
+          this.matter.alignBody(
+            body,
+            object.x!,
+            object.y!,
+            Phaser.Display.Align.TOP_LEFT
+          );
+        } else if (object.polygon) {
+          // When converting Tiled polygon objects to game objects with MatterJS.Bodies.fromVertices method,
+          // Phaser will recalculate the vertices' positions based on the object position. That means,
+          // the final vertices' positions will no longer be the same as they are when we draw them in Tiled.
+          // This demands a custom logic to translate them back to their original position.
+
+          // Assuming that the polygon objects exported from Tiled is correct,
+          // the polygon points' positions will be relative to the polygon object's position.
+          // First, we need to get the original (absolute) coordinates of all vertices.
+          const vertices = object.polygon.map((point) => {
+            return {
+              x: point.x! + object.x!,
+              y: point.y! + object.y!,
+            };
+          });
+
+          // Now calculate the original bounds of the object
+          const originalBounds = {
+            max: {
+              x: Math.max(...vertices.map((point) => point.x)),
+              y: Math.max(...vertices.map((point) => point.y)),
+            },
+            min: {
+              x: Math.min(...vertices.map((point) => point.x)),
+              y: Math.min(...vertices.map((point) => point.y)),
+            },
+          };
+
+          // Create the body
+          const body = this.matter.add.fromVertices(
+            object.x || 0,
+            object.y || 0,
+            object.polygon,
+            {
+              isStatic: true,
+            }
+          );
+
+          // Now calculate the offset between the created body & the original bounds
+          const offset = {
+            x: body.bounds.min.x - originalBounds.min.x,
+            y: body.bounds.min.y - originalBounds.min.y,
+          };
+
+          this.matter.body.setPosition(body, {
+            x: body.position.x - offset.x,
+            y: body.position.y - offset.y,
+          });
         }
       });
     });
@@ -117,8 +154,6 @@ export default class Game extends Phaser.Scene {
     this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
       x: 5000,
       y: 5600,
-      // x: 0,
-      // y: 0,
       scale: 0.4,
     });
   }
