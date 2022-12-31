@@ -45,9 +45,36 @@ export default class Game extends Phaser.Scene {
     const { objects = [], layers = [], tilesets = [] } = map;
 
     objects.forEach((layer) => {
-      const gameObjects = map.createFromObjects(layer.name, {});
-      gameObjects.forEach((_go) => {
-        // add the game object to the matter physics world and set the collide group to be the same with the player's (default is 0)
+      layer.objects.forEach((object) => {
+        let body: MatterJS.BodyType | null = null;
+        if (object.rectangle) {
+          body = this.matter.add.rectangle(
+            0,
+            0,
+            object.width ?? 0,
+            object.height ?? 0,
+            {
+              isStatic: true,
+            }
+          );
+        } else if (object.polygon) {
+          body = this.matter.add.fromVertices(0, 0, object.polygon, {
+            isStatic: true,
+          });
+        }
+        if (body) {
+          const x = object.x ?? 0;
+          const y = object.y ?? 0;
+
+          if (object.polygon) {
+            // TODO: okay so the first point of the polygon when drawn in tiled will be the origin
+            // so depending on where the origin is, we will have to set the proper align e.g TOP_LEFT, BOTTOM_RIGHT, etc...
+            // which is ridiculously nonsense so I don't know what 🤷
+          } else {
+            // otherwise recangle origin is alwasy the top left so we're good
+            this.matter.alignBody(body, x, y, Phaser.Display.Align.TOP_LEFT);
+          }
+        }
       });
     });
 
@@ -90,6 +117,8 @@ export default class Game extends Phaser.Scene {
     this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
       x: 5000,
       y: 5600,
+      // x: 0,
+      // y: 0,
       scale: 0.4,
     });
   }

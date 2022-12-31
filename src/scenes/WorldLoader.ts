@@ -13,6 +13,7 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image("title-screen-bg", "/images/title-screen-bg.jpeg");
     this.load.json("config", "/config.json");
     this.load.tilemapTiledJSON("map", "/map.json");
 
