@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Player } from "../characters/player";
-import { TILE_SIZE } from "../constants";
+import { PROD, TILE_SIZE } from "../constants";
 import { BaseSprite } from "../objects/BaseSprite";
 import Stats from "stats.js";
 
@@ -18,7 +18,7 @@ export default class Game extends Phaser.Scene {
       physics: {
         matter: {
           gravity: { y: 0 },
-          debug: true,
+          debug: !PROD,
           // @ts-ignore
           debugShowBody: true,
           debugBodyColor: 0x0000ff,
