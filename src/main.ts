@@ -6,6 +6,8 @@ import Boot from "./scenes/Boot";
 import Game from "./scenes/Game";
 import PodScene from "./scenes/Pod";
 import WorldLoader from "./scenes/WorldLoader";
+import ConfigLoader from "./scenes/ConfigLoader";
+import Interaction from "./scenes/Interaction";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -17,7 +19,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.RESIZE,
   },
   // Boot screen -> Load world & world assets -> Game
-  scene: [Boot, WorldLoader, Game, PodScene],
+  scene: [Boot, ConfigLoader, WorldLoader, Game, Interaction, PodScene],
   plugins: {
     scene: [
       {

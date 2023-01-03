@@ -91,6 +91,7 @@ export default class PodScene extends Phaser.Scene {
   }
 
   create() {
+    this.scene.pause("interaction");
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
 

@@ -36,10 +36,6 @@ export class Character extends Phaser.GameObjects.GameObject {
     this.followee = followee;
     this.follower = follower;
 
-    if (this.follower) {
-      this.follower.followee = this;
-    }
-
     // @ts-ignore Ignore, we'll add the Matter physics later
     this.instance = this.scene.make.spine({
       ...spriteConfig,
@@ -48,6 +44,10 @@ export class Character extends Phaser.GameObjects.GameObject {
       animationName: getBasicAnimation("idle", "front"),
       loop: true,
     });
+
+    if (this.follower) {
+      this.follower.followee = this;
+    }
 
     this.instance.depth = (spriteConfig?.y as number) || 0;
 

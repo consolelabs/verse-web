@@ -1,0 +1,6 @@
+{
+  "main": "map",
+  "maps": {
+    "map": "/tiles/map.json"
+  }
+}
