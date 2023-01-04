@@ -3,6 +3,7 @@ import { Player } from "../characters/player";
 import { CDN_PATH, PROD, TILE_SIZE } from "../constants";
 import Stats from "stats.js";
 import { PodHUD } from "../objects/hud/PodHUD";
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 // FPS Counter
 const stats = new Stats();
@@ -15,7 +16,8 @@ let text: any;
 export default class PodScene extends Phaser.Scene {
   private player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
-  private mode: "normal" | "builder" = "normal";
+  public mode: "normal" | "builder" = "normal";
+  public rexUI!: RexUIPlugin;
 
   constructor() {
     super({
@@ -60,6 +62,31 @@ export default class PodScene extends Phaser.Scene {
       }
 
       this.load.image(tileset.name, `/tiles/${tilesetSource[tileset.name]}`);
+    });
+
+    // Load some mock exterior items for the builder mode
+    [
+      "bench-1",
+      "bench-2",
+      "bench-3",
+      "plant-1",
+      "plant-2",
+      "street-light",
+      "trash-bin",
+      "vending-machine",
+      "ice-cream-cart",
+      "flower-bed",
+    ].forEach((key) => {
+      // Do nothing if texture was already loaded
+      if (this.textures.exists(key)) {
+        return;
+      }
+
+      this.load.atlas(
+        key,
+        `/tiles/exterior/sprites/${key}/${key}.png`,
+        `/tiles/exterior/sprites/${key}/${key}.json`
+      );
     });
   }
 
@@ -113,8 +140,29 @@ export default class PodScene extends Phaser.Scene {
         .setScale(1 / camera.zoom)
         .setScrollFactor(0);
 
-      this.input.on("pointermove", (p: any) => {
-        if (!p.isDown) return;
+      this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
+        // We do nothing if:
+        // 1. Pointer is not down
+        // 2. Pointer is over certain regions (e.g. HUD)
+        // FIXME: Move the region checking logic into an util
+        if (
+          !p.isDown ||
+          [
+            // For example, the left HUD region has these bounds
+            {
+              max: { x: 500, y: window.innerHeight },
+              min: { x: 0, y: window.innerHeight - 100 },
+            },
+          ].some(
+            (bounds) =>
+              p.x > bounds.min.x &&
+              p.y > bounds.min.y &&
+              p.x < bounds.max.x &&
+              p.y < bounds.max.y
+          )
+        ) {
+          return;
+        }
 
         camera.scrollX -= (p.x - p.prevPosition.x) / camera.zoom;
         camera.scrollY -= (p.y - p.prevPosition.y) / camera.zoom;
@@ -150,7 +198,7 @@ export default class PodScene extends Phaser.Scene {
     if (this.mode !== "builder") {
       this.player.update();
     } else {
-      text.setText(
+      text?.setText(
         JSON.stringify(
           this.input.activePointer,
           [

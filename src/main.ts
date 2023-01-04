@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import "phaser/plugins/spine/dist/SpinePlugin";
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 import Boot from "./scenes/Boot";
 import Game from "./scenes/Game";
@@ -23,6 +24,11 @@ const config: Phaser.Types.Core.GameConfig = {
         key: "SpinePlugin",
         plugin: window.SpinePlugin,
         mapping: "spine",
+      },
+      {
+        key: "rexUI",
+        plugin: RexUIPlugin,
+        mapping: "rexUI",
       },
     ],
   },
