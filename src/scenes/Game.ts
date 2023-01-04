@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 import { Player } from "../characters/player";
-import { PROD, TILE_SIZE } from "../constants";
+import { CDN_PATH, PROD, TILE_SIZE } from "../constants";
 import { BaseSprite } from "../objects/BaseSprite";
 import Stats from "stats.js";
+import { GameHUD } from "../objects/hud/GameHUD";
 
 // FPS Counter
 const stats = new Stats();
@@ -11,6 +12,7 @@ document.body.appendChild(stats.dom);
 
 export default class Game extends Phaser.Scene {
   private player!: Player;
+  private map!: Phaser.Tilemaps.Tilemap;
 
   constructor() {
     super({
@@ -24,25 +26,80 @@ export default class Game extends Phaser.Scene {
           debugBodyColor: 0x0000ff,
         },
       },
+      loader: {
+        baseURL: CDN_PATH,
+      },
     });
   }
 
   preload() {
     this.player = new Player(this);
+
+    // Now load assets
+    const tilesetSource = Object.fromEntries(
+      this.cache.tilemap
+        .get("map")
+        ?.data.tilesets.map((ts: any) => [ts.name, ts.image]) ?? []
+    );
+
+    this.map = this.make.tilemap({
+      key: "map",
+      tileWidth: TILE_SIZE,
+      tileHeight: TILE_SIZE,
+    });
+    const { layers = [], tilesets = [] } = this.map;
+
+    // Load tilesets
+    tilesets.forEach((tileset) => {
+      // Do nothing if texture was already loaded
+      if (this.textures.exists(tileset.name)) {
+        return;
+      }
+
+      this.load.image(tileset.name, `/tiles/${tilesetSource[tileset.name]}`);
+    });
+
+    // Load the sprite in each layer
+    layers.forEach((layer) => {
+      layer.data.forEach((row) => {
+        row.forEach((tile) => {
+          const spriteImage = tile.properties.spriteImage;
+          const spriteJSON = tile.properties.spriteJSON ?? "";
+          const spriteKey = spriteJSON.split("/").pop()?.slice(0, -5);
+          const isMultiAtlas = tile.properties.multiatlas ?? false;
+          if (spriteKey && spriteJSON) {
+            // Do nothing if texture was already loaded
+            if (this.textures.exists(spriteKey)) {
+              return;
+            }
+
+            if (isMultiAtlas) {
+              const path = spriteJSON.split("/");
+              path.pop();
+              path.unshift("tiles");
+              this.load.multiatlas(
+                spriteKey,
+                `/tiles/${spriteJSON}`,
+                path.join("/")
+              );
+            } else {
+              this.load.atlas(
+                spriteKey,
+                `/tiles/${spriteImage}`,
+                `/tiles/${spriteJSON}`
+              );
+            }
+          }
+        });
+      });
+    });
   }
 
   create() {
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
-    // Load the map & the sprites
-    const map = this.make.tilemap({
-      key: "map",
-      tileWidth: TILE_SIZE,
-      tileHeight: TILE_SIZE,
-    });
-
-    const { objects = [], layers = [], tilesets = [] } = map;
+    const { objects = [], layers = [], tilesets = [] } = this.map;
 
     objects.forEach((layer) => {
       layer.objects.forEach((object) => {
@@ -107,8 +164,10 @@ export default class Game extends Phaser.Scene {
       });
     });
 
-    tilesets.forEach((tileset) => map.addTilesetImage(tileset.name));
+    // Add loaded tilesets to the map
+    tilesets.forEach((tileset) => this.map.addTilesetImage(tileset.name));
 
+    // Loop through the layers & create them (& the sprites they refer to)
     layers.forEach((layer) => {
       const isStatic =
         // @ts-ignore
@@ -118,7 +177,7 @@ export default class Game extends Phaser.Scene {
         // @ts-ignore
         layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
 
-      map.createLayer(layer.name, tilesets.split(","), 0, 0);
+      this.map.createLayer(layer.name, tilesets.split(","), 0, 0);
 
       if (!isStatic) {
         layer.data.forEach((row, y) => {
@@ -148,6 +207,9 @@ export default class Game extends Phaser.Scene {
       y: 5600,
       scale: 0.4,
     });
+
+    // Load HUD
+    new GameHUD(this);
   }
 
   update() {

@@ -18,16 +18,18 @@ export class Button extends Phaser.GameObjects.Container {
     key?: string;
     text: string;
     textStyle?: Phaser.GameObjects.TextStyle;
+    depth?: number;
     onClick?: () => void;
   }) {
     const {
       scene,
       x,
       y,
-      width = 200,
+      width = 100,
       height = 50,
       key = "btn",
       text,
+      depth = 1000,
       textStyle = {
         fontSize: "28px",
       },
@@ -46,29 +48,54 @@ export class Button extends Phaser.GameObjects.Container {
     this.key = key;
 
     // Generate texture for button bg
-    const graphics = scene.add.graphics();
+    const graphics = this.scene.add.graphics();
     graphics.fillStyle(0x000000, 1);
-    //  8px radius on the corners
-    graphics.fillRoundedRect(this.x, this.y, this.width, this.height, 8);
-    graphics.generateTexture(`${this.key}-bg`);
-    graphics.destroy();
-
-    // Generate button object
-    const button = this.scene.add
-      .sprite(0, 0, `${this.key}-bg`)
-      .setInteractive();
-    const buttonText = this.scene.add.text(0, 0, text, textStyle);
-
+    // 8px radius on the corners
     // Translate the components by 50% on both axes
-    button.x -= this.width / 2;
-    button.y -= this.height / 2;
+    graphics.fillRoundedRect(
+      this.x - this.width / 2,
+      this.y - this.height / 2,
+      this.width,
+      this.height,
+      8
+    );
+    graphics.setScrollFactor(0);
+    graphics.setDepth(depth);
+
+    const buttonText = this.scene.add.text(0, 0, text, textStyle);
+    // Translate the components by 50% on both axes
     buttonText.x -= buttonText.width / 2;
     buttonText.y -= buttonText.height / 2;
 
-    button.on("pointerup", onClick);
-
-    this.add(button);
     this.add(buttonText);
+    this.setDepth(depth);
+    this.setScrollFactor(0);
+    this.setInteractive();
+
+    // Change bg color on click captured
+    this.on("pointerdown", () => {
+      graphics.fillStyle(0x444444, 1);
+      graphics.fillRoundedRect(
+        this.x - this.width / 2,
+        this.y - this.height / 2,
+        this.width,
+        this.height,
+        8
+      );
+    });
+
+    // Change bg color back on click released
+    this.on("pointerup", () => {
+      graphics.fillStyle(0x000000, 1);
+      graphics.fillRoundedRect(
+        this.x - this.width / 2,
+        this.y - this.height / 2,
+        this.width,
+        this.height,
+        8
+      );
+      onClick();
+    });
 
     this.scene.add.existing(this);
   }

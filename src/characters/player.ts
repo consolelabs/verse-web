@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { CDN_PATH, TILE_SIZE } from "../constants";
+import { TILE_SIZE } from "../constants";
 import { AnimationDirection, CharacterType } from "../types/character";
 import { Character } from "./character";
 
@@ -16,12 +16,11 @@ export class Player extends Phaser.GameObjects.GameObject {
   }
 
   load() {
-    this.scene.load.setBaseURL(`${CDN_PATH}/characters`);
     ["fukuro", "ghost-neko", "neko", "tv-head"].forEach((char) => {
       this.scene.load.spine(
         `${char}-character`,
-        `/${char}/char.json`,
-        `/${char}/char.atlas`
+        `/characters/${char}/char.json`,
+        `/characters/${char}/char.atlas`
       );
     });
   }
