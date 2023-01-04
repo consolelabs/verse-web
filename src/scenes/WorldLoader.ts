@@ -14,7 +14,6 @@ export default class WorldLoader extends Phaser.Scene {
 
   preload() {
     this.load.image("title-screen-bg", "/images/title-screen-bg.jpeg");
-    this.load.json("config", "/tiles/config.json");
     this.load.tilemapTiledJSON("map", "/tiles/map.json");
     this.load.tilemapTiledJSON("pod", "/tiles/pod.json");
 
@@ -23,12 +22,6 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   create() {
-    const { shapes: shapeFiles = {} } = this.cache.json.get("config");
-
-    Object.entries<string>(shapeFiles).forEach((sf) => {
-      this.load.json(`${sf[0]}-shapes`, `/tiles/${sf[1]}`);
-    });
-
     this.load.once("complete", () => {
       // Fade out & prepare for scene transition
       this.cameras.main.fadeOut(500, 0, 0, 0);

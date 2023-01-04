@@ -17,21 +17,9 @@ export class BaseSprite {
     animated?: boolean;
     duration?: number;
   }) {
-    const shapes = Object.entries(game.cache.json.entries.entries).reduce<
-      Record<string, any>
-    >((acc, c) => {
-      if (c[0].endsWith("-shapes")) {
-        return {
-          ...acc,
-          ...c[1],
-        };
-      }
-      return acc;
-    }, {});
-
     let spriteObject: any;
 
-    if (animated || shapes[key]) {
+    if (animated) {
       spriteObject = game.matter.add.sprite(
         anchor.left * TILE_SIZE,
         (anchor.bottom + 1) * TILE_SIZE,
@@ -39,8 +27,6 @@ export class BaseSprite {
         undefined,
         {
           isStatic: true,
-          // @ts-ignore
-          shape: shapes[key],
         }
       );
     } else {
@@ -77,9 +63,7 @@ export class BaseSprite {
 
     spriteObject.setDepth(
       anchor.bottom -
-        (shapes[key]
-          ? (spriteObject.height - spriteObject.displayOriginY) / TILE_SIZE
-          : 0)
+        (spriteObject.height - spriteObject.displayOriginY) / TILE_SIZE
     );
 
     this.spriteObject = spriteObject;
