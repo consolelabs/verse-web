@@ -33,33 +33,26 @@ export default class GameInteraction extends Phaser.Scene {
     }
     const label = new Label(this, {
       space: {
-        left: 7,
-        top: 5,
-        bottom: 5,
-        right: 7,
-        icon: 5,
+        left: 10,
+        top: 7,
+        bottom: 10,
+        icon: 10,
       },
       background: this.add.existing(
         new RoundRectangle(this, 0, 0, 1, 1, 10, 0x150f2b)
       ),
-      icon: this.add.text(0, 0, interactionData.key, {
-        padding: {
-          top: 5,
-          left: 5,
-          right: 5,
-          bottom: 8,
-        },
-        fontSize: "1.5rem",
-        color: "#04a9f5",
-      }),
+      icon: this.add
+        .sprite(0, 0, "j-control")
+        .play("j-control-press")
+        .setDisplaySize(32, 32),
       text: this.add.text(0, 0, interactionData.text, {
-        fontSize: "1rem",
+        fontSize: "1.25rem",
         color: "white",
       }),
     }).setAlpha(0);
 
     if (this.sizer) {
-      this.sizer.add(label).layout();
+      this.sizer.add(label, { align: "center-center" }).layout();
       label.fadeIn(100, 1);
     }
   }

@@ -1,5 +1,5 @@
 import { TILE_SIZE } from "../constants";
-import Game from "../scenes/Game/map";
+import Game from "../scenes/Game/Map";
 
 export class BaseSprite {
   public spriteObject: Phaser.Physics.Matter.Sprite;

@@ -1,16 +1,37 @@
 import Phaser from "phaser";
 import { Player } from "../../characters/player";
+import { Character } from "../../characters/character";
 import { COLLISION_CATEGORY, CDN_PATH, PROD, TILE_SIZE } from "../../constants";
 import { BaseSprite } from "../../objects/BaseSprite";
 import Stats from "stats.js";
+import GameDialogue from "../Game/Dialogue";
+import GameInteraction from "./Interaction";
 
-function getInteractHandler(properties: any) {
-  switch (properties.type) {
-    case "open-link":
-      return () => window.open(properties.value, "_blank");
-    default:
-      return () => window.alert(`${properties.type} - ${properties.value}`);
-  }
+function getInteractHandler(properties: any, scene: GameMap) {
+  return () => {
+    scene.player.idle = true;
+    scene.scene.pause("game-interaction");
+    switch (properties.type) {
+      case "open-link":
+        window.open(properties.value, "_blank");
+        scene.player.idle = false;
+        scene.scene.resume("game-interaction");
+        break;
+      case "dialogue": {
+        const dialogueScene = scene.scene.get("game-dialogue") as GameDialogue;
+        dialogueScene.show(properties.value, () => {
+          scene.player.idle = false;
+          scene.scene.resume("game-interaction");
+        });
+        break;
+      }
+      default:
+        window.alert(`${properties.type} - ${properties.value}`);
+        scene.player.idle = false;
+        scene.scene.resume("game-interaction");
+        break;
+    }
+  };
 }
 
 // FPS Counter
@@ -19,7 +40,7 @@ stats.showPanel(0);
 document.body.appendChild(stats.dom);
 
 export default class GameMap extends Phaser.Scene {
-  private player!: Player;
+  player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
 
   constructor() {
@@ -46,8 +67,12 @@ export default class GameMap extends Phaser.Scene {
     hudScene.mainScene = this;
     this.scene.launch(hudScene);
 
-    const interactionScene = this.scene.get("game-interaction");
+    const interactionScene = this.scene.get(
+      "game-interaction"
+    ) as GameInteraction;
     this.scene.launch(interactionScene);
+    this.scene.launch("game-dialogue");
+
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");
     const interactionMapping = this.cache.json.get("interaction");
@@ -82,7 +107,44 @@ export default class GameMap extends Phaser.Scene {
           const properties = interactionMapping.find((i: any) => i.id === id);
           if (!properties) return;
 
-          if (object.point) {
+          if (
+            object.point &&
+            properties.type === "dialogue" &&
+            properties.character
+          ) {
+            const char = new Character({
+              scene: this,
+              type: properties.character,
+              spriteConfig: {
+                x,
+                y,
+                scale: 0.4,
+              },
+            });
+            char.playAnimation("idle", "front");
+            // since the NPC is not moving we might want to re extend the collision box so the player won't need to
+            // stand too close to the NPC to trigger interaction
+            char.instance.height *= 5 / 2;
+
+            this.matter.add.gameObject(char.instance, {
+              isStatic: true,
+              onCollideCallback: () => {
+                interactionScene.show({
+                  key: properties.key,
+                  text: properties.text,
+                  onInteract: getInteractHandler(properties, this),
+                });
+              },
+              onCollideEndCallback: () => {
+                interactionScene.hide();
+              },
+            });
+            char.instance.setFixedRotation();
+
+            char.instance.setCollisionCategory(COLLISION_CATEGORY.NPC);
+            char.instance.setCollidesWith(COLLISION_CATEGORY.PLAYER);
+            char.instance.setDepth(y / TILE_SIZE);
+          } else if (object.point) {
             this.matter.add.circle(x, y, TILE_SIZE, {
               isStatic: true,
               isSensor: true,
@@ -91,15 +153,13 @@ export default class GameMap extends Phaser.Scene {
                 mask: COLLISION_CATEGORY.PLAYER,
               },
               onCollideCallback: () => {
-                // @ts-ignore
                 interactionScene.show({
                   key: properties.key,
                   text: properties.text,
-                  onInteract: getInteractHandler(properties),
+                  onInteract: getInteractHandler(properties, this),
                 });
               },
               onCollideEndCallback: () => {
-                // @ts-ignore
                 interactionScene.hide();
               },
             });
@@ -116,7 +176,7 @@ export default class GameMap extends Phaser.Scene {
                 interactionScene.show({
                   key: properties.key,
                   text: properties.text,
-                  onInteract: getInteractHandler(properties),
+                  onInteract: getInteractHandler(properties, this),
                 });
               },
               onCollideEndCallback: () => {
@@ -282,7 +342,7 @@ export default class GameMap extends Phaser.Scene {
     });
 
     // Load characters
-    this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
+    this.player.loadCharacters(["tv-head", "fukuro", "ghost-neko"], {
       x: 5000,
       y: 5600,
       scale: 0.4,
