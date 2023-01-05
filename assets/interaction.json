@@ -1,0 +1,23 @@
+[
+  {
+    "id": 178,
+    "key": "J",
+    "text": "Visit Mochi",
+    "type": "open-link",
+    "value": "https://mochi.gg"
+  },
+  {
+    "id": 179,
+    "key": "J",
+    "text": "Enter building",
+    "type": "map-transition",
+    "value": "building"
+  },
+  {
+    "id": 180,
+    "key": "J",
+    "text": "Visit PodTown",
+    "type": "open-link",
+    "value": "https://pod.town"
+  }
+]

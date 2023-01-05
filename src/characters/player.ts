@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { TILE_SIZE } from "../constants";
+import { COLLISION_CATEGORY, TILE_SIZE } from "../constants";
 import { AnimationDirection, CharacterType } from "../types/character";
 import { Character } from "./character";
 
@@ -42,7 +42,7 @@ export class Player extends Phaser.GameObjects.GameObject {
     }, [] as Character[]);
 
     // Loop and add extra logic
-    this.characters.forEach((character) => {
+    this.characters.forEach((character, i) => {
       // Add physic object to each character
       this.scene.matter.add.gameObject(character.instance);
       character.instance.setFixedRotation();
@@ -50,7 +50,12 @@ export class Player extends Phaser.GameObjects.GameObject {
       // Set collision filter so that characters will not collide with themselves
       // but still collide with everything else
       character.instance.setCollisionGroup(-1);
-      character.instance.setCollidesWith(-1);
+      character.instance.setCollisionCategory(
+        i === 0 ? COLLISION_CATEGORY.PLAYER : COLLISION_CATEGORY.MEMBER
+      );
+      character.instance.setCollidesWith(
+        i === 0 ? [-1, COLLISION_CATEGORY.INTERACTION_POINT] : -1
+      );
     });
 
     // Follow the last character
