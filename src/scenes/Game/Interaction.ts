@@ -5,13 +5,13 @@ import {
   RoundRectangle,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
 
-export default class Interaction extends Phaser.Scene {
+export default class GameInteraction extends Phaser.Scene {
   private sizer?: Sizer;
   private key?: Phaser.Input.Keyboard.Key;
 
   constructor() {
     super({
-      key: "interaction",
+      key: "game-interaction",
     });
   }
 

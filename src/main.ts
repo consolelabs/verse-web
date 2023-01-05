@@ -1,13 +1,14 @@
 import Phaser from "phaser";
 import "phaser/plugins/spine/dist/SpinePlugin";
-import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 import Boot from "./scenes/Boot";
-import Game from "./scenes/Game";
-import PodScene from "./scenes/Pod";
 import WorldLoader from "./scenes/WorldLoader";
 import ConfigLoader from "./scenes/ConfigLoader";
-import Interaction from "./scenes/Interaction";
+import GameMap from "./scenes/Game/Map";
+import GameHUD from "./scenes/Game/HUD";
+import GameInteraction from "./scenes/Game/Interaction";
+import PodMap from "./scenes/Pod/Map";
+import PodHUD from "./scenes/Pod/HUD";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -19,18 +20,22 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.RESIZE,
   },
   // Boot screen -> Load world & world assets -> Game
-  scene: [Boot, ConfigLoader, WorldLoader, Game, Interaction, PodScene],
+  scene: [
+    Boot,
+    ConfigLoader,
+    WorldLoader,
+    GameMap,
+    GameHUD,
+    GameInteraction,
+    PodMap,
+    PodHUD,
+  ],
   plugins: {
     scene: [
       {
         key: "SpinePlugin",
         plugin: window.SpinePlugin,
         mapping: "spine",
-      },
-      {
-        key: "rexUI",
-        plugin: RexUIPlugin,
-        mapping: "rexUI",
       },
     ],
   },

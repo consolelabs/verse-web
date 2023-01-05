@@ -1,9 +1,7 @@
 import Phaser from "phaser";
-import { Player } from "../characters/player";
-import { CDN_PATH, PROD, TILE_SIZE } from "../constants";
+import { Player } from "../../characters/player";
+import { CDN_PATH, PROD, TILE_SIZE } from "../../constants";
 import Stats from "stats.js";
-import { PodHUD } from "../objects/hud/PodHUD";
-import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 // FPS Counter
 const stats = new Stats();
@@ -13,11 +11,10 @@ document.body.appendChild(stats.dom);
 // Debug text
 let text: any;
 
-export default class PodScene extends Phaser.Scene {
+export default class PodMap extends Phaser.Scene {
   private player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
   public mode: "normal" | "builder" = "normal";
-  public rexUI!: RexUIPlugin;
 
   constructor() {
     super({
@@ -118,7 +115,10 @@ export default class PodScene extends Phaser.Scene {
     });
 
     // Load HUD
-    new PodHUD(this);
+    const hudScene = this.scene.get("pod-hud");
+    // @ts-ignore
+    hudScene.mainScene = this;
+    this.scene.launch(hudScene);
   }
 
   toggleBuildMode() {

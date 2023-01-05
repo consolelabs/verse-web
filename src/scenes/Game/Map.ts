@@ -1,9 +1,8 @@
 import Phaser from "phaser";
-import { Player } from "../characters/player";
-import { COLLISION_CATEGORY, CDN_PATH, PROD, TILE_SIZE } from "../constants";
-import { BaseSprite } from "../objects/BaseSprite";
+import { Player } from "../../characters/player";
+import { COLLISION_CATEGORY, CDN_PATH, PROD, TILE_SIZE } from "../../constants";
+import { BaseSprite } from "../../objects/BaseSprite";
 import Stats from "stats.js";
-import { GameHUD } from "../objects/hud/GameHUD";
 
 function getInteractHandler(properties: any) {
   switch (properties.type) {
@@ -19,7 +18,7 @@ const stats = new Stats();
 stats.showPanel(0);
 document.body.appendChild(stats.dom);
 
-export default class Game extends Phaser.Scene {
+export default class GameMap extends Phaser.Scene {
   private player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
 
@@ -42,7 +41,12 @@ export default class Game extends Phaser.Scene {
   }
 
   preload() {
-    const interactionScene = this.scene.get("interaction");
+    const hudScene = this.scene.get("game-hud");
+    // @ts-ignore
+    hudScene.mainScene = this;
+    this.scene.launch(hudScene);
+
+    const interactionScene = this.scene.get("game-interaction");
     this.scene.launch(interactionScene);
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");
@@ -283,9 +287,6 @@ export default class Game extends Phaser.Scene {
       y: 5600,
       scale: 0.4,
     });
-
-    // Load HUD
-    new GameHUD(this);
   }
 
   update() {
