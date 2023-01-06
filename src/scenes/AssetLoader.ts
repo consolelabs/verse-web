@@ -5,25 +5,23 @@ export default class AssetLoader extends Phaser.Scene {
   constructor() {
     super({
       key: "asset-loader",
-      loader: {
-        baseURL: CDN_PATH,
-      },
     });
   }
 
   preload() {
-    this.load.spritesheet("j-control", "/controls/j.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-      spacing: 1,
-    });
-
+    this.load.setPath(CDN_PATH);
     ["fukuro", "ghost-neko", "neko", "tv-head", "rabby"].forEach((char) => {
       this.load.spine(
         `${char}-character`,
         `/characters/${char}/char.json`,
         `/characters/${char}/char.atlas`
       );
+    });
+
+    this.load.spritesheet("j-control", "/controls/j.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+      spacing: 1,
     });
 
     const emotions = {
