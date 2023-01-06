@@ -6,6 +6,7 @@ import { BaseSprite } from "../../objects/BaseSprite";
 import Stats from "stats.js";
 import GameDialogue from "../Game/Dialogue";
 import GameInteraction from "./Interaction";
+import { SceneKey } from "../../constants/scenes";
 
 function getInteractHandler(properties: any, scene: GameMap) {
   return () => {
@@ -45,7 +46,7 @@ export default class GameMap extends Phaser.Scene {
 
   constructor() {
     super({
-      key: "game",
+      key: SceneKey.GAME,
       physics: {
         matter: {
           gravity: { y: 0 },
@@ -62,16 +63,20 @@ export default class GameMap extends Phaser.Scene {
   }
 
   preload() {
-    const hudScene = this.scene.get("game-hud");
+    // Launch HUD scene
+    const hudScene = this.scene.get(SceneKey.GAME_HUD);
     // @ts-ignore
     hudScene.mainScene = this;
     this.scene.launch(hudScene);
 
+    // Launch interaction scene
     const interactionScene = this.scene.get(
-      "game-interaction"
+      SceneKey.GAME_INTERACTION
     ) as GameInteraction;
     this.scene.launch(interactionScene);
-    this.scene.launch("game-dialogue");
+
+    // Launch dialog scene
+    this.scene.launch(SceneKey.GAME_DIALOG);
 
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");

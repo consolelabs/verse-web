@@ -1,9 +1,10 @@
 import Phaser from "phaser";
+import { SceneKey } from "../constants/scenes";
 
 export default class Boot extends Phaser.Scene {
   constructor() {
     super({
-      key: "boot",
+      key: SceneKey.BOOT,
     });
   }
 
@@ -15,6 +16,6 @@ export default class Boot extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("config-loader");
+    this.scene.start(SceneKey.CONFIG_LOADER);
   }
 }

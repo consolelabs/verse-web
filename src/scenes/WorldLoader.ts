@@ -1,12 +1,13 @@
 import Phaser from "phaser";
 import { CDN_PATH } from "../constants";
+import { SceneKey } from "../constants/scenes";
 
 export default class WorldLoader extends Phaser.Scene {
   private proceed = false;
 
   constructor() {
     super({
-      key: "world-loader",
+      key: SceneKey.WORLD_LOADER,
       loader: {
         baseURL: CDN_PATH,
       },
@@ -41,7 +42,7 @@ export default class WorldLoader extends Phaser.Scene {
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
       () => {
         if (this.proceed) {
-          this.scene.start("game");
+          this.scene.start(SceneKey.GAME);
         } else {
           // TODO: maybe show error scene
         }

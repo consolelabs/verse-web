@@ -6,7 +6,26 @@ import {
   Buttons,
   Label,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
+import { SceneKey } from "../../constants/scenes";
 import PodMap from "./Map";
+
+export interface Item {
+  key: string;
+  quantity: number;
+}
+
+const mockItems: Item[] = [
+  { key: "bench-1", quantity: 1 },
+  { key: "bench-2", quantity: 1 },
+  { key: "bench-3", quantity: 1 },
+  { key: "plant-1", quantity: 1 },
+  { key: "plant-2", quantity: 1 },
+  { key: "street-light", quantity: 1 },
+  { key: "trash-bin", quantity: 1 },
+  { key: "vending-machine", quantity: 1 },
+  { key: "ice-cream-cart", quantity: 1 },
+  { key: "flower-bed", quantity: 1 },
+];
 
 const createButton = (
   scene: Phaser.Scene,
@@ -95,7 +114,7 @@ export default class PodHUD extends Phaser.Scene {
 
   constructor(public mainScene: PodMap) {
     super({
-      key: "pod-hud",
+      key: SceneKey.POD_HUD,
     });
   }
 
@@ -145,8 +164,8 @@ export default class PodHUD extends Phaser.Scene {
     this.mainScene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
       () => {
-        this.mainScene.scene.stop("pod-hud");
-        this.mainScene.scene.start("game");
+        this.mainScene.scene.stop(SceneKey.POD_HUD);
+        this.mainScene.scene.start(SceneKey.GAME);
       }
     );
 
@@ -156,7 +175,7 @@ export default class PodHUD extends Phaser.Scene {
   toggleBuildMode() {
     this.mainScene.toggleBuildMode();
 
-    if (this.mainScene.mode === "builder") {
+    if (this.mainScene.mode === "build") {
       // Bottom left HUD
       this.bottomLeftHUD = this.mainScene.add.group();
 
@@ -187,28 +206,17 @@ export default class PodHUD extends Phaser.Scene {
 
           return createItem(scene, item);
         },
-        items: [
-          "bench-1",
-          "bench-2",
-          "bench-3",
-          "plant-1",
-          "plant-2",
-          "street-light",
-          "trash-bin",
-          "vending-machine",
-          "ice-cream-cart",
-          "flower-bed",
-        ].map((key, index) => {
+        items: mockItems.map((item, index) => {
           return {
             id: index,
-            sprite: key,
+            sprite: item.key,
           };
         }),
       })
         .layout()
         // @ts-ignore
-        .on("cell.1tap", (...props) => {
-          console.log(props);
+        .on("cell.1tap", (_, index: number) => {
+          this.mainScene.setItemToPlace(mockItems[index]);
         });
 
       this.bottomLeftHUD.add(table);

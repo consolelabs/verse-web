@@ -4,6 +4,7 @@ import {
   Sizer,
   RoundRectangle,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
+import { SceneKey } from "../../constants/scenes";
 
 export default class GameInteraction extends Phaser.Scene {
   private sizer?: Sizer;
@@ -11,7 +12,7 @@ export default class GameInteraction extends Phaser.Scene {
 
   constructor() {
     super({
-      key: "game-interaction",
+      key: SceneKey.GAME_INTERACTION,
     });
   }
 

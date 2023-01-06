@@ -4,6 +4,7 @@ import {
   Buttons,
   Label,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
+import { SceneKey } from "../../constants/scenes";
 import PodMap from "./Map";
 
 const createButton = (
@@ -43,7 +44,7 @@ const createButton = (
 export default class GameHUD extends Phaser.Scene {
   constructor(public mainScene: PodMap) {
     super({
-      key: "game-hud",
+      key: SceneKey.GAME_HUD,
     });
   }
 
@@ -83,9 +84,9 @@ export default class GameHUD extends Phaser.Scene {
     this.mainScene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
       () => {
-        this.mainScene.scene.stop("game-hud");
-        this.mainScene.scene.stop("game-interaction");
-        this.mainScene.scene.start("pod");
+        this.mainScene.scene.stop(SceneKey.GAME_HUD);
+        this.mainScene.scene.stop(SceneKey.GAME_INTERACTION);
+        this.mainScene.scene.start(SceneKey.POD);
       }
     );
   }
