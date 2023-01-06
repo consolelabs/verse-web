@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1010000,
+    "character": {
+      "id": 1,
+      "name": "Rarepepe the Fog",
+      "face": "normal"
+    },
+    "content": {
+      "english": "Oh hi there, you must be new, haven't seen you around. Welcome to Futuristic City! My name is Rarepepe the Fog, they usually call me Pepe."
+    },
+    "next": 1010001
+  },
+  {
+    "id": 1010001,
+    "character": {
+      "id": 1,
+      "name": "Pepe",
+      "face": "happy"
+    },
+    "content": {
+      "english": "Currently I am the tour guide for this city, it's being built and soon this place will be crowded with citizen of PodTown."
+    },
+    "next": 1010002
+  },
+  {
+    "id": 1010002,
+    "character": {
+      "id": 1,
+      "name": "Pepe",
+      "face": "sad"
+    },
+    "content": {
+      "english": "Unforetunately you're here quite early I'm afraid, feel free to poke around though."
+    }
+  }
+]

@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { CDN_PATH } from "../constants";
-import { TitleBg } from "../objects/TitleBg";
 
 export default class WorldLoader extends Phaser.Scene {
   private proceed = false;
@@ -15,8 +14,6 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   preload() {
-    new TitleBg({ scene: this });
-
     const config = this.cache.json.get("config");
     if (
       !config ||

@@ -7,22 +7,12 @@ export class Player extends Phaser.GameObjects.GameObject {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: any;
   public characters: Character[] = [];
+  idle = false;
 
   constructor(public scene: Phaser.Scene) {
     super(scene, "player");
-    this.load();
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys("W,A,S,D,Shift");
-  }
-
-  load() {
-    ["fukuro", "ghost-neko", "neko", "tv-head"].forEach((char) => {
-      this.scene.load.spine(
-        `${char}-character`,
-        `/characters/${char}/char.json`,
-        `/characters/${char}/char.atlas`
-      );
-    });
   }
 
   loadCharacters(
@@ -68,6 +58,7 @@ export class Player extends Phaser.GameObjects.GameObject {
   }
 
   update() {
+    if (this.idle) return;
     const leadCharacter = this.characters[0];
     const directions: AnimationDirection[] = [];
 
