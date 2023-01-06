@@ -6,6 +6,7 @@ import {
   Label,
   Sizer,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
+import { SceneKey } from "../../constants/scenes";
 
 const COLOR_PRIMARY = 0x150f2b;
 const COLOR_SECONDARY = 0x2c2640;
@@ -25,7 +26,7 @@ export default class GameDialogue extends Phaser.Scene {
 
   constructor() {
     super({
-      key: "game-dialogue",
+      key: SceneKey.GAME_DIALOGUE,
       active: false,
     });
   }

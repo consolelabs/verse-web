@@ -11,25 +11,27 @@ import { SceneKey } from "../../constants/scenes";
 function getInteractHandler(properties: any, scene: GameMap) {
   return () => {
     scene.player.idle = true;
-    scene.scene.pause("game-interaction");
+    scene.scene.pause(SceneKey.GAME_INTERACTION);
     switch (properties.type) {
       case "open-link":
         window.open(properties.value, "_blank");
         scene.player.idle = false;
-        scene.scene.resume("game-interaction");
+        scene.scene.resume(SceneKey.GAME_INTERACTION);
         break;
       case "dialogue": {
-        const dialogueScene = scene.scene.get("game-dialogue") as GameDialogue;
+        const dialogueScene = scene.scene.get(
+          SceneKey.GAME_DIALOGUE
+        ) as GameDialogue;
         dialogueScene.show(properties.value, () => {
           scene.player.idle = false;
-          scene.scene.resume("game-interaction");
+          scene.scene.resume(SceneKey.GAME_INTERACTION);
         });
         break;
       }
       default:
         window.alert(`${properties.type} - ${properties.value}`);
         scene.player.idle = false;
-        scene.scene.resume("game-interaction");
+        scene.scene.resume(SceneKey.GAME_INTERACTION);
         break;
     }
   };
@@ -76,7 +78,7 @@ export default class GameMap extends Phaser.Scene {
     this.scene.launch(interactionScene);
 
     // Launch dialog scene
-    this.scene.launch(SceneKey.GAME_DIALOG);
+    this.scene.launch(SceneKey.GAME_DIALOGUE);
 
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");
