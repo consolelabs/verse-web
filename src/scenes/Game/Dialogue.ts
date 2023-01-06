@@ -122,7 +122,7 @@ export default class GameDialogue extends Phaser.Scene {
             mode: "word",
             width: window.innerWidth / 3,
           },
-          maxLines: 4,
+          maxLines: 5,
         })
       ),
       action: this.add
@@ -163,11 +163,13 @@ export default class GameDialogue extends Phaser.Scene {
           this.nextPage = true;
           return;
         }
-        this.textBox?.setIconTexture(
-          `${next.character.id}-${next.character.face}`
-        );
-        this.textBox?.setIconSize(CHARACTER_FACE_SIZE, CHARACTER_FACE_SIZE);
-        this.label?.setText(next.character.name);
+        this.textBox
+          ?.setIconTexture(`${next.character.id}-${next.character.face}`)
+          .layout();
+        this.textBox
+          ?.setIconSize(CHARACTER_FACE_SIZE, CHARACTER_FACE_SIZE)
+          .layout();
+        this.label?.setText(next.character.name).layout();
         this.dialogue = next;
         this.typing();
       }
