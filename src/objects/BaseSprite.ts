@@ -10,12 +10,14 @@ export class BaseSprite {
     anchor,
     animated = false,
     duration = 1000,
+    depthOffset = 1,
   }: {
     key: string;
     game: Game;
     anchor: { left: number; bottom: number };
     animated?: boolean;
     duration?: number;
+    depthOffset?: number;
   }) {
     let spriteObject: any;
 
@@ -61,9 +63,12 @@ export class BaseSprite {
       spriteObject.anims.play(`${key}-anims`);
     }
 
+    // By default, depth will be set to the anchor bottom
+    // If the sprite has custom property depthOffset defined,
+    // we'll adjust the depth based on that
     spriteObject.setDepth(
       anchor.bottom -
-        (spriteObject.height - spriteObject.displayOriginY) / TILE_SIZE
+        (spriteObject.height - spriteObject.height * depthOffset) / TILE_SIZE
     );
 
     this.spriteObject = spriteObject;

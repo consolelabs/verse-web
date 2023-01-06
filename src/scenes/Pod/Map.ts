@@ -169,7 +169,7 @@ export default class PodMap extends Phaser.Scene {
         // We do nothing if:
         // 1. Pointer is not down
         // 2. Pointer is over certain regions (e.g. HUD)
-        // FIXME: Move the region checking logic into an util
+        // TODO: Move the region checking logic into an util
         if (
           !p.isDown ||
           [
@@ -178,12 +178,8 @@ export default class PodMap extends Phaser.Scene {
               max: { x: 500, y: window.innerHeight },
               min: { x: 0, y: window.innerHeight - 100 },
             },
-          ].some(
-            (bounds) =>
-              p.x > bounds.min.x &&
-              p.y > bounds.min.y &&
-              p.x < bounds.max.x &&
-              p.y < bounds.max.y
+          ].some((bounds) =>
+            this.matter.bounds.contains(bounds, { x: p.x, y: p.y })
           )
         ) {
           return;

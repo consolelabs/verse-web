@@ -7,6 +7,7 @@ import Stats from "stats.js";
 import GameDialogue from "../Game/Dialogue";
 import GameInteraction from "./Interaction";
 import { SceneKey } from "../../constants/scenes";
+import { IBound } from "matter";
 
 function getInteractHandler(properties: any, scene: GameMap) {
   return () => {
@@ -45,6 +46,7 @@ document.body.appendChild(stats.dom);
 export default class GameMap extends Phaser.Scene {
   player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
+  public bounds!: IBound;
 
   constructor() {
     super({
@@ -99,6 +101,9 @@ export default class GameMap extends Phaser.Scene {
     });
     const { objects = [], layers = [], tilesets = [] } = this.map;
 
+    // TODO: Move/Divide this into separate classes for better handling, e.g:
+    // 1. CollisionObject
+    // 2. NPC
     objects.forEach((layer) => {
       const layerPropsRaw = layer.properties;
       const layerProps = Array.isArray(layerPropsRaw)
@@ -119,6 +124,7 @@ export default class GameMap extends Phaser.Scene {
             properties.type === "dialogue" &&
             properties.character
           ) {
+            // TODO: Move this to a new NPC class
             const char = new Character({
               scene: this,
               type: properties.character,
@@ -201,9 +207,10 @@ export default class GameMap extends Phaser.Scene {
           const y = object.y ?? 0;
           const w = object.width ?? 0;
           const h = object.height ?? 0;
+          let body: MatterJS.BodyType | undefined = undefined;
 
           if (object.rectangle) {
-            const body = this.matter.add.rectangle(0, 0, w, h, {
+            body = this.matter.add.rectangle(0, 0, w, h, {
               isStatic: true,
             });
 
@@ -240,7 +247,7 @@ export default class GameMap extends Phaser.Scene {
             };
 
             // Create the body
-            const body = this.matter.add.fromVertices(x, y, object.polygon, {
+            body = this.matter.add.fromVertices(x, y, object.polygon, {
               isStatic: true,
             });
 
@@ -303,6 +310,18 @@ export default class GameMap extends Phaser.Scene {
         });
       });
     });
+
+    // Set world bounds
+    this.bounds = {
+      min: { x: 0, y: 0 },
+      max: { x: this.map.widthInPixels, y: this.map.heightInPixels },
+    };
+    this.matter.world.setBounds(
+      this.bounds.min.x,
+      this.bounds.min.y,
+      this.bounds.max.x,
+      this.bounds.max.y
+    );
   }
 
   create() {
@@ -335,12 +354,14 @@ export default class GameMap extends Phaser.Scene {
               const atlas = this.textures.get(spriteKey);
               // phaser auto add a "BASE" frame so we need to subtract 1 more
               const animated = atlas.frameTotal - 1 > 1;
+
               new BaseSprite({
                 game: this,
                 key: spriteKey,
                 anchor: { left: x, bottom: y },
                 animated,
                 duration: Number(tile.properties.duration),
+                depthOffset: tile.properties.depthOffset,
               });
             }
           });
