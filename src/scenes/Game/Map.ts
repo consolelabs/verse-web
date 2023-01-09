@@ -366,12 +366,22 @@ export default class GameMap extends Phaser.Scene {
       y: 5600,
       scale: 0.4,
     });
+
+    // Follow the first character
+    this.cameras.main.startFollow(
+      this.player.characters[0].instance,
+      true,
+      0.05,
+      0.05
+    );
   }
 
   update() {
     if (!this.player) {
       return;
     }
+
+    console.log(this.game.loop.actualFps);
 
     this.player.update();
   }

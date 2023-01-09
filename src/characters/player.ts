@@ -47,14 +47,6 @@ export class Player extends Phaser.GameObjects.GameObject {
         i === 0 ? [-1, COLLISION_CATEGORY.INTERACTION_POINT] : -1
       );
     });
-
-    // Follow the last character
-    this.scene.cameras.main.startFollow(
-      this.characters[0].instance,
-      true,
-      0.05,
-      0.05
-    );
   }
 
   update() {

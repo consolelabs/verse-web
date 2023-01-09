@@ -123,6 +123,14 @@ export default class PodMap extends Phaser.Scene {
       scale: 0.4,
     });
 
+    // Follow the first character
+    this.cameras.main.startFollow(
+      this.player.characters[0].instance,
+      true,
+      0.05,
+      0.05
+    );
+
     // Set world bounds
     this.bounds = {
       min: { x: 0, y: 0 },
