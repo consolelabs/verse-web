@@ -3,10 +3,9 @@ import {
   RoundRectangle,
   GridTable,
   Sizer,
-  Buttons,
-  Label,
 } from "phaser3-rex-plugins/templates/ui/ui-components";
 import { SceneKey } from "../../constants/scenes";
+import { GridButtonGroup } from "../../objects/GridButtonGroup";
 import PodMap from "./Map";
 
 export interface Item {
@@ -26,40 +25,6 @@ const mockItems: Item[] = [
   { key: "ice-cream-cart", quantity: 1 },
   { key: "flower-bed", quantity: 1 },
 ];
-
-const createButton = (
-  scene: Phaser.Scene,
-  config: {
-    text: string;
-    name: string;
-  }
-) => {
-  const { text, name } = config;
-
-  return new Label(scene, {
-    width: 60,
-    height: 60,
-    background: scene.add.existing(
-      new RoundRectangle(scene, 0, 0, 0, 0, 20, 0xffffff)
-    ),
-    text: scene.add.text(0, 0, text, {
-      fontSize: "24px",
-      color: "#000000",
-      padding: {
-        top: 5,
-        left: 5,
-        right: 5,
-        bottom: 8,
-      },
-    }),
-    space: {
-      left: 10,
-      right: 10,
-    },
-    align: "center",
-    name,
-  }).setOrigin(0.5, 1);
-};
 
 const createItem = (scene: Phaser.Scene, config: any = {}) => {
   const background = scene.add.existing(
@@ -109,7 +74,6 @@ const createItem = (scene: Phaser.Scene, config: any = {}) => {
 };
 
 export default class PodHUD extends Phaser.Scene {
-  private bottomRightHUD!: Phaser.GameObjects.Group;
   private bottomLeftHUD!: Phaser.GameObjects.Group;
 
   constructor(public mainScene: PodMap) {
@@ -119,46 +83,42 @@ export default class PodHUD extends Phaser.Scene {
   }
 
   create() {
-    this.bottomRightHUD = this.add.group();
-
     // Bottom right HUD
-    const buttons = new Buttons(this, {
-      x: window.innerWidth - 120,
-      y: window.innerHeight,
-      orientation: "x",
-      buttons: [
-        createButton(this, { text: "Build", name: "build" }),
-        createButton(this, { text: "World", name: "world" }),
-      ],
-      space: {
-        left: 10,
-        right: 10,
-        top: 10,
-        bottom: 10,
-        item: 6,
+    new GridButtonGroup(this, 80, {
+      anchor: {
+        right: "right-25",
+        bottom: "bottom-10",
       },
-    })
-      .setOrigin(0.5, 1)
-      .layout()
-      .setDepth(1001)
-      .on("button.click", (button: Buttons) => {
-        switch (button.name) {
-          case "build": {
-            this.toggleBuildMode();
+      x: window.innerWidth,
+      y: window.innerHeight,
+      buttons: [
+        [
+          this.add
+            .image(0, 0, "pod-builder-icon")
+            .setData({ text: "Toggle build mode", name: "build" }),
+          this.add
+            .image(0, 0, "world-icon")
+            .setData({ text: "World", name: "world" }),
+        ],
+      ],
+    }).onClick((container) => {
+      switch (container.name) {
+        case "build": {
+          this.toggleBuildMode();
 
-            break;
-          }
-          case "world": {
-            // Fade out & prepare for scene transition
-            this.mainScene.cameras.main.fadeOut(500, 0, 0, 0);
-
-            break;
-          }
-          default: {
-            break;
-          }
+          break;
         }
-      });
+        case "world": {
+          // Fade out & prepare for scene transition
+          this.mainScene.cameras.main.fadeOut(500, 0, 0, 0);
+
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    });
 
     // Start scene transition when camera is fully fade out
     this.mainScene.cameras.main.once(
@@ -168,8 +128,6 @@ export default class PodHUD extends Phaser.Scene {
         this.mainScene.scene.start(SceneKey.GAME);
       }
     );
-
-    this.bottomRightHUD.add(buttons);
   }
 
   toggleBuildMode() {
