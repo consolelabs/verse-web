@@ -10,6 +10,7 @@ export default class AssetLoader extends Phaser.Scene {
   preload() {
     this.load.image("pod-builder-icon", "/assets/images/pod-builder.png");
     this.load.image("world-icon", "/assets/images/world.png");
+    this.load.image("inventory-icon", "/assets/images/inventory.png");
 
     ["fukuro", "ghost-neko", "neko", "tv-head", "rabby"].forEach((char) => {
       this.load.spine(

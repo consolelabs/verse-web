@@ -24,6 +24,9 @@ export default class GameHUD extends Phaser.Scene {
           this.add
             .image(0, 0, "pod-builder-icon")
             .setData({ text: "Pod Builder", name: "pod-builder" }),
+          this.add
+            .image(0, 0, "inventory-icon")
+            .setData({ text: "Inventory", name: "inventory" }),
         ],
       ],
     }).onClick((container: Phaser.GameObjects.Container) => {

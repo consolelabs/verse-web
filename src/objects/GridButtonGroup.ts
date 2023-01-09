@@ -36,7 +36,7 @@ function addTooltip(image: Phaser.GameObjects.Image) {
           icon: 10,
         },
         background: scene.add.existing(
-          new RoundRectangle(scene, 0, 0, 1, 1, 10, 0x150f2b)
+          new RoundRectangle(scene, 0, 0, 1, 1, 5, 0x150f2b)
         ),
         text: scene.add.text(0, 0, image.data.get("text"), {
           align: "center",
@@ -100,8 +100,7 @@ export class GridButtonGroup {
           .map(setSize(size));
       }),
       space: {
-        row: 6,
-        column: 6,
+        column: 20,
       },
     })
       .setOrigin(0.5, 1)

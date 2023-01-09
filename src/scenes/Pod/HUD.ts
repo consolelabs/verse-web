@@ -109,6 +109,7 @@ export default class PodHUD extends Phaser.Scene {
           break;
         }
         case "world": {
+          container.disableInteractive();
           // Fade out & prepare for scene transition
           this.mainScene.cameras.main.fadeOut(500, 0, 0, 0);
 
