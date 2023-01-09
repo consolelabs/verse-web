@@ -46,6 +46,7 @@ export default class GameHUD extends Phaser.Scene {
       () => {
         this.mainScene.scene.stop(SceneKey.GAME_HUD);
         this.mainScene.scene.stop(SceneKey.GAME_INTERACTION);
+        this.mainScene.scene.stop(SceneKey.GAME_DIALOGUE);
         this.mainScene.scene.start(SceneKey.POD);
       }
     );

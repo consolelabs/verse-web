@@ -117,7 +117,7 @@ export default class PodMap extends Phaser.Scene {
     });
 
     // Load characters
-    this.player.loadCharacters(["tv-head", "neko", "fukuro", "ghost-neko"], {
+    this.player.loadCharacters(["tv-head", "fukuro", "ghost-neko"], {
       x: 500,
       y: 500,
       scale: 0.4,
