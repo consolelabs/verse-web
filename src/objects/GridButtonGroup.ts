@@ -41,10 +41,10 @@ function addTooltip(image: Phaser.GameObjects.Image) {
         text: scene.add.text(0, 0, image.data.get("text"), {
           align: "center",
           wordWrap: {
-            width: 80,
+            width: 160,
             useAdvancedWrap: true,
           },
-          fontSize: "1rem",
+          fontSize: "0.875rem",
           color: "white",
         }),
       })

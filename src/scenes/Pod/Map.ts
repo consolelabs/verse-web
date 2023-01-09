@@ -1,15 +1,9 @@
 import Phaser from "phaser";
 import { Player } from "../../characters/player";
-import { CDN_PATH, PROD, TILE_SIZE } from "../../constants";
-import Stats from "stats.js";
+import { PROD, TILE_SIZE } from "../../constants";
 import { Item } from "./HUD";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
-
-// FPS Counter
-const stats = new Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
 
 // Debug text
 let text: any;
@@ -40,9 +34,6 @@ export default class PodMap extends Phaser.Scene {
           debugShowBody: true,
           debugBodyColor: 0x0000ff,
         },
-      },
-      loader: {
-        baseURL: CDN_PATH,
       },
     });
   }
@@ -203,8 +194,8 @@ export default class PodMap extends Phaser.Scene {
       this.cameras.main.startFollow(
         this.player.characters[0].instance,
         true,
-        0.1,
-        0.1
+        0.05,
+        0.05
       );
     }
   }
@@ -274,8 +265,6 @@ export default class PodMap extends Phaser.Scene {
   }
 
   update() {
-    stats.begin();
-
     if (!this.player) {
       return;
     }
@@ -318,7 +307,5 @@ export default class PodMap extends Phaser.Scene {
         );
       }
     }
-
-    stats.end();
   }
 }

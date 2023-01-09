@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { CDN_PATH } from "../constants";
 import { SceneKey } from "../constants/scenes";
 
 export default class WorldLoader extends Phaser.Scene {
@@ -8,9 +7,6 @@ export default class WorldLoader extends Phaser.Scene {
   constructor() {
     super({
       key: SceneKey.WORLD_LOADER,
-      loader: {
-        baseURL: CDN_PATH,
-      },
     });
   }
 

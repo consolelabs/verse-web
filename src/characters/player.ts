@@ -52,8 +52,8 @@ export class Player extends Phaser.GameObjects.GameObject {
     this.scene.cameras.main.startFollow(
       this.characters[0].instance,
       true,
-      0.1,
-      0.1
+      0.05,
+      0.05
     );
   }
 

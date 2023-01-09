@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "serve": "serve assets/ --cors"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

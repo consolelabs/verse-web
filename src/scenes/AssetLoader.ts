@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { CDN_PATH } from "../constants";
 
 export default class AssetLoader extends Phaser.Scene {
   constructor() {
@@ -9,13 +8,9 @@ export default class AssetLoader extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(
-      "pod-builder-icon",
-      "/public/assets/images/pod-builder.png"
-    );
-    this.load.image("world-icon", "/public/assets/images/world.png");
+    this.load.image("pod-builder-icon", "/assets/images/pod-builder.png");
+    this.load.image("world-icon", "/assets/images/world.png");
 
-    this.load.setPath(CDN_PATH);
     ["fukuro", "ghost-neko", "neko", "tv-head", "rabby"].forEach((char) => {
       this.load.spine(
         `${char}-character`,

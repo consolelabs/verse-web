@@ -11,6 +11,12 @@ import GameInteraction from "./scenes/Game/Interaction";
 import GameDialogue from "./scenes/Game/Dialogue";
 import PodMap from "./scenes/Pod/Map";
 import PodHUD from "./scenes/Pod/HUD";
+import Stats from "stats.js";
+
+// FPS Counter
+const stats = new Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -45,4 +51,14 @@ const config: Phaser.Types.Core.GameConfig = {
   },
 };
 
-export default new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+game.events.on(Phaser.Core.Events.PRE_STEP, () => {
+  stats.begin();
+});
+
+game.events.on(Phaser.Core.Events.POST_RENDER, () => {
+  stats.end();
+});
+
+export default game;

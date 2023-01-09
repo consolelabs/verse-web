@@ -1,9 +1,8 @@
 import Phaser from "phaser";
 import { Player } from "../../characters/player";
 import { Character } from "../../characters/character";
-import { COLLISION_CATEGORY, CDN_PATH, PROD, TILE_SIZE } from "../../constants";
+import { COLLISION_CATEGORY, PROD, TILE_SIZE } from "../../constants";
 import { BaseSprite } from "../../objects/BaseSprite";
-import Stats from "stats.js";
 import GameDialogue from "../Game/Dialogue";
 import GameInteraction from "./Interaction";
 import { SceneKey } from "../../constants/scenes";
@@ -38,11 +37,6 @@ function getInteractHandler(properties: any, scene: GameMap) {
   };
 }
 
-// FPS Counter
-const stats = new Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
-
 export default class GameMap extends Phaser.Scene {
   player!: Player;
   private map!: Phaser.Tilemaps.Tilemap;
@@ -59,9 +53,6 @@ export default class GameMap extends Phaser.Scene {
           debugShowBody: true,
           debugBodyColor: 0x0000ff,
         },
-      },
-      loader: {
-        baseURL: CDN_PATH,
       },
     });
   }
@@ -378,14 +369,10 @@ export default class GameMap extends Phaser.Scene {
   }
 
   update() {
-    stats.begin();
-
     if (!this.player) {
       return;
     }
 
     this.player.update();
-
-    stats.end();
   }
 }
