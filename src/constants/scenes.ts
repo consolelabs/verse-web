@@ -11,4 +11,5 @@ export enum SceneKey {
 
   POD = "pod",
   POD_HUD = "pod-hud",
+  MENU = "MENU",
 }
