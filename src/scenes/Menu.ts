@@ -103,6 +103,7 @@ export default class Menu extends Phaser.Scene {
       switch (container.name) {
         case "pod": {
           this.transition = () => {
+            this.scene.stop(SceneKey.GAME);
             this.scene.stop(SceneKey.GAME_HUD);
             this.scene.stop(SceneKey.GAME_INTERACTION);
             this.scene.stop(SceneKey.GAME_DIALOGUE);
