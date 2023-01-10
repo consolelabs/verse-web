@@ -11,6 +11,20 @@ export default class AssetLoader extends Phaser.Scene {
     this.load.image("pod-builder-icon", "/assets/images/pod-builder.png");
     this.load.image("world-icon", "/assets/images/world.png");
     this.load.image("inventory-icon", "/assets/images/inventory.png");
+    this.load.image("menu-icon", "/assets/images/menu.png");
+    this.load.image("pod-icon", "/assets/images/pod.png");
+    this.load.image("character-icon", "/assets/images/character.png");
+    this.load.image("mail-icon", "/assets/images/mail.png");
+    this.load.image("market-icon", "/assets/images/market.png");
+    this.load.image("leaderboard-icon", "/assets/images/leaderboard.png");
+    this.load.image("achievement-icon", "/assets/images/achievement.png");
+    this.load.image("airdrop-icon", "/assets/images/airdrop.png");
+    this.load.image("quest-icon", "/assets/images/quest.png");
+    this.load.image("quit-icon", "/assets/images/quit.png");
+
+    this.load.image("container", "/assets/images/container.png");
+
+    this.input.setDefaultCursor("url(/assets/images/cursor.png), pointer");
 
     ["fukuro", "ghost-neko", "neko", "tv-head", "rabby"].forEach((char) => {
       this.load.spine(

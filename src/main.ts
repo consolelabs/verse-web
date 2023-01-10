@@ -11,6 +11,7 @@ import GameInteraction from "./scenes/Game/Interaction";
 import GameDialogue from "./scenes/Game/Dialogue";
 import PodMap from "./scenes/Pod/Map";
 import PodHUD from "./scenes/Pod/HUD";
+import Menu from "./scenes/Menu";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -33,6 +34,7 @@ const config: Phaser.Types.Core.GameConfig = {
     GameDialogue,
     PodMap,
     PodHUD,
+    Menu,
   ],
   plugins: {
     scene: [

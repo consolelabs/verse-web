@@ -1,10 +1,12 @@
 import Phaser from "phaser";
 import { SceneKey } from "../../constants/scenes";
 import { GridButtonGroup } from "../../objects/GridButtonGroup";
-import PodMap from "./Map";
+import GameMap from "./Map";
 
 export default class GameHUD extends Phaser.Scene {
-  constructor(public mainScene: PodMap) {
+  transition?: () => void;
+
+  constructor(public mainScene: GameMap) {
     super({
       key: SceneKey.GAME_HUD,
     });
@@ -14,7 +16,7 @@ export default class GameHUD extends Phaser.Scene {
     // Bottom right HUD
     new GridButtonGroup(this, 80, {
       anchor: {
-        right: "right-25",
+        right: "right-10",
         bottom: "bottom-10",
       },
       x: window.innerWidth,
@@ -22,19 +24,18 @@ export default class GameHUD extends Phaser.Scene {
       buttons: [
         [
           this.add
-            .image(0, 0, "pod-builder-icon")
-            .setData({ text: "Pod Builder", name: "pod-builder" }),
-          this.add
             .image(0, 0, "inventory-icon")
             .setData({ text: "Inventory", name: "inventory" }),
+          this.add
+            .image(0, 0, "menu-icon")
+            .setData({ text: "Menu", name: "menu" }),
         ],
       ],
     }).onClick((container: Phaser.GameObjects.Container) => {
       switch (container.name) {
-        case "pod-builder": {
-          // Fade out & prepare for scene transition
-          this.mainScene.cameras.main.fadeOut(500, 0, 0, 0);
-
+        case "menu": {
+          this.scene.pause(this);
+          this.scene.run(SceneKey.MENU);
           break;
         }
         default: {
@@ -46,12 +47,7 @@ export default class GameHUD extends Phaser.Scene {
     // Start scene transition when camera is fully fade out
     this.mainScene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-      () => {
-        this.mainScene.scene.stop(SceneKey.GAME_HUD);
-        this.mainScene.scene.stop(SceneKey.GAME_INTERACTION);
-        this.mainScene.scene.stop(SceneKey.GAME_DIALOGUE);
-        this.mainScene.scene.start(SceneKey.POD);
-      }
+      () => this.transition?.()
     );
   }
 }
