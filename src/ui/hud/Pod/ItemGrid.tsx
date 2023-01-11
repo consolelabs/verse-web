@@ -22,7 +22,7 @@ export const Item = ({
       <img
         src={src}
         className={classNames(
-          "aspect-square w-full object-contain border-2 border-solid",
+          "aspect-square w-full object-contain border-2 border-solid p-2",
           {
             "border-white": isSelected,
             "border-white/10": !isSelected,

@@ -3,15 +3,13 @@ import { Player } from "../../characters/player";
 import { PROD, TILE_SIZE } from "../../constants";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
+import { PodPlacedItem } from "objects/PodPlacedItem";
 
 // 64 tiles * tile size
 const WORLD_WIDTH = 64 * TILE_SIZE;
 const WORLD_HEIGHT = 64 * TILE_SIZE;
 
-// Debug text
-let text: any;
-
-interface PodItem {
+export interface PodItem {
   key: string;
   object: Phaser.GameObjects.Image;
 }
@@ -22,14 +20,15 @@ export default class PodMap extends Phaser.Scene {
 
   // Build-mode related props
   public mode: "normal" | "build" = "normal";
+  private placedItems: PodPlacedItem[] = [];
   public itemToPlace?: PodItem;
-  private placedItems: PodItem[] = [];
 
   // Mock
   floorKey?: string;
   floorSprite?: Phaser.GameObjects.TileSprite;
   wallKey?: string;
   wallSprite?: Phaser.GameObjects.TileSprite;
+  onPlacingItem?: (item: PodItem) => void;
 
   init(params: Record<string, any>) {
     this.wallKey = params.wallKey;
@@ -181,22 +180,10 @@ export default class PodMap extends Phaser.Scene {
   toggleBuildMode() {
     if (this.mode === "normal") {
       this.player.setActive(false);
-      this.player.characters.forEach((char) =>
-        char.instance.setActive(false).setVisible(false)
-      );
+      this.player.characters.forEach((char) => char.hide());
       this.mode = "build";
 
       const camera = this.cameras.main;
-      // text = this.add
-      //   .text(window.innerWidth - 200, 0, "", {
-      //     font: "16px monospace",
-      //     color: "#00ffff",
-      //     backgroundColor: "#000c",
-      //     fixedWidth: 200,
-      //     fixedHeight: 300,
-      //   })
-      //   .setScale(1 / camera.zoom)
-      //   .setScrollFactor(0);
 
       this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
         // We do nothing if:
@@ -224,15 +211,12 @@ export default class PodMap extends Phaser.Scene {
 
       camera.stopFollow();
     } else {
+      this.itemToPlace?.object.destroy();
       this.player.setActive(true);
-      this.player.characters.forEach((char) =>
-        char.instance.setActive(true).setVisible(true)
-      );
+      this.player.characters.forEach((char) => char.show());
       this.mode = "normal";
 
-      // Clean up debug stuff
       this.input.off("pointermove");
-      // text.destroy();
       this.cameras.main.startFollow(
         this.player.characters[0].instance,
         true,
@@ -242,25 +226,26 @@ export default class PodMap extends Phaser.Scene {
     }
   }
 
-  setItemToUpdate() {
-    console.log("Hi");
-  }
-
-  setItemToPlace(key: string) {
-    const object = this.add.image(0, 0, key);
-    object.setAlpha(0.5);
-
+  setItemToPlace(key?: string, callback?: () => void) {
     // Destroy previous itemToPlace if it exists
     if (this.itemToPlace) {
       this.itemToPlace.object.destroy();
       this.itemToPlace = undefined;
     }
 
+    if (!key) {
+      return;
+    }
+
+    const object = this.add.image(0, 0, key);
+    object.setAlpha(0.5);
+
     this.itemToPlace = {
       key,
       object,
     };
 
+    // Add an event listener to wait for click to place item
     this.input.on("pointerup", (p: Phaser.Input.Pointer) => {
       if (!this.itemToPlace) {
         return;
@@ -279,7 +264,7 @@ export default class PodMap extends Phaser.Scene {
         this.placedItems.some((item) => {
           return this.matter.bounds.contains(
             // @ts-ignore, prop exists but the type is not correctly mapped
-            item.object.body.bounds,
+            item.instance.body.bounds,
             {
               x: p.worldX,
               y: p.worldY,
@@ -291,19 +276,69 @@ export default class PodMap extends Phaser.Scene {
       }
 
       // If it's valid, we should place the item there
+      this.placeItem();
+      callback && callback();
 
-      // Reset alpha & add world body for this item to make sure it's interactive
-      this.matter.add.gameObject(this.itemToPlace.object, { isStatic: true });
-      this.itemToPlace.object.setAlpha(1);
-
-      // Save it to the array
-      this.placedItems.push(this.itemToPlace);
-      console.log(this.placedItems);
-
-      // Reset the itemToPlace object
-      this.itemToPlace = undefined;
+      // Remove the event listener
       this.input.off("pointerup");
     });
+  }
+
+  setItemToEdit(id: number) {
+    this.placedItems.find((i) => i.id === id)?.startEditing();
+
+    this.placedItems.forEach((item) => {
+      if (id !== item.id) {
+        item.stopEditing();
+      }
+    });
+  }
+
+  placeItem() {
+    if (!this.itemToPlace) {
+      return;
+    }
+
+    const itemId = Date.now();
+
+    // Reset alpha & add world body for this item to make sure it's interactive
+    const placedItem = new PodPlacedItem({
+      key: this.itemToPlace.key,
+      id: itemId,
+      scene: this,
+      object: this.itemToPlace.object,
+      onClick: () => this.setItemToEdit(itemId),
+      onRemove: () => this.removeItem(itemId),
+      onMove: () => this.moveItem(itemId),
+    });
+
+    // Callback
+    this.onPlacingItem?.(this.itemToPlace);
+
+    // Save it to the array
+    this.placedItems.push(placedItem);
+
+    // Reset the itemToPlace object
+    this.itemToPlace = undefined;
+  }
+
+  removeItem(id: number) {
+    const itemToRemove = this.placedItems.find((i) => i.id === id);
+    this.placedItems = this.placedItems.filter((i) => i.id !== id);
+
+    // Destroy the item
+    // TODO: An API call to update the inventory
+    itemToRemove?.destroy();
+  }
+
+  moveItem(id: number) {
+    const itemToMove = this.placedItems.find((i) => i.id === id);
+    this.placedItems = this.placedItems.filter((i) => i.id !== id);
+
+    if (itemToMove) {
+      itemToMove.destroy();
+      this.setItemToPlace(itemToMove.key);
+    }
   }
 
   update() {
@@ -314,24 +349,6 @@ export default class PodMap extends Phaser.Scene {
     if (this.mode !== "build") {
       this.player.update();
     } else {
-      // text?.setText(
-      //   JSON.stringify(
-      //     this.input.activePointer,
-      //     [
-      //       "isDown",
-      //       "downX",
-      //       "downY",
-      //       "worldX",
-      //       "worldY",
-      //       "x",
-      //       "y",
-      //       "position",
-      //       "prevPosition",
-      //     ],
-      //     2
-      //   )
-      // );
-
       // Move itemToPlace along with the pointer
       if (this.itemToPlace) {
         // Snap to grid?

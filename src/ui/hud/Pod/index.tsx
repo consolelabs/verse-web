@@ -33,7 +33,7 @@ export const Pod = () => {
 
   return (
     <>
-      <PodBuilderPanel isActive={isBuildModeEnabled} />
+      {getActiveScene() && <PodBuilderPanel isActive={isBuildModeEnabled} />}
       <div className="fixed bottom-0 right-0 mb-8 mr-8 flex space-x-2">
         <button
           type="button"

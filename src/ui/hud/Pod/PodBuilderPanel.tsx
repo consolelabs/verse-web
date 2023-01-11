@@ -115,6 +115,8 @@ export const PodBuilderPanel = (props: Props) => {
   const { activeSceneKey, getActiveScene } = useGameContext();
 
   const { isOpen, open, close } = useDisclosure();
+
+  const [data, setData] = useState(mockItems);
   const [selectedFloor, setSelectedFloor] = useState(mockItems.floors[0]);
   const [selectedWall, setSelectedWall] = useState(mockItems.walls[0]);
   const [selectedHousewareItem, setSelectedHousewareItem] =
@@ -137,9 +139,33 @@ export const PodBuilderPanel = (props: Props) => {
   };
 
   const selectHousewareItem = (item: ItemProps) => {
-    setSelectedHousewareItem(item);
+    if (item.key === selectedHousewareItem?.key) {
+      setSelectedHousewareItem(undefined);
+      activeScene.setItemToPlace();
+    } else {
+      setSelectedHousewareItem(item);
+      activeScene.setItemToPlace(item.key, () => {
+        setSelectedHousewareItem(undefined);
 
-    activeScene.setItemToPlace(item.key);
+        // Minus 1 from quantity
+        // TODO: An API call to update the inventory
+        setData((o) => {
+          return {
+            ...o,
+            housewares: o.housewares.map((i) => {
+              if (i.key === item.key) {
+                return {
+                  ...i,
+                  quantity: i.quantity - 1,
+                };
+              }
+
+              return i;
+            }),
+          };
+        });
+      });
+    }
   };
 
   useEffect(() => {
@@ -147,6 +173,7 @@ export const PodBuilderPanel = (props: Props) => {
       open();
     } else {
       close();
+      setSelectedHousewareItem(undefined);
     }
   }, [isActive]);
 
@@ -164,7 +191,7 @@ export const PodBuilderPanel = (props: Props) => {
             label: "Floors",
             content: (
               <ItemGrid
-                items={mockItems.floors}
+                items={data.floors}
                 selectedItem={selectedFloor}
                 onSelect={selectFloor}
               />
@@ -175,7 +202,7 @@ export const PodBuilderPanel = (props: Props) => {
             label: "Walls",
             content: (
               <ItemGrid
-                items={mockItems.walls}
+                items={data.walls}
                 selectedItem={selectedWall}
                 onSelect={selectWall}
               />
@@ -186,7 +213,9 @@ export const PodBuilderPanel = (props: Props) => {
             label: "Housewares",
             content: (
               <ItemGrid
-                items={mockItems.housewares}
+                items={data.housewares.filter((item) => {
+                  return Boolean(item.quantity);
+                })}
                 selectedItem={selectedHousewareItem}
                 onSelect={selectHousewareItem}
               />

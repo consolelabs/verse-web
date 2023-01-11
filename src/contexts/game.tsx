@@ -17,7 +17,6 @@ import GameHUD from "../scenes/Game/HUD";
 import GameInteraction from "../scenes/Game/Interaction";
 import GameDialogue from "../scenes/Game/Dialogue";
 import PodMap from "../scenes/Pod/Map";
-import PodHUD from "../scenes/Pod/HUD";
 import { SceneKey } from "../constants/scenes";
 
 interface Props {
@@ -56,7 +55,6 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
         GameInteraction,
         GameDialogue,
         PodMap,
-        PodHUD,
       ],
       plugins: {
         scene: [
@@ -70,7 +68,7 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     setGame(new Phaser.Game(config));
-    setActiveSceneKey(SceneKey.GAME);
+    setActiveSceneKey(SceneKey.POD);
   };
 
   const getActiveScene = () => game?.scene.keys[activeSceneKey];

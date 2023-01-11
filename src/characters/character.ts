@@ -86,6 +86,16 @@ export class Character extends Phaser.GameObjects.GameObject {
     this.instance.setVelocity(x, y);
   }
 
+  hide() {
+    this.instance.setActive(false).setVisible(false);
+    this.shadow.setVisible(false);
+  }
+
+  show() {
+    this.instance.setActive(true).setVisible(true);
+    this.shadow.setVisible(true);
+  }
+
   // Update this character as a followee
   update() {
     const followee = this.followee;

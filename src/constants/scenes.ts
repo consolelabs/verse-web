@@ -10,6 +10,6 @@ export enum SceneKey {
   GAME_DIALOGUE = "game-dialogue",
 
   POD = "pod",
-  POD_HUD = "pod-hud",
+
   MENU = "MENU",
 }
