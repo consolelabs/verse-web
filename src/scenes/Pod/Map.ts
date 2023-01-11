@@ -95,11 +95,11 @@ export default class PodMap extends Phaser.Scene {
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
-    // Load HUD
-    const hudScene = this.scene.get(SceneKey.POD_HUD);
-    // @ts-ignore
-    hudScene.mainScene = this;
-    this.scene.launch(hudScene);
+    // // Load HUD
+    // const hudScene = this.scene.get(SceneKey.POD_HUD);
+    // // @ts-ignore
+    // hudScene.mainScene = this;
+    // this.scene.launch(hudScene);
 
     // Load tilesets & map layers
     const { layers = [], tilesets = [] } = this.map;

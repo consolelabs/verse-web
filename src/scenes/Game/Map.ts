@@ -58,11 +58,11 @@ export default class GameMap extends Phaser.Scene {
   }
 
   preload() {
-    // Launch HUD scene
-    const hudScene = this.scene.get(SceneKey.GAME_HUD);
-    // @ts-ignore
-    hudScene.mainScene = this;
-    this.scene.launch(hudScene);
+    // // Launch HUD scene
+    // const hudScene = this.scene.get(SceneKey.GAME_HUD);
+    // // @ts-ignore
+    // hudScene.mainScene = this;
+    // this.scene.launch(hudScene);
 
     // Launch interaction scene
     const interactionScene = this.scene.get(
@@ -380,8 +380,6 @@ export default class GameMap extends Phaser.Scene {
     if (!this.player) {
       return;
     }
-
-    console.log(this.game.loop.actualFps);
 
     this.player.update();
   }
