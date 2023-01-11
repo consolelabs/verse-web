@@ -39,6 +39,10 @@ export default class WorldLoader extends Phaser.Scene {
       () => {
         if (this.proceed) {
           this.scene.start(SceneKey.GAME);
+          // this.scene.start(SceneKey.POD, {
+          //   wallKey: "wall-1",
+          //   floorKey: "floor-1",
+          // });
         } else {
           // TODO: maybe show error scene
         }

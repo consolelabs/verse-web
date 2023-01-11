@@ -16,7 +16,8 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "typeRoots": ["@types", "node_modules/@types", "node_modules/phaser/@types"]
+    "typeRoots": ["@types", "node_modules/@types", "node_modules/phaser/@types"],
+    "baseUrl": "./src"
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

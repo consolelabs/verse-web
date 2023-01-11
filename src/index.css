@@ -1,4 +1,18 @@
 html, body {
   padding: 0;
   margin: 0;
+  font-family: 'Chakra Petch', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  cursor: url('/assets/images/cursor.png'), pointer;
+}
+
+*:hover {
+  cursor: url('/assets/images/cursor.png'), pointer;
+}
+
+img {
+  max-width: 100%;
 }

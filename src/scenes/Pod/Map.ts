@@ -1,27 +1,40 @@
 import Phaser from "phaser";
 import { Player } from "../../characters/player";
 import { PROD, TILE_SIZE } from "../../constants";
-import { Item } from "./HUD";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
+
+// 64 tiles * tile size
+const WORLD_WIDTH = 64 * TILE_SIZE;
+const WORLD_HEIGHT = 64 * TILE_SIZE;
 
 // Debug text
 let text: any;
 
 interface PodItem {
-  data: Item;
+  key: string;
   object: Phaser.GameObjects.Image;
 }
 
 export default class PodMap extends Phaser.Scene {
   private player!: Player;
-  private map!: Phaser.Tilemaps.Tilemap;
   public bounds!: IBound;
 
   // Build-mode related props
   public mode: "normal" | "build" = "normal";
   public itemToPlace?: PodItem;
   private placedItems: PodItem[] = [];
+
+  // Mock
+  floorKey?: string;
+  floorSprite?: Phaser.GameObjects.TileSprite;
+  wallKey?: string;
+  wallSprite?: Phaser.GameObjects.TileSprite;
+
+  init(params: Record<string, any>) {
+    this.wallKey = params.wallKey;
+    this.floorKey = params.floorKey;
+  }
 
   constructor() {
     super({
@@ -41,28 +54,24 @@ export default class PodMap extends Phaser.Scene {
   preload() {
     this.player = new Player(this);
 
-    // Now load assets
-    const tilesetSource = Object.fromEntries(
-      this.cache.tilemap
-        .get("pod")
-        ?.data.tilesets.map((ts: any) => [ts.name, ts.image]) ?? []
-    );
-
-    this.map = this.make.tilemap({
-      key: "pod",
-      tileWidth: TILE_SIZE,
-      tileHeight: TILE_SIZE,
-    });
-    const { tilesets = [] } = this.map;
-
-    // Load tilesets
-    tilesets.forEach((tileset) => {
+    // Load some mock floors texture for the builder mode
+    ["1", "2", "3"].forEach((key) => {
       // Do nothing if texture was already loaded
-      if (this.textures.exists(tileset.name)) {
+      if (this.textures.exists(key)) {
         return;
       }
 
-      this.load.image(tileset.name, `/tiles/${tilesetSource[tileset.name]}`);
+      this.load.image(`floor-${key}`, `/tiles/pod/floors/${key}.png`);
+    });
+
+    // Load some mock walls texture for the builder mode
+    ["1", "2", "3"].forEach((key) => {
+      // Do nothing if texture was already loaded
+      if (this.textures.exists(key)) {
+        return;
+      }
+
+      this.load.image(`wall-${key}`, `/tiles/pod/walls/${key}.png`);
     });
 
     // Load some mock exterior items for the builder mode
@@ -95,27 +104,6 @@ export default class PodMap extends Phaser.Scene {
     // Fade in
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
-    // // Load HUD
-    // const hudScene = this.scene.get(SceneKey.POD_HUD);
-    // // @ts-ignore
-    // hudScene.mainScene = this;
-    // this.scene.launch(hudScene);
-
-    // Load tilesets & map layers
-    const { layers = [], tilesets = [] } = this.map;
-
-    // Add loaded tilesets to the map
-    tilesets.forEach((tileset) => this.map.addTilesetImage(tileset.name));
-
-    // Loop through the layers & create them (& the sprites they refer to)
-    layers.forEach((layer) => {
-      const tilesets =
-        // @ts-ignore
-        layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
-
-      this.map.createLayer(layer.name, tilesets.split(","), 0, 0);
-    });
-
     // Load characters
     this.player.loadCharacters(["tv-head", "fukuro", "ghost-neko"], {
       x: 500,
@@ -132,9 +120,10 @@ export default class PodMap extends Phaser.Scene {
     );
 
     // Set world bounds
+
     this.bounds = {
       min: { x: 0, y: 0 },
-      max: { x: this.map.widthInPixels, y: this.map.heightInPixels },
+      max: { x: WORLD_WIDTH, y: WORLD_HEIGHT },
     };
     this.matter.world.setBounds(
       this.bounds.min.x,
@@ -142,6 +131,51 @@ export default class PodMap extends Phaser.Scene {
       this.bounds.max.x,
       this.bounds.max.y
     );
+
+    this.loadFloor();
+    this.loadWall();
+  }
+
+  loadFloor() {
+    this.floorSprite?.destroy();
+
+    // Generate floor texture
+    this.floorSprite = this.add.tileSprite(
+      0,
+      0,
+      WORLD_WIDTH,
+      WORLD_HEIGHT,
+      this.floorKey || ""
+    );
+    this.floorSprite.setOrigin(0, 0);
+    this.floorSprite.setTileScale(0.5, 0.5);
+  }
+
+  loadWall() {
+    this.wallSprite?.destroy();
+
+    // Generate wall texture
+    this.wallSprite = this.add.tileSprite(
+      0,
+      0,
+      WORLD_WIDTH,
+      // This is the wall texture's height
+      // TODO: Get this from API
+      196,
+      this.wallKey || ""
+    );
+    this.wallSprite.setOrigin(0, 1);
+    this.wallSprite.setTileScale(0.75, 0.75);
+  }
+
+  setFloor(key: string) {
+    this.floorKey = key;
+    this.loadFloor();
+  }
+
+  setWall(key: string) {
+    this.wallKey = key;
+    this.loadWall();
   }
 
   toggleBuildMode() {
@@ -153,16 +187,16 @@ export default class PodMap extends Phaser.Scene {
       this.mode = "build";
 
       const camera = this.cameras.main;
-      text = this.add
-        .text(window.innerWidth - 200, 0, "", {
-          font: "16px monospace",
-          color: "#00ffff",
-          backgroundColor: "#000c",
-          fixedWidth: 200,
-          fixedHeight: 300,
-        })
-        .setScale(1 / camera.zoom)
-        .setScrollFactor(0);
+      // text = this.add
+      //   .text(window.innerWidth - 200, 0, "", {
+      //     font: "16px monospace",
+      //     color: "#00ffff",
+      //     backgroundColor: "#000c",
+      //     fixedWidth: 200,
+      //     fixedHeight: 300,
+      //   })
+      //   .setScale(1 / camera.zoom)
+      //   .setScrollFactor(0);
 
       this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
         // We do nothing if:
@@ -198,7 +232,7 @@ export default class PodMap extends Phaser.Scene {
 
       // Clean up debug stuff
       this.input.off("pointermove");
-      text.destroy();
+      // text.destroy();
       this.cameras.main.startFollow(
         this.player.characters[0].instance,
         true,
@@ -212,8 +246,8 @@ export default class PodMap extends Phaser.Scene {
     console.log("Hi");
   }
 
-  setItemToPlace(item: Item) {
-    const object = this.add.image(0, 0, item.key);
+  setItemToPlace(key: string) {
+    const object = this.add.image(0, 0, key);
     object.setAlpha(0.5);
 
     // Destroy previous itemToPlace if it exists
@@ -223,7 +257,7 @@ export default class PodMap extends Phaser.Scene {
     }
 
     this.itemToPlace = {
-      data: item,
+      key,
       object,
     };
 
@@ -280,23 +314,23 @@ export default class PodMap extends Phaser.Scene {
     if (this.mode !== "build") {
       this.player.update();
     } else {
-      text?.setText(
-        JSON.stringify(
-          this.input.activePointer,
-          [
-            "isDown",
-            "downX",
-            "downY",
-            "worldX",
-            "worldY",
-            "x",
-            "y",
-            "position",
-            "prevPosition",
-          ],
-          2
-        )
-      );
+      // text?.setText(
+      //   JSON.stringify(
+      //     this.input.activePointer,
+      //     [
+      //       "isDown",
+      //       "downX",
+      //       "downY",
+      //       "worldX",
+      //       "worldY",
+      //       "x",
+      //       "y",
+      //       "position",
+      //       "prevPosition",
+      //     ],
+      //     2
+      //   )
+      // );
 
       // Move itemToPlace along with the pointer
       if (this.itemToPlace) {

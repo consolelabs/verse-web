@@ -21,12 +21,15 @@
   },
   "dependencies": {
     "@unocss/preset-uno": "^0.48.3",
+    "@unocss/transformer-variant-group": "^0.48.3",
     "@unocss/vite": "^0.48.3",
     "@vitejs/plugin-react": "^3.0.1",
+    "classnames": "^2.3.2",
     "phaser": "^3.55.2",
     "phaser3-rex-plugins": "^1.1.79",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "unocss": "^0.48.3"
+    "unocss": "^0.48.3",
+    "vite-tsconfig-paths": "^4.0.3"
   }
 }
