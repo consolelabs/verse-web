@@ -5,6 +5,7 @@ import { Boot } from "ui/hud/Boot";
 import { Game } from "ui/hud/Game";
 import { Pod } from "ui/hud/Pod";
 import { Menu } from "./components/Menu";
+import { CharSelect } from "ui/hud/CharSelect";
 
 const App = () => {
   const { state } = useGameContext();
@@ -14,6 +15,9 @@ const App = () => {
     switch (state.activeSceneKey) {
       case SceneKey.BOOT: {
         return <Boot />;
+      }
+      case SceneKey.CHAR_SELECT: {
+        return <CharSelect />;
       }
       case SceneKey.GAME: {
         return <Game />;

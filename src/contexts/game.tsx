@@ -15,6 +15,7 @@ import GameInteraction from "../scenes/Game/Interaction";
 import GameDialogue from "../scenes/Game/Dialogue";
 import PodMap from "../scenes/Pod/Map";
 import { SceneKey } from "../constants/scenes";
+import CharSelect from "scenes/CharSelect";
 
 interface State {
   activeSceneKey: SceneKey;
@@ -81,6 +82,7 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
       // Boot screen -> Load world & world assets -> Game
       scene: [
         Boot,
+        CharSelect,
         ConfigLoader,
         AssetLoader,
         WorldLoader,
@@ -101,7 +103,7 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     dispatch({ type: "setGame", payload: new Phaser.Game(config) });
-    dispatch({ type: "setActiveSceneKey", payload: SceneKey.GAME });
+    dispatch({ type: "setActiveSceneKey", payload: SceneKey.CHAR_SELECT });
   };
 
   const getActiveScene = () => state.game?.scene.keys[state.activeSceneKey];

@@ -1,9 +1,10 @@
+import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
 
 export default class AssetLoader extends Phaser.Scene {
   constructor() {
     super({
-      key: "asset-loader",
+      key: SceneKey.ASSET_LOADER,
     });
   }
 
@@ -57,6 +58,6 @@ export default class AssetLoader extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("world-loader");
+    this.scene.start(SceneKey.WORLD_LOADER);
   }
 }

@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+button {
+  font-family: 'Chakra Petch', sans-serif;
+}
+
 * {
   box-sizing: border-box;
   cursor: url("/assets/images/cursor.png"), pointer;

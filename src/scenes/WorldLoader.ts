@@ -38,11 +38,8 @@ export default class WorldLoader extends Phaser.Scene {
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
       () => {
         if (this.proceed) {
+          // Pass the data through
           this.scene.start(SceneKey.GAME);
-          // this.scene.start(SceneKey.POD, {
-          //   wallKey: "wall-1",
-          //   floorKey: "floor-1",
-          // });
         } else {
           // TODO: maybe show error scene
         }

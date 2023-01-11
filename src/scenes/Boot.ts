@@ -13,6 +13,6 @@ export default class Boot extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(SceneKey.CONFIG_LOADER);
+    this.scene.start(SceneKey.CHAR_SELECT);
   }
 }

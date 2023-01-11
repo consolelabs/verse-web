@@ -9,6 +9,12 @@ export default class ConfigLoader extends Phaser.Scene {
     });
   }
 
+  init(params: Record<string, any>) {
+    // Save the selected chars to global game object
+    // @ts-ignore
+    this.game.chars = params.chars;
+  }
+
   preload() {
     new TitleBg({ scene: this });
 

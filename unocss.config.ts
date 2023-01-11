@@ -21,6 +21,10 @@ export const config = defineConfig({
   safelist: `${cols} ${rows}`.split(" "),
   theme: {
     colors: {
+      typo: {
+        secondary: "#C3E6FF",
+        tertiary: "#7183A1",
+      },
       background: {
         primary: "#151321",
         secondary: "#2D2D45",

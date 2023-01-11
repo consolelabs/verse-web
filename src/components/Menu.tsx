@@ -49,7 +49,10 @@ export const Menu = () => {
                       () => {
                         activeScene.scene.stop(SceneKey.GAME_INTERACTION);
                         activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
-                        activeScene.scene.start(SceneKey.POD);
+                        activeScene.scene.start(SceneKey.POD, {
+                          wallKey: "wall-1",
+                          floorKey: "floor-1",
+                        });
                         dispatch({
                           type: "setActiveSceneKey",
                           payload: SceneKey.POD,

@@ -38,8 +38,8 @@ function getInteractHandler(properties: any, scene: GameMap) {
 }
 
 export default class GameMap extends Phaser.Scene {
-  player!: Player;
-  private map!: Phaser.Tilemaps.Tilemap;
+  public player!: Player;
+  public map!: Phaser.Tilemaps.Tilemap;
   public bounds!: IBound;
 
   constructor() {
@@ -353,7 +353,23 @@ export default class GameMap extends Phaser.Scene {
     });
 
     // Load characters
-    this.player.loadCharacters(["tv-head", "fukuro", "ghost-neko"], {
+    // The list of characters will be saved in the global game object
+    // Refer to ConfigLoader scene
+    // @ts-ignore
+    let charsToLoad = this.game.chars;
+    // Change rabby and other to some other spines because we don't have spines for those yet
+    charsToLoad = charsToLoad.map((c: string) => {
+      if (c === "rabby") {
+        return "ghost-neko";
+      }
+
+      if (c === "other") {
+        return "tv-head";
+      }
+
+      return c;
+    });
+    this.player.loadCharacters(charsToLoad, {
       x: 5000,
       y: 5600,
       scale: 0.4,

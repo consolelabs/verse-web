@@ -13,11 +13,15 @@ export const Boot = () => {
 
   return (
     <div className="fixed w-full h-full flex">
+      <img
+        className="absolute w-full h-full object-cover top-0 left-0"
+        src="/assets/images/title-screen-bg.jpeg"
+      />
       <button
         id="start"
         type="button"
         onClick={start}
-        className="m-auto text-xl bg-white rounded"
+        className="relative m-auto text-xl bg-white rounded"
       >
         Start Game
       </button>

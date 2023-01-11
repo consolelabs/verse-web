@@ -137,7 +137,7 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     // Update object depth based on y
     this.instance.depth = this.instance.y / TILE_SIZE;
-    this.shadow.setPosition(this.instance.x, this.instance.y - 7.5);
-    this.shadow.setDepth((this.instance.y - 7.5) / TILE_SIZE);
+    this.shadow.setPosition(this.instance.x, this.instance.y);
+    this.shadow.setDepth(this.instance.y / TILE_SIZE);
   }
 }
