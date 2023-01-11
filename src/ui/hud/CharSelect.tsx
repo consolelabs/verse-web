@@ -218,7 +218,7 @@ export const CharSelect = () => {
                             onClick={() => setPreviewChar(item)}
                           >
                             {isSelectedForTheTeam && (
-                              <div className="absolute bottom-0 right-0 mr-1 mb-1 w-2 h-2 rounded-full bg-green" />
+                              <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
                             )}
                             <img src={item.src} className="w-full h-full" />
                           </div>
@@ -267,7 +267,7 @@ export const CharSelect = () => {
                   {isPreviewingATeamMember ? "Remove From Team" : "Add To Team"}
                 </button>
                 <div className="text-typo-secondary mb-2">Team</div>
-                <div className="grid grid-cols-5 gap-2 w-2/3">
+                <div className="grid grid-cols-5 gap-2 w-320px">
                   {new Array(5).fill(0).map((_, index) => {
                     return (
                       <div
