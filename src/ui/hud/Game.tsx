@@ -15,7 +15,10 @@ export const Game = () => {
         () => {
           activeScene.scene.stop(SceneKey.GAME_INTERACTION);
           activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
-          activeScene.scene.start(SceneKey.POD);
+          activeScene.scene.start(SceneKey.POD, {
+            floorKey: "floor-1",
+            wallKey: "wall-1",
+          });
           setActiveSceneKey(SceneKey.POD);
         }
       );

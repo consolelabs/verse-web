@@ -18,14 +18,17 @@ export const Item = ({
   onClick: () => void;
 }) => {
   return (
-    <div
-      className={classNames("p-2 rounded border-2 border-solid", {
-        "border-white": isSelected,
-        "border-white/10": !isSelected,
-      })}
-      onClick={onClick}
-    >
-      <img src={src} className="aspect-square w-full object-contain" />
+    <div className="p-2 rounded" onClick={onClick}>
+      <img
+        src={src}
+        className={classNames(
+          "aspect-square w-full object-contain border-2 border-solid",
+          {
+            "border-white": isSelected,
+            "border-white/10": !isSelected,
+          }
+        )}
+      />
       <div className="text-center p-2">
         {name}
         {quantity && ` (${quantity})`}

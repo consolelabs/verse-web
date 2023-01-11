@@ -20,6 +20,8 @@ export class Character extends Phaser.GameObjects.GameObject {
   public follower?: Character;
   public maximumDistanceToFollower: number;
 
+  private shadow: Phaser.GameObjects.Image;
+
   constructor(props: {
     scene: Phaser.Scene;
     type?: CharacterType;
@@ -64,6 +66,15 @@ export class Character extends Phaser.GameObjects.GameObject {
       this.instance.y = follower.instance.y - this.maximumDistanceToFollower;
       this.instance.depth = this.instance.y / TILE_SIZE;
     }
+
+    // Create a shadow
+    this.shadow = this.scene.add.image(
+      this.instance.x,
+      this.instance.y,
+      "char-shadow"
+    );
+    this.shadow.setScale(0.175);
+    this.shadow.setAlpha(0.5);
   }
 
   playAnimation(state: AnimationState, direction: AnimationDirection) {
@@ -116,5 +127,7 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     // Update object depth based on y
     this.instance.depth = this.instance.y / TILE_SIZE;
+    this.shadow.setPosition(this.instance.x, this.instance.y - 7.5);
+    this.shadow.setDepth((this.instance.y - 7.5) / TILE_SIZE);
   }
 }
