@@ -59,7 +59,7 @@ export const CharStats = () => {
             /2000
           </div>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 mb-12">
           {[
             [
               "XP",
@@ -119,6 +119,12 @@ export const CharStats = () => {
               </div>
             );
           })}
+        </div>
+        <div className="text-typo-tertiary">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
         </div>
       </div>
     </div>
