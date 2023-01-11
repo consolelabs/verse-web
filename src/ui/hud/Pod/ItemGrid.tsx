@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 
 export interface ItemProps {
   key: string;
@@ -21,7 +21,7 @@ export const Item = ({
     <div className="p-2 rounded" onClick={onClick}>
       <img
         src={src}
-        className={classNames(
+        className={clsx(
           "aspect-square w-full object-contain border-2 border-solid p-2",
           {
             "border-white": isSelected,

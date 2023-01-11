@@ -5,7 +5,6 @@ export enum SceneKey {
   ASSET_LOADER = "asset-loader",
 
   GAME = "game",
-  GAME_HUD = "game-hud",
   GAME_INTERACTION = "game-interaction",
   GAME_DIALOGUE = "game-dialogue",
 

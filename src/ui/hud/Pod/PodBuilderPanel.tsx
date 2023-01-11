@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import { useGameContext } from "contexts/game";
 import { useDisclosure } from "hooks/useDisclosure";
 import { useEffect, useMemo, useState } from "react";
@@ -112,7 +112,7 @@ interface Props {
 export const PodBuilderPanel = (props: Props) => {
   const { isActive } = props;
 
-  const { activeSceneKey, getActiveScene } = useGameContext();
+  const { state, getActiveScene } = useGameContext();
 
   const { isOpen, open, close } = useDisclosure();
 
@@ -124,7 +124,7 @@ export const PodBuilderPanel = (props: Props) => {
 
   const activeScene = useMemo(() => {
     return getActiveScene() as PodMap;
-  }, [activeSceneKey]);
+  }, [state.activeSceneKey]);
 
   const selectWall = (item: ItemProps) => {
     setSelectedWall(item);
@@ -179,7 +179,7 @@ export const PodBuilderPanel = (props: Props) => {
 
   return (
     <div
-      className={classNames(
+      className={clsx(
         "fixed left-0 bottom-0 h-50vh w-50vw bg-background-primary translate-x-[-50vw] transition-all duration-500 rounded-tr-xl p-4",
         { "translate-x-0": isOpen }
       )}

@@ -3,9 +3,10 @@ import { SceneKey } from "constants/scenes";
 import { useGameContext } from "contexts/game";
 import PodMap from "scenes/Pod/Map";
 import { PodBuilderPanel } from "./PodBuilderPanel";
+import { GridButtons } from "components/GridButtons";
 
 export const Pod = () => {
-  const { getActiveScene, setActiveSceneKey } = useGameContext();
+  const { getActiveScene, dispatch } = useGameContext();
 
   const [isBuildModeEnabled, setIsBuildModeEnabled] = useState(false);
 
@@ -19,7 +20,7 @@ export const Pod = () => {
         Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
         () => {
           activeScene.scene.start(SceneKey.GAME);
-          setActiveSceneKey(SceneKey.GAME);
+          dispatch({ type: "setActiveSceneKey", payload: SceneKey.GAME });
         }
       );
     }
@@ -34,22 +35,24 @@ export const Pod = () => {
   return (
     <>
       {getActiveScene() && <PodBuilderPanel isActive={isBuildModeEnabled} />}
-      <div className="fixed bottom-0 right-0 mb-8 mr-8 flex space-x-2">
-        <button
-          type="button"
-          onClick={onToggleBuildMode}
-          className="btn-control"
-        >
-          <img src="/assets/images/pod-builder.png" />
-        </button>
-        <button
-          type="button"
-          onClick={onNavigateToWorld}
-          className="btn-control"
-          disabled={isBuildModeEnabled}
-        >
-          <img src="/assets/images/world.png" />
-        </button>
+
+      <div className="fixed bottom-0 right-0 mb-4 mr-8 flex space-x-4">
+        <GridButtons rows={1} cols={2}>
+          <GridButtons.Button onClick={onToggleBuildMode}>
+            <img
+              src="/assets/images/pod-builder.png"
+              className="w-80px h-80px"
+            />
+            <span className="-mt-1">Build</span>
+          </GridButtons.Button>
+          <GridButtons.Button
+            onClick={onNavigateToWorld}
+            disabled={isBuildModeEnabled}
+          >
+            <img src="/assets/images/world.png" className="w-80px h-80px" />
+            <span className="-mt-1">World</span>
+          </GridButtons.Button>
+        </GridButtons>
       </div>
     </>
   );
