@@ -1,10 +1,8 @@
 import {
   createContext,
-  Dispatch,
   PropsWithChildren,
-  SetStateAction,
   useContext,
-  useState,
+  useReducer,
 } from "react";
 import Phaser from "phaser";
 import "phaser/plugins/spine/dist/SpinePlugin";
@@ -13,26 +11,62 @@ import WorldLoader from "../scenes/WorldLoader";
 import ConfigLoader from "../scenes/ConfigLoader";
 import AssetLoader from "../scenes/AssetLoader";
 import GameMap from "../scenes/Game/Map";
-import GameHUD from "../scenes/Game/HUD";
 import GameInteraction from "../scenes/Game/Interaction";
 import GameDialogue from "../scenes/Game/Dialogue";
 import PodMap from "../scenes/Pod/Map";
 import { SceneKey } from "../constants/scenes";
 
-interface Props {
+interface State {
   activeSceneKey: SceneKey;
-  game: Phaser.Game;
+  game?: Phaser.Game;
+  openMenu: boolean;
+}
+
+type Action = {
+  type: "setActiveSceneKey" | "setOpenMenu" | "setGame";
+  payload: any;
+};
+
+type Reducer = (s: State, a: Action) => State;
+
+interface Props {
   start: () => void;
-  setActiveSceneKey: Dispatch<SetStateAction<SceneKey>>;
   getActiveScene: () => Phaser.Scene | undefined;
+  state: State;
+  dispatch: (a: Action) => void;
 }
 
 // @ts-ignore
 const Context = createContext<Props>({});
 
 export const GameContextProvider = ({ children }: PropsWithChildren) => {
-  const [activeSceneKey, setActiveSceneKey] = useState<SceneKey>(SceneKey.BOOT);
-  const [game, setGame] = useState<Phaser.Game>();
+  const [state, dispatch] = useReducer<Reducer>(
+    (state, action) => {
+      switch (action.type) {
+        case "setActiveSceneKey":
+          return {
+            ...state,
+            activeSceneKey: action.payload,
+          };
+        case "setGame":
+          return {
+            ...state,
+            game: action.payload,
+          };
+        case "setOpenMenu":
+          return {
+            ...state,
+            openMenu: action.payload,
+          };
+        default:
+          throw new Error("[GameContext] No type found in reducer");
+      }
+    },
+    {
+      activeSceneKey: SceneKey.BOOT,
+      openMenu: false,
+    }
+  );
 
   const start = () => {
     const config: Phaser.Types.Core.GameConfig = {
@@ -51,7 +85,6 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
         AssetLoader,
         WorldLoader,
         GameMap,
-        GameHUD,
         GameInteraction,
         GameDialogue,
         PodMap,
@@ -67,21 +100,19 @@ export const GameContextProvider = ({ children }: PropsWithChildren) => {
       },
     };
 
-    setGame(new Phaser.Game(config));
-    setActiveSceneKey(SceneKey.POD);
+    dispatch({ type: "setGame", payload: new Phaser.Game(config) });
+    dispatch({ type: "setActiveSceneKey", payload: SceneKey.GAME });
   };
 
-  const getActiveScene = () => game?.scene.keys[activeSceneKey];
+  const getActiveScene = () => state.game?.scene.keys[state.activeSceneKey];
 
   return (
     <Context.Provider
       value={{
-        activeSceneKey,
-        // @ts-ignore
-        game,
+        state,
         getActiveScene,
         start,
-        setActiveSceneKey,
+        dispatch,
       }}
     >
       {children}

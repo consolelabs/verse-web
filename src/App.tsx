@@ -4,13 +4,14 @@ import { useGameContext } from "contexts/game";
 import { Boot } from "ui/hud/Boot";
 import { Game } from "ui/hud/Game";
 import { Pod } from "ui/hud/Pod";
+import { Menu } from "./components/Menu";
 
 const App = () => {
-  const { game, activeSceneKey } = useGameContext();
+  const { state } = useGameContext();
   const [fps, setFPS] = useState(0);
 
   const contentRender = useMemo(() => {
-    switch (activeSceneKey) {
+    switch (state.activeSceneKey) {
       case SceneKey.BOOT: {
         return <Boot />;
       }
@@ -24,32 +25,32 @@ const App = () => {
         return null;
       }
     }
-  }, [activeSceneKey]);
+  }, [state.activeSceneKey]);
 
   useEffect(() => {
     let interval: any;
 
-    if (game) {
+    if (state.game) {
       setInterval(() => {
-        setFPS(game.loop.actualFps);
+        setFPS(state.game?.loop.actualFps ?? -1);
       }, 1000);
     }
 
     return () => {
       clearInterval(interval);
     };
-  }, [game]);
+  }, [state.game]);
 
   return (
     <>
       <div className="fixed top-0 left-0 w-full h-full bg-black" id="game" />
-
-      {game && (
+      {state.game && (
         <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
           {Math.floor(fps)}
         </div>
       )}
       {contentRender}
+      <Menu />
     </>
   );
 };

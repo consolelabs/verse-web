@@ -1,36 +1,23 @@
-import { SceneKey } from "constants/scenes";
+import { GridButtons } from "components/GridButtons";
 import { useGameContext } from "contexts/game";
 
 export const Game = () => {
-  const { getActiveScene, setActiveSceneKey } = useGameContext();
+  const { dispatch } = useGameContext();
 
-  const onNavigateToPod = () => {
-    const activeScene = getActiveScene();
-
-    if (activeScene) {
-      // Fade out & prepare for scene transition
-      activeScene.cameras.main.fadeOut(500, 0, 0, 0);
-      activeScene.cameras.main.once(
-        Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-        () => {
-          activeScene.scene.stop(SceneKey.GAME_INTERACTION);
-          activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
-          activeScene.scene.start(SceneKey.POD, {
-            floorKey: "floor-1",
-            wallKey: "wall-1",
-          });
-          setActiveSceneKey(SceneKey.POD);
-        }
-      );
-    }
-  };
+  const openMenu = () => dispatch({ type: "setOpenMenu", payload: true });
 
   return (
-    <div className="fixed bottom-0 right-0 mb-8 mr-8 flex space-x-4">
-      <button type="button" onClick={onNavigateToPod}>
-        Pod
-      </button>
-      <button type="button">Inventory</button>
+    <div className="fixed bottom-0 right-0 mb-4 mr-8 flex space-x-4">
+      <GridButtons rows={1} cols={2}>
+        <GridButtons.Button>
+          <img src="/assets/images/inventory.png" className="w-80px h-80px" />
+          <span className="-mt-2">Inventory</span>
+        </GridButtons.Button>
+        <GridButtons.Button onClick={openMenu}>
+          <img src="/assets/images/menu.png" className="w-80px h-80px" />
+          <span className="-mt-2">Menu</span>
+        </GridButtons.Button>
+      </GridButtons>
     </div>
   );
 };

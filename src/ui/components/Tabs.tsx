@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import { useState } from "react";
 
 interface Props {
@@ -21,7 +21,7 @@ export const Tabs = (props: Props) => {
 
           return (
             <div
-              className={classNames("px-4 py-2", {
+              className={clsx("px-4 py-2", {
                 "bg-background-tertiary font-bold": isActive,
                 "bg-background-secondary": !isActive,
               })}

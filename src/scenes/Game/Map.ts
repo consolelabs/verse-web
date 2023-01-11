@@ -58,12 +58,6 @@ export default class GameMap extends Phaser.Scene {
   }
 
   preload() {
-    // // Launch HUD scene
-    // const hudScene = this.scene.get(SceneKey.GAME_HUD);
-    // // @ts-ignore
-    // hudScene.mainScene = this;
-    // this.scene.launch(hudScene);
-
     // Launch interaction scene
     const interactionScene = this.scene.get(
       SceneKey.GAME_INTERACTION
@@ -176,7 +170,6 @@ export default class GameMap extends Phaser.Scene {
                 mask: COLLISION_CATEGORY.PLAYER,
               },
               onCollideCallback: () => {
-                // @ts-ignore
                 interactionScene.show({
                   key: properties.key,
                   text: properties.text,
@@ -184,7 +177,6 @@ export default class GameMap extends Phaser.Scene {
                 });
               },
               onCollideEndCallback: () => {
-                // @ts-ignore
                 interactionScene.hide();
               },
             });
