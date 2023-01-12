@@ -28,7 +28,6 @@ export default class PodMap extends Phaser.Scene {
   floorSprite?: Phaser.GameObjects.TileSprite;
   wallKey?: string;
   wallSprite?: Phaser.GameObjects.TileSprite;
-  onPlacingItem?: (item: PodItem) => void;
 
   init(params: Record<string, any>) {
     this.wallKey = params.wallKey;
@@ -327,9 +326,6 @@ export default class PodMap extends Phaser.Scene {
       onRemove: () => this.removeItem(itemId),
       onMove: () => this.moveItem(itemId),
     });
-
-    // Callback
-    this.onPlacingItem?.(this.itemToPlace);
 
     // Save it to the array
     this.placedItems.push(placedItem);
