@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useGameContext } from "contexts/game";
+import { useGameState } from "stores/game";
 import { useDisclosure } from "hooks/useDisclosure";
 import { useEffect, useMemo, useState } from "react";
 import PodMap from "scenes/Pod/Map";
@@ -112,7 +112,7 @@ interface Props {
 export const PodBuilderPanel = (props: Props) => {
   const { isActive } = props;
 
-  const { state, getActiveScene } = useGameContext();
+  const { getActiveScene, activeSceneKey } = useGameState();
 
   const { isOpen, open, close } = useDisclosure();
 
@@ -124,7 +124,7 @@ export const PodBuilderPanel = (props: Props) => {
 
   const activeScene = useMemo(() => {
     return getActiveScene() as PodMap;
-  }, [state.activeSceneKey]);
+  }, [activeSceneKey]);
 
   const selectWall = (item: ItemProps) => {
     setSelectedWall(item);

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { SceneKey } from "constants/scenes";
-import { useGameContext } from "contexts/game";
+import { useGameState } from "stores/game";
 import PodMap from "scenes/Pod/Map";
 import { PodBuilderPanel } from "./PodBuilderPanel";
 import { GridButtons } from "components/GridButtons";
 
 export const Pod = () => {
-  const { getActiveScene, dispatch } = useGameContext();
+  const { getActiveScene, setActiveSceneKey } = useGameState();
 
   const [isBuildModeEnabled, setIsBuildModeEnabled] = useState(false);
 
@@ -20,7 +20,7 @@ export const Pod = () => {
         Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
         () => {
           activeScene.scene.start(SceneKey.GAME);
-          dispatch({ type: "setActiveSceneKey", payload: SceneKey.GAME });
+          setActiveSceneKey(SceneKey.GAME);
         }
       );
     }

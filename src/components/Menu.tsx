@@ -1,28 +1,27 @@
 import { useEffect } from "react";
 import { SceneKey } from "../constants/scenes";
-import { useGameContext } from "../contexts/game";
+import { useGameState } from "stores/game";
 import { GradientContainer } from "./GradientContainer";
 import { GridButtons } from "./GridButtons";
 
 export const Menu = () => {
-  const { state, dispatch, getActiveScene } = useGameContext();
+  const { setOpenMenu, openMenu, setActiveSceneKey, getActiveScene } =
+    useGameState();
 
-  const closeMenu = () => {
-    dispatch({ type: "setOpenMenu", payload: false });
-  };
+  const closeMenu = () => setOpenMenu(false);
 
   useEffect(() => {
     function esc(e: KeyboardEvent) {
-      if (!state.openMenu) return;
+      if (!openMenu) return;
       if (e.key !== "Escape") return;
       closeMenu();
     }
     window.addEventListener("keyup", esc);
 
     return () => window.removeEventListener("keyup", esc);
-  }, [state.openMenu]);
+  }, [openMenu]);
 
-  if (!state.openMenu) return null;
+  if (!openMenu) return null;
 
   return (
     <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center">
@@ -53,10 +52,7 @@ export const Menu = () => {
                           wallKey: "wall-1",
                           floorKey: "floor-1",
                         });
-                        dispatch({
-                          type: "setActiveSceneKey",
-                          payload: SceneKey.POD,
-                        });
+                        setActiveSceneKey(SceneKey.POD);
                       }
                     );
                   }

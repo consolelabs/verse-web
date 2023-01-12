@@ -1,10 +1,10 @@
 import { GridButtons } from "components/GridButtons";
-import { useGameContext } from "contexts/game";
+import { useGameState } from "stores/game";
 
 export const Game = () => {
-  const { dispatch } = useGameContext();
+  const { setOpenMenu } = useGameState();
 
-  const openMenu = () => dispatch({ type: "setOpenMenu", payload: true });
+  const openMenu = () => setOpenMenu(true);
 
   return (
     <div className="fixed bottom-0 right-0 mb-4 mr-8 flex space-x-4">

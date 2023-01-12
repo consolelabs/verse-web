@@ -1,5 +1,5 @@
 import { SceneKey } from "constants/scenes";
-import { useGameContext } from "contexts/game";
+import { useGameState } from "stores/game";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 
@@ -132,7 +132,7 @@ export const CharStats = () => {
 };
 
 export const CharSelect = () => {
-  const { getActiveScene, dispatch } = useGameContext();
+  const { getActiveScene, setActiveSceneKey } = useGameState();
   const [selectedChars, setSelectedChars] = useState([mockData[0]]);
   const [previewChar, setPreviewChar] = useState(mockData[0]);
 
@@ -238,7 +238,7 @@ export const CharSelect = () => {
             <div className="flex-1 flex flex-col relative">
               <img
                 src="/assets/images/char-select/grid.png"
-                className="w-4/5 absolute top-1/3 left-1/2 -translate-1/2"
+                className="w-600px absolute top-1/3 left-1/2 -translate-1/2"
               />
               <img
                 src="/assets/images/char-select/light.png"
@@ -299,10 +299,7 @@ export const CharSelect = () => {
                     activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
                       chars: selectedChars.map((c) => c.type),
                     });
-                    dispatch({
-                      type: "setActiveSceneKey",
-                      payload: SceneKey.GAME,
-                    });
+                    setActiveSceneKey(SceneKey.GAME);
                   }}
                 >
                   Play Game
