@@ -1,3 +1,6 @@
+import { WagmiConfig, createClient } from "wagmi";
+import { ConnectKitProvider, getDefaultClient } from "connectkit";
+
 import { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
@@ -5,6 +8,13 @@ import { Game } from "ui/hud/Game";
 import { Pod } from "ui/hud/Pod";
 import { Menu } from "./components/Menu";
 import { CharSelect } from "ui/hud/CharSelect";
+import { Boot } from "ui/hud/Boot";
+
+const client = createClient(
+  getDefaultClient({
+    appName: "Verse",
+  })
+);
 
 const App = () => {
   const { activeSceneKey, game, init } = useGameState();
@@ -12,6 +22,9 @@ const App = () => {
 
   const contentRender = useMemo(() => {
     switch (activeSceneKey) {
+      case SceneKey.BOOT: {
+        return <Boot />;
+      }
       case SceneKey.CHAR_SELECT: {
         return <CharSelect />;
       }
@@ -48,16 +61,18 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      <div className="fixed top-0 left-0 w-full h-full bg-black" id="game" />
-      {game && (
-        <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
-          {Math.floor(fps)}
-        </div>
-      )}
-      {contentRender}
-      <Menu />
-    </>
+    <WagmiConfig client={client}>
+      <ConnectKitProvider>
+        <div className="fixed top-0 left-0 w-full h-full bg-black" id="game" />
+        {game && (
+          <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
+            {Math.floor(fps)}
+          </div>
+        )}
+        {contentRender}
+        <Menu />
+      </ConnectKitProvider>
+    </WagmiConfig>
   );
 };
 

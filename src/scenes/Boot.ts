@@ -12,8 +12,4 @@ export default class Boot extends Phaser.Scene {
     this.load.image("title-screen-bg", "/assets/images/title-screen-bg.jpeg");
     this.load.image("consolelabslogo", "/assets/images/consolelabslogo.png");
   }
-
-  create() {
-    this.scene.start(SceneKey.INTRO);
-  }
 }

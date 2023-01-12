@@ -47,6 +47,8 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 interface State {
+  account?: `0x${string}`;
+  setAccount: (account: `0x${string}`) => void;
   activeSceneKey: SceneKey;
   setActiveSceneKey: (key: SceneKey) => void;
   getActiveScene: () => Phaser.Scene | undefined;
@@ -57,8 +59,15 @@ interface State {
 }
 
 export const useGameState = create<State>((set, get) => ({
+  account: undefined,
+  setAccount: (account: `0x${string}`) =>
+    set(() => ({
+      account,
+    })),
   activeSceneKey: SceneKey.BOOT,
   setActiveSceneKey: (key: SceneKey) => set(() => ({ activeSceneKey: key })),
+  // We need to get the active scene with a method to make sure
+  // we get the latest data.
   getActiveScene: () => {
     const { activeSceneKey, game } = get();
     if (!activeSceneKey || !game) return;
