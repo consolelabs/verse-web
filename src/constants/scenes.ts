@@ -1,4 +1,5 @@
 export enum SceneKey {
+  INTRO = "intro",
   BOOT = "boot",
   CHAR_SELECT = "char-select",
   CONFIG_LOADER = "config-loader",
@@ -10,6 +11,4 @@ export enum SceneKey {
   GAME_DIALOGUE = "game-dialogue",
 
   POD = "pod",
-
-  MENU = "MENU",
 }

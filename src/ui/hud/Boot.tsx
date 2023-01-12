@@ -1,15 +1,8 @@
-import { useGameContext } from "contexts/game";
-import { useEffect } from "react";
+import { SceneKey } from "constants/scenes";
+import { useGameState } from "stores/game";
 
 export const Boot = () => {
-  const { start } = useGameContext();
-
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-ignore
-      document.querySelector("#start")?.click();
-    });
-  }, []);
+  const { setActiveSceneKey } = useGameState();
 
   return (
     <div className="fixed w-full h-full flex">
@@ -20,7 +13,7 @@ export const Boot = () => {
       <button
         id="start"
         type="button"
-        onClick={start}
+        onClick={() => setActiveSceneKey(SceneKey.CHAR_SELECT)}
         className="relative m-auto text-xl bg-white rounded"
       >
         Start Game

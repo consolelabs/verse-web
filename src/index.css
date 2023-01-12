@@ -2,16 +2,13 @@ html,
 body {
   padding: 0;
   margin: 0;
-}
-
-button {
-  font-family: 'Chakra Petch', sans-serif;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
   cursor: url("/assets/images/cursor.png"), pointer;
-  font-family: "Chakra Petch", sans-serif;
+  font-family: "Chakra Petch", "PT Sans", "PT Mono", sans-serif;
 }
 
 img {
