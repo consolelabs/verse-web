@@ -26,6 +26,9 @@
     "text": "Talk",
     "type": "dialogue",
     "value": 1010000,
-    "character": "neko"
+    "character": {
+      "id": 1,
+      "spine": "Neko"
+    }
   }
 ]

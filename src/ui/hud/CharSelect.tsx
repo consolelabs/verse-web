@@ -161,11 +161,7 @@ export const CharSelect = () => {
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-background-primary">
-      <img
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        src="/assets/images/char-select/bg.png"
-      />
+    <div className="fixed top-0 left-0 w-full h-full">
       <div className="absolute top-0 left-0 w-full h-full px-36 text-white flex flex-col">
         <div className="text-3xl font-bold py-12">Select Characters</div>
         <div className="flex-1 overflow-hidden">
@@ -236,22 +232,10 @@ export const CharSelect = () => {
               })}
             </div>
             <div className="flex-1 flex flex-col relative">
-              <img
-                src="/assets/images/char-select/grid.png"
-                className="w-600px absolute top-1/3 left-1/2 -translate-1/2"
-              />
-              <img
-                src="/assets/images/char-select/light.png"
-                className="w-4/5 absolute top-3/5 left-1/2 -translate-1/2"
-              />
-              <img
-                src={previewChar.src}
-                className="w-256px absolute top-1/3 left-1/2 -translate-1/2 aspect-square"
-              />
               <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-12">
                 <button
                   type="button"
-                  className="bg-white uppercase font-semibold rounded px-4 py-2 border-none mb-6"
+                  className="hidden bg-white uppercase font-semibold rounded px-4 py-2 border-none mb-6"
                   onClick={() => {
                     if (isPreviewingATeamMember) {
                       setSelectedChars((o) =>
@@ -272,8 +256,8 @@ export const CharSelect = () => {
                 >
                   {isPreviewingATeamMember ? "Remove From Team" : "Add To Team"}
                 </button>
-                <div className="text-typo-secondary mb-2">Team</div>
-                <div className="grid grid-cols-5 gap-2 w-320px">
+                <div className="hidden text-typo-secondary mb-2">Team</div>
+                <div className="hidden grid grid-cols-5 gap-2 w-320px">
                   {new Array(5).fill(0).map((_, index) => {
                     return (
                       <div
@@ -290,6 +274,16 @@ export const CharSelect = () => {
                     );
                   })}
                 </div>
+                <div className="text-xl font-medium flex items-center text-teal-100">
+                  <span>TIP: try moving around with</span>
+                  <kbd className="kbc-button kbc-button-xxs ml-3">W</kbd>
+                  <kbd className="kbc-button kbc-button-xxs">A</kbd>
+                  <kbd className="kbc-button kbc-button-xxs">S</kbd>
+                  <kbd className="kbc-button kbc-button-xxs mr-3">D</kbd>
+                  <span>and hold</span>
+                  <kbd className="kbc-button kbc-button-xxs mx-3">Shift</kbd>
+                  <span>to run!</span>
+                </div>
                 <button
                   type="button"
                   className="bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6"
@@ -299,10 +293,10 @@ export const CharSelect = () => {
                     activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
                       chars: selectedChars.map((c) => c.type),
                     });
-                    setActiveSceneKey(SceneKey.GAME);
+                    setActiveSceneKey(SceneKey.BLANK);
                   }}
                 >
-                  Play Game
+                  Enter game
                 </button>
               </div>
             </div>

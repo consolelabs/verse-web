@@ -21,9 +21,21 @@ export default class ConfigLoader extends Phaser.Scene {
     this.load.json("config", "./config.json");
     this.load.json("interaction", "./interaction.json");
     this.load.json("dialogue", "./dialogue.json");
+
+    this.cameras.main.fadeOut(0);
   }
 
   create() {
-    this.scene.start(SceneKey.ASSET_LOADER);
+    this.cameras.main
+      .fadeIn(500)
+      .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
+        this.time.delayedCall(1000, () => {
+          this.cameras.main
+            .fadeOut(500)
+            .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+              this.scene.start(SceneKey.ASSET_LOADER);
+            });
+        });
+      });
   }
 }

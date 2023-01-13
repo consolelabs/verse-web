@@ -50,8 +50,6 @@ export default class PodMap extends Phaser.Scene {
   }
 
   preload() {
-    this.player = new Player(this);
-
     // Load some mock floors texture for the builder mode
     ["1", "2", "3"].forEach((key) => {
       // Do nothing if texture was already loaded
@@ -100,7 +98,7 @@ export default class PodMap extends Phaser.Scene {
 
   create() {
     // Fade in
-    this.cameras.main.fadeIn(500, 0, 0, 0);
+    this.cameras.main.fadeIn(500);
 
     // Load characters
     // The list of characters will be saved in the global game object
@@ -119,19 +117,24 @@ export default class PodMap extends Phaser.Scene {
 
       return c;
     });
-    this.player.loadCharacters(charsToLoad, {
-      x: 500,
-      y: 500,
-      scale: 0.4,
+    this.player = new Player({
+      scene: this,
+      spine: "Neko",
+      id: 3,
+      spineConfig: {
+        x: 500,
+        y: 500,
+        scale: 0.4,
+      },
     });
 
-    // Follow the first character
-    this.cameras.main.startFollow(
-      this.player.characters[0].instance,
-      true,
-      0.05,
-      0.05
-    );
+    this.player.character?.loadPromise.then((instance) => {
+      this.matter.add.gameObject(instance);
+      instance.setFixedRotation();
+
+      // Follow the first character
+      this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+    });
 
     // Set world bounds
 
@@ -195,7 +198,7 @@ export default class PodMap extends Phaser.Scene {
   toggleBuildMode() {
     if (this.mode === "normal") {
       this.player.setActive(false);
-      this.player.characters.forEach((char) => char.hide());
+      this.player.character?.hide();
       this.mode = "build";
 
       const camera = this.cameras.main;
@@ -228,16 +231,18 @@ export default class PodMap extends Phaser.Scene {
     } else {
       this.itemToPlace?.object.destroy();
       this.player.setActive(true);
-      this.player.characters.forEach((char) => char.show());
+      this.player.character?.show();
       this.mode = "normal";
 
       this.input.off("pointermove");
-      this.cameras.main.startFollow(
-        this.player.characters[0].instance,
-        true,
-        0.05,
-        0.05
-      );
+      if (this.player.character?.instance) {
+        this.cameras.main.startFollow(
+          this.player.character.instance,
+          true,
+          0.05,
+          0.05
+        );
+      }
     }
   }
 

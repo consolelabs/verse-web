@@ -24,14 +24,6 @@ export default class AssetLoader extends Phaser.Scene {
     this.load.image("quit-icon", "/assets/images/quit.png");
     this.load.image("container", "/assets/images/container.png");
 
-    ["fukuro", "ghost-neko", "neko", "tv-head", "rabby"].forEach((char) => {
-      this.load.spine(
-        `${char}-character`,
-        `/characters/${char}/char.json`,
-        `/characters/${char}/char.atlas`
-      );
-    });
-
     this.load.spritesheet("j-control", "/controls/j.png", {
       frameWidth: 16,
       frameHeight: 16,

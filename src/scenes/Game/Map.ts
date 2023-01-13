@@ -70,7 +70,6 @@ export default class GameMap extends Phaser.Scene {
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");
     const interactionMapping = this.cache.json.get("interaction");
-    this.player = new Player(this);
 
     // Now load assets
     const tilesetSource = Object.fromEntries(
@@ -112,36 +111,39 @@ export default class GameMap extends Phaser.Scene {
             // TODO: Move this to a new NPC class
             const char = new Character({
               scene: this,
-              type: properties.character,
-              spriteConfig: {
+              id: properties.character.id,
+              spine: properties.character.spine,
+              spineConfig: {
                 x,
                 y,
                 scale: 0.4,
               },
             });
-            char.playAnimation("idle", "front");
-            // since the NPC is not moving we might want to re extend the collision box so the player won't need to
-            // stand too close to the NPC to trigger interaction
-            char.instance.height *= 5 / 2;
+            char.loadPromise.then((instance) => {
+              // since the NPC is not moving we might want to re extend the collision box so the player won't need to
+              // stand too close to the NPC to trigger interaction
+              instance.height *= 5 / 2;
+              char.playAnimation("idle", "front");
 
-            this.matter.add.gameObject(char.instance, {
-              isStatic: true,
-              onCollideCallback: () => {
-                interactionScene.show({
-                  key: properties.key,
-                  text: properties.text,
-                  onInteract: getInteractHandler(properties, this),
-                });
-              },
-              onCollideEndCallback: () => {
-                interactionScene.hide();
-              },
+              this.matter.add.gameObject(instance, {
+                isStatic: true,
+                onCollideCallback: () => {
+                  interactionScene.show({
+                    key: properties.key,
+                    text: properties.text,
+                    onInteract: getInteractHandler(properties, this),
+                  });
+                },
+                onCollideEndCallback: () => {
+                  interactionScene.hide();
+                },
+              });
+              instance.setFixedRotation();
+
+              instance.setCollisionCategory(COLLISION_CATEGORY.NPC);
+              instance.setCollidesWith(COLLISION_CATEGORY.PLAYER);
+              instance.setDepth(y / TILE_SIZE);
             });
-            char.instance.setFixedRotation();
-
-            char.instance.setCollisionCategory(COLLISION_CATEGORY.NPC);
-            char.instance.setCollidesWith(COLLISION_CATEGORY.PLAYER);
-            char.instance.setDepth(y / TILE_SIZE);
           } else if (object.point) {
             this.matter.add.circle(x, y, TILE_SIZE, {
               isStatic: true,
@@ -309,7 +311,7 @@ export default class GameMap extends Phaser.Scene {
 
   create() {
     // Fade in
-    this.cameras.main.fadeIn(100, 0, 0, 0);
+    this.cameras.main.fadeIn(500);
 
     const { layers = [], tilesets = [] } = this.map;
 
@@ -369,19 +371,24 @@ export default class GameMap extends Phaser.Scene {
 
       return c;
     });
-    this.player.loadCharacters(charsToLoad, {
-      x: 5000,
-      y: 5600,
-      scale: 0.4,
+    this.player = new Player({
+      scene: this,
+      spine: "Neko",
+      id: 3,
+      spineConfig: {
+        x: 5000,
+        y: 5600,
+        scale: 0.4,
+      },
     });
 
-    // Follow the first character
-    this.cameras.main.startFollow(
-      this.player.characters[0].instance,
-      true,
-      0.05,
-      0.05
-    );
+    this.player.character?.loadPromise.then((instance) => {
+      this.matter.add.gameObject(instance);
+      instance.setFixedRotation();
+
+      // Follow the first character
+      this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+    });
   }
 
   update() {

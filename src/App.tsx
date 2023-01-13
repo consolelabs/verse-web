@@ -34,6 +34,7 @@ const App = () => {
       case SceneKey.POD: {
         return <Pod />;
       }
+      case SceneKey.BLANK:
       default: {
         return null;
       }

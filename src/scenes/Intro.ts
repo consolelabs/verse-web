@@ -1,5 +1,4 @@
 import { SceneKey } from "constants/scenes";
-import { useGameState } from "stores/game";
 import Phaser from "phaser";
 
 export default class Intro extends Phaser.Scene {
@@ -76,7 +75,6 @@ export default class Intro extends Phaser.Scene {
               .fadeOut(500)
               .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                 this.scene.start(SceneKey.CHAR_SELECT);
-                useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT });
               });
           });
         });

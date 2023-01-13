@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { useGameState } from "stores/game";
 import { SceneKey } from "../constants/scenes";
 
 export default class WorldLoader extends Phaser.Scene {
@@ -40,6 +41,7 @@ export default class WorldLoader extends Phaser.Scene {
         if (this.proceed) {
           // Pass the data through
           this.scene.start(SceneKey.GAME);
+          useGameState.setState({ activeSceneKey: SceneKey.GAME });
         } else {
           // TODO: maybe show error scene
         }
