@@ -142,7 +142,7 @@ export const CharSelect = () => {
   }, [nfts]);
 
   useEffect(() => {
-    if (nfts && nfts.length > 1 && !previewChar) {
+    if (Array.isArray(nfts) && nfts.length > 1 && !previewChar) {
       setPreviewChar(nfts[0]);
     }
   }, [nfts]);
@@ -162,12 +162,12 @@ export const CharSelect = () => {
                 {
                   title: "Cyber Neko",
                   icon: "/assets/images/char-select/icon-neko.png",
-                  items: chars["Neko"],
+                  items: chars["Neko"] || [],
                 },
                 {
                   title: "Cyber Rabby",
                   icon: "/assets/images/char-select/icon-rabby.png",
-                  items: chars["Rabby"],
+                  items: chars["Rabby"] || [],
                 },
                 // {
                 //   title: "Fukuro",
@@ -177,7 +177,7 @@ export const CharSelect = () => {
                 {
                   title: "Other",
                   icon: "/assets/images/char-select/icon-other.png",
-                  items: chars["TV-head"],
+                  items: chars["TV-head"] || [],
                 },
               ]
                 .filter((section) => section.items.length > 0)
@@ -266,7 +266,7 @@ export const CharSelect = () => {
                     );
                   })}
                 </div> */}
-                <div className="text-xl font-medium flex items-center text-teal-100">
+                <div className="text-xl font-medium inline items-center text-teal-100 text-center">
                   <span>TIP: try moving around with</span>
                   <kbd className="kbc-button kbc-button-xxs ml-3">W</kbd>
                   <kbd className="kbc-button kbc-button-xxs">A</kbd>

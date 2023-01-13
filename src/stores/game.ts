@@ -90,7 +90,7 @@ export const useGameState = create<State>((set, get) => ({
 
         nfts.push(...nftThisBatch);
 
-        if (nftThisBatch.length < data.size) {
+        if (!nftThisBatch || nftThisBatch.length < data.size) {
           break;
         }
 
