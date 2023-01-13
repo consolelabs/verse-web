@@ -10,6 +10,5 @@ export default defineConfig((config) => {
     plugins: [react(), unocss(unocssConfig), tsconfigPaths()],
     server: { host: "0.0.0.0", port: 8000 },
     clearScreen: false,
-    publicDir: config.mode === "production" ? "." : "public",
   };
 });
