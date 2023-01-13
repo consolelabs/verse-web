@@ -5,10 +5,12 @@ import { useEffect } from "react";
 import { SceneKey } from "constants/scenes";
 
 export const Boot = () => {
-  const { setAccount, getActiveScene, setActiveSceneKey } = useGameState();
+  const { getNFTs, setAccount, getActiveScene, setActiveSceneKey } =
+    useGameState();
   const account = useAccount();
 
   const startGame = () => {
+    getNFTs();
     getActiveScene()?.scene.start(SceneKey.INTRO);
     setActiveSceneKey(SceneKey.INTRO);
   };

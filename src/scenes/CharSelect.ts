@@ -1,6 +1,7 @@
 import { Player } from "characters/player";
 import Phaser from "phaser";
 import { useGameState } from "stores/game";
+import { CharacterSpine } from "types/character";
 import { SceneKey } from "../constants/scenes";
 
 export default class CharSelect extends Phaser.Scene {
@@ -27,12 +28,18 @@ export default class CharSelect extends Phaser.Scene {
     );
   }
 
-  create() {
+  // TODO: Should load ghost-face by default?
+  loadPlayer(spine: CharacterSpine = "Neko", id = "3") {
+    // Destroy existing player before creating new one
+    if (this.player) {
+      this.player.destroy(true);
+    }
+
     this.player = new Player({
       scene: this,
       isPreview: true,
-      spine: "Neko",
-      id: 3,
+      spine,
+      id,
       spineConfig: {
         x: window.innerWidth / 2,
         y: window.innerHeight / 1.575,
@@ -66,6 +73,10 @@ export default class CharSelect extends Phaser.Scene {
       .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
         useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
       );
+  }
+
+  create() {
+    this.loadPlayer();
   }
 
   update() {

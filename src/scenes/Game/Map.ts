@@ -374,7 +374,7 @@ export default class GameMap extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       spine: "Neko",
-      id: 3,
+      id: "3",
       spineConfig: {
         x: 5000,
         y: 5600,

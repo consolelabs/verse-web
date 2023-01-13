@@ -12,6 +12,10 @@ import PodMap from "../scenes/Pod/Map";
 import { SceneKey } from "../constants/scenes";
 import CharSelect from "scenes/CharSelect";
 import Intro from "scenes/Intro";
+import { FullResponse } from "types/apis";
+import { NFT } from "types/nfts";
+
+const BASE_URL = "https://backend.pod.so/api/v1";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -49,9 +53,14 @@ const config: Phaser.Types.Core.GameConfig = {
 interface State {
   account?: `0x${string}`;
   setAccount: (account: `0x${string}`) => void;
+
+  nfts?: NFT[];
+  getNFTs: () => Promise<void>;
+
   activeSceneKey: SceneKey;
   setActiveSceneKey: (key: SceneKey) => void;
   getActiveScene: () => Phaser.Scene | undefined;
+
   game?: Phaser.Game;
   openMenu: boolean;
   setOpenMenu: (o: boolean) => void;
@@ -64,6 +73,36 @@ export const useGameState = create<State>((set, get) => ({
     set(() => ({
       account,
     })),
+
+  nfts: undefined,
+  getNFTs: async () => {
+    const nfts = [];
+    let page = 0;
+
+    try {
+      // Fetch till break
+      // eslint-disable-next-line
+      while (true) {
+        const data: FullResponse<NFT> = await fetch(
+          `${BASE_URL}/verse/nfts?user_address=${get().account}&page=${page}`
+        ).then((res) => res.json());
+        const nftThisBatch = data.data;
+
+        nfts.push(...nftThisBatch);
+
+        if (nftThisBatch.length < data.size) {
+          break;
+        }
+
+        page += 1;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    set({ nfts });
+  },
+
   activeSceneKey: SceneKey.BOOT,
   setActiveSceneKey: (key: SceneKey) => set(() => ({ activeSceneKey: key })),
   // We need to get the active scene with a method to make sure
@@ -73,6 +112,7 @@ export const useGameState = create<State>((set, get) => ({
     if (!activeSceneKey || !game) return;
     return game.scene.keys[activeSceneKey];
   },
+
   openMenu: false,
   setOpenMenu: (openMenu) => set(() => ({ openMenu })),
   init: () => set(() => ({ game: new Phaser.Game(config) })),

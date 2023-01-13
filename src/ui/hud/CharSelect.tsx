@@ -1,45 +1,19 @@
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
+import { NFT } from "types/nfts";
+import { CharacterSpine } from "types/character";
+import CharSelectScene from "scenes/CharSelect";
 
-const mockData = [
-  {
-    id: 1,
-    src: "/assets/images/char-select/mock/neko/1.png",
-    type: "neko",
-  },
-  {
-    id: 2,
-    src: "/assets/images/char-select/mock/neko/2.png",
-    type: "neko",
-  },
-  {
-    id: 3,
-    src: "/assets/images/char-select/mock/neko/3.png",
-    type: "neko",
-  },
-  {
-    id: 1,
-    src: "/assets/images/char-select/mock/rabby/1.png",
-    type: "rabby",
-  },
-  {
-    id: 2,
-    src: "/assets/images/char-select/mock/rabby/2.png",
-    type: "rabby",
-  },
-  {
-    id: 1,
-    src: "/assets/images/char-select/mock/fukuro/1.png",
-    type: "fukuro",
-  },
-  {
-    id: 1,
-    src: "/assets/images/char-select/mock/other/1.png",
-    type: "other",
-  },
-];
+const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {
+  "0x7D1070fdbF0eF8752a9627a79b00221b53F231fA": "Neko",
+  "": "TV-head",
+};
+
+const isTheSame = (a: NFT, b: NFT) => {
+  return a.token_address === b.token_address && a.token_id === b.token_id;
+};
 
 export const CharStats = () => {
   return (
@@ -132,33 +106,50 @@ export const CharStats = () => {
 };
 
 export const CharSelect = () => {
-  const { getActiveScene, setActiveSceneKey } = useGameState();
-  const [selectedChars, setSelectedChars] = useState([mockData[0]]);
-  const [previewChar, setPreviewChar] = useState(mockData[0]);
+  const { nfts, getActiveScene, setActiveSceneKey } = useGameState();
+  // const [selectedChars, setSelectedChars] = useState<NFT[]>([]);
+  const [previewChar, setPreviewChar] = useState<NFT>();
 
-  const { neko, rabby, fukuro, other } = useMemo(() => {
-    return mockData.reduce(
+  const selectCharToPreview = (item: NFT) => {
+    setPreviewChar(item);
+    (getActiveScene() as CharSelectScene).loadPlayer(item.type, item.token_id);
+  };
+
+  const chars: Record<CharacterSpine, NFT[]> = useMemo(() => {
+    if (!nfts) {
+      return {} as any;
+    }
+
+    return nfts.reduce(
       (result, current) => {
-        const next: any = { ...result };
+        const next = { ...result };
+        const type = COLLECTION_TO_SPINE[current.token_address];
+
         // @ts-ignore
-        next[current.type].push(current);
+        next[type].push({
+          ...current,
+          type,
+        });
 
         return next;
       },
       {
-        neko: [] as any[],
-        rabby: [] as any[],
-        fukuro: [] as any[],
-        other: [] as any[],
+        Neko: [],
+        Rabby: [],
+        "TV-head": [],
       }
     );
-  }, []);
+  }, [nfts]);
 
-  const isPreviewingATeamMember = Boolean(
-    selectedChars.find(
-      (c) => c.type === previewChar.type && c.id === previewChar.id
-    )
-  );
+  useEffect(() => {
+    if (nfts && nfts.length > 1 && !previewChar) {
+      setPreviewChar(nfts[0]);
+    }
+  }, [nfts]);
+
+  // const isPreviewingATeamMember = Boolean(
+  //   selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
+  // );
 
   return (
     <div className="fixed top-0 left-0 w-full h-full">
@@ -171,82 +162,83 @@ export const CharSelect = () => {
                 {
                   title: "Cyber Neko",
                   icon: "/assets/images/char-select/icon-neko.png",
-                  items: neko,
+                  items: chars["Neko"],
                 },
                 {
                   title: "Cyber Rabby",
                   icon: "/assets/images/char-select/icon-rabby.png",
-                  items: rabby,
+                  items: chars["Rabby"],
                 },
-                {
-                  title: "Fukuro",
-                  icon: "/assets/images/char-select/icon-fukuro.png",
-                  items: fukuro,
-                },
+                // {
+                //   title: "Fukuro",
+                //   icon: "/assets/images/char-select/icon-fukuro.png",
+                //   items: fukuro,
+                // },
                 {
                   title: "Other",
                   icon: "/assets/images/char-select/icon-other.png",
-                  items: other,
+                  items: chars["TV-head"],
                 },
-              ].map((section, index) => {
-                return (
-                  <div className="mb-12" key={index}>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <img src={section.icon} className="w-6 h-6" />
-                      <div className="font-semibold text-2xl text-typo-secondary">
-                        {section.title} ({section.items.length})
+              ]
+                .filter((section) => section.items.length > 0)
+                .map((section, index) => {
+                  return (
+                    <div className="mb-12" key={index}>
+                      <div className="flex items-center space-x-2 mb-2">
+                        <img src={section.icon} className="w-6 h-6" />
+                        <div className="font-semibold text-2xl text-typo-secondary">
+                          {section.title} ({section.items.length})
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-4 gap-1">
+                        {section.items.map((item) => {
+                          const isSelectedForPreviewing =
+                            previewChar && isTheSame(item, previewChar);
+                          // const isSelectedForTheTeam = selectedChars.find((c) =>
+                          //   isTheSame(c, item)
+                          // );
+
+                          return (
+                            <div
+                              key={`${item.token_address}-${item.token_id}`}
+                              className={clsx(
+                                "aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
+                                {
+                                  "border-white brightness-100":
+                                    isSelectedForPreviewing,
+                                  "brightness-50": !isSelectedForPreviewing,
+                                }
+                              )}
+                              onClick={() => selectCharToPreview(item)}
+                            >
+                              {/* {isSelectedForTheTeam && (
+                                <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
+                              )} */}
+                              <img src={item.image} className="w-full h-full" />
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                    <div className="grid grid-cols-4 gap-1">
-                      {section.items.map((item) => {
-                        const isSelectedForPreviewing =
-                          previewChar.id === item.id &&
-                          previewChar.type === item.type;
-                        const isSelectedForTheTeam = selectedChars.find(
-                          (c) => c.type === item.type && c.id === item.id
-                        );
-
-                        return (
-                          <div
-                            key={item.id}
-                            className={clsx(
-                              "aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
-                              {
-                                "border-white brightness-100":
-                                  isSelectedForPreviewing,
-                                "brightness-50": !isSelectedForPreviewing,
-                              }
-                            )}
-                            onClick={() => setPreviewChar(item)}
-                          >
-                            {isSelectedForTheTeam && (
-                              <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
-                            )}
-                            <img src={item.src} className="w-full h-full" />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
             <div className="flex-1 flex flex-col relative">
               <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-12">
-                <button
+                {/* <button
                   type="button"
-                  className="hidden bg-white uppercase font-semibold rounded px-4 py-2 border-none mb-6"
+                  className="bg-white uppercase font-semibold rounded px-4 py-2 border-none mb-6"
                   onClick={() => {
                     if (isPreviewingATeamMember) {
                       setSelectedChars((o) =>
                         o.filter(
-                          (o) =>
-                            o.type !== previewChar.type ||
-                            o.id !== previewChar.id
+                          (o) => !previewChar || !isTheSame(o, previewChar)
                         )
                       );
                     } else {
-                      setSelectedChars((o) => [...o, previewChar]);
+                      if (previewChar) {
+                        setSelectedChars((o) => [...o, previewChar]);
+                      }
                     }
                   }}
                   // Max 5 members
@@ -256,8 +248,8 @@ export const CharSelect = () => {
                 >
                   {isPreviewingATeamMember ? "Remove From Team" : "Add To Team"}
                 </button>
-                <div className="hidden text-typo-secondary mb-2">Team</div>
-                <div className="hidden grid grid-cols-5 gap-2 w-320px">
+                <div className="text-typo-secondary mb-2">Team</div>
+                <div className="grid grid-cols-5 gap-2 w-320px">
                   {new Array(5).fill(0).map((_, index) => {
                     return (
                       <div
@@ -266,14 +258,14 @@ export const CharSelect = () => {
                       >
                         {selectedChars[index] && (
                           <img
-                            src={selectedChars[index].src}
+                            src={selectedChars[index].image}
                             className="w-full h-full object-cover"
                           />
                         )}
                       </div>
                     );
                   })}
-                </div>
+                </div> */}
                 <div className="text-xl font-medium flex items-center text-teal-100">
                   <span>TIP: try moving around with</span>
                   <kbd className="kbc-button kbc-button-xxs ml-3">W</kbd>
@@ -291,12 +283,12 @@ export const CharSelect = () => {
                     const activeScene = getActiveScene();
                     // Mock: Only send the char type for now
                     activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
-                      chars: selectedChars.map((c) => c.type),
+                      chars: [previewChar],
                     });
-                    setActiveSceneKey(SceneKey.BLANK);
+                    setActiveSceneKey(SceneKey.GAME);
                   }}
                 >
-                  Enter game
+                  Play Game
                 </button>
               </div>
             </div>
