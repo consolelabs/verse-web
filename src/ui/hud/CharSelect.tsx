@@ -112,7 +112,10 @@ export const CharSelect = () => {
 
   const selectCharToPreview = (item: NFT) => {
     setPreviewChar(item);
-    (getActiveScene() as CharSelectScene).loadPlayer(item.type, item.token_id);
+    (getActiveScene() as CharSelectScene).loadPlayer(
+      item.type,
+      Number(item.token_id)
+    );
   };
 
   const chars: Record<CharacterSpine, NFT[]> = useMemo(() => {

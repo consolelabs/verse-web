@@ -29,7 +29,7 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   // TODO: Should load ghost-face by default?
-  loadPlayer(spine: CharacterSpine = "Neko", id = "3") {
+  loadPlayer(spine: CharacterSpine = "Neko", id = 1) {
     // Destroy existing player before creating new one
     if (this.player) {
       this.player.destroy(true);
@@ -76,7 +76,7 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   create() {
-    this.loadPlayer();
+    this.loadPlayer("Neko", 3);
   }
 
   update() {

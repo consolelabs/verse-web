@@ -120,7 +120,7 @@ export default class PodMap extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       spine: "Neko",
-      id: "3",
+      id: 3,
       spineConfig: {
         x: 500,
         y: 500,

@@ -27,7 +27,7 @@ export class Character extends Phaser.GameObjects.GameObject {
 
   constructor(props: {
     scene: Phaser.Scene;
-    id: string;
+    id: number;
     spine?: CharacterSpine;
     followee?: Character;
     follower?: Character;

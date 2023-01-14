@@ -12,7 +12,7 @@ export class Player extends Phaser.GameObjects.GameObject {
 
   constructor(config: {
     scene: Phaser.Scene;
-    id: string;
+    id: number;
     spine: CharacterSpine;
     isPreview?: boolean;
     spineConfig?: SpineGameObjectConfig;
