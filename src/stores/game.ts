@@ -14,8 +14,8 @@ import CharSelect from "scenes/CharSelect";
 import Intro from "scenes/Intro";
 import { FullResponse } from "types/apis";
 import { NFT } from "types/nfts";
-
-const BASE_URL = "https://backend.pod.so/api/v1";
+import { API_BASE_URL } from "envs";
+import { CharacterSpine } from "types/character";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -65,6 +65,18 @@ interface State {
   openMenu: boolean;
   setOpenMenu: (o: boolean) => void;
   init: () => void;
+
+  player?: {
+    animSuffix: string;
+    spine: CharacterSpine;
+    id: number;
+  };
+
+  setPlayer: (p: {
+    animSuffix: string;
+    spine: CharacterSpine;
+    id: number;
+  }) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -81,10 +93,11 @@ export const useGameState = create<State>((set, get) => ({
 
     try {
       // Fetch till break
-      // eslint-disable-next-line
       while (true) {
         const data: FullResponse<NFT> = await fetch(
-          `${BASE_URL}/verse/nfts?user_address=${get().account}&page=${page}`
+          `${API_BASE_URL}/verse/nfts?user_address=${
+            get().account
+          }&page=${page}`
         ).then((res) => res.json());
         const nftThisBatch = data.data;
 
@@ -112,6 +125,8 @@ export const useGameState = create<State>((set, get) => ({
     if (!activeSceneKey || !game) return;
     return game.scene.keys[activeSceneKey];
   },
+
+  setPlayer: (player) => set({ player }),
 
   openMenu: false,
   setOpenMenu: (openMenu) => set(() => ({ openMenu })),

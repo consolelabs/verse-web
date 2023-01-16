@@ -7,11 +7,18 @@ import {
 } from "../types/character";
 import { distance } from "../utils/math";
 
-function getBasicAnimation(state: AnimationState, dir: AnimationDirection) {
-  return `anim_${state}_${dir}`;
+type Anim = `anim_${AnimationState}_${AnimationDirection}${string}`;
+type Instance = SpineGameObject & Phaser.Physics.Matter.Sprite;
+
+function getBasicAnimation(
+  state: AnimationState,
+  dir: AnimationDirection,
+  suffix = ""
+): Anim {
+  return `anim_${state}_${dir}${suffix}`;
 }
 
-type Instance = SpineGameObject & Phaser.Physics.Matter.Sprite;
+const fallbackOrder: Array<AnimationState> = ["run", "walk", "idle"];
 
 export class Character extends Phaser.GameObjects.GameObject {
   public scene: Phaser.Scene;
@@ -22,6 +29,8 @@ export class Character extends Phaser.GameObjects.GameObject {
   public follower?: Character;
   public maximumDistanceToFollower = 60;
   public loadPromise: Promise<Instance>;
+  public animSuffix = "";
+  public availableAnims: Array<Anim> = [];
 
   private shadow?: Phaser.GameObjects.Image;
 
@@ -32,6 +41,7 @@ export class Character extends Phaser.GameObjects.GameObject {
     followee?: Character;
     follower?: Character;
     spineConfig?: SpineGameObjectConfig;
+    animSuffix?: string;
   }) {
     const {
       scene,
@@ -39,18 +49,32 @@ export class Character extends Phaser.GameObjects.GameObject {
       spine = "Neko",
       followee,
       follower,
-      spineConfig,
+      spineConfig = {},
+      animSuffix = "",
     } = props;
 
     super(scene, "character");
 
     this.scene = scene;
-    const atlas = `/api/atlas?spine=${spine}&id=${id}`;
-    const texture = `${CHARACTER_ASSET_PATH}/${spine}/Web/${
-      spine === "TV-head" ? "" : `${id}/`
-    }${spine}.png`;
+    let atlas = `/api/atlas?spine=${spine}&id=${id}`;
+    let texture = `${CHARACTER_ASSET_PATH}/${spine}/Web`;
+
+    switch (spine) {
+      case "GhostNeko":
+        atlas = "/characters/ghost-neko/char.atlas";
+        texture = "";
+        break;
+      case "TV-head":
+        texture += `/${spine}.png`;
+        break;
+      default:
+        texture += `/${id}`;
+        texture += `/${spine}.png`;
+    }
+
     this.followee = followee;
     this.follower = follower;
+    this.animSuffix = animSuffix;
 
     this.loadPromise = new Promise((r) => {
       this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
@@ -59,16 +83,20 @@ export class Character extends Phaser.GameObjects.GameObject {
           ...spineConfig,
           key: `${spine}/${id}-character`,
           skinName: "char_default",
-          animationName: getBasicAnimation("idle", "front"),
+          animationName: getBasicAnimation("idle", "front", this.animSuffix),
           loop: true,
         });
 
         if (this.instance) {
+          this.availableAnims = this.instance.getAnimationList() as Array<Anim>;
+
           const char = this.instance.findSkin("char");
           const clothes = this.instance.findSkin("clothes");
-          char.addSkin(clothes);
+          if (char && clothes) {
+            char.addSkin(clothes);
 
-          this.instance.setSkin(char);
+            this.instance.setSkin(char);
+          }
 
           if (this.follower) {
             this.follower.followee = this;
@@ -103,7 +131,9 @@ export class Character extends Phaser.GameObjects.GameObject {
         }
       });
 
-      this.scene.load.image(`${spine}/${id}.png`, texture);
+      if (texture) {
+        this.scene.load.image(`${spine}/${id}.png`, texture);
+      }
 
       this.scene.load.spine(
         `${spine}/${id}-character`,
@@ -118,7 +148,16 @@ export class Character extends Phaser.GameObjects.GameObject {
   playAnimation(state: AnimationState, direction: AnimationDirection) {
     if (!this.instance) return;
     this.state = state;
-    this.instance.play(getBasicAnimation(state, direction), true, true);
+    let anim = getBasicAnimation(state, direction, this.animSuffix);
+    if (!this.availableAnims.includes(anim)) {
+      for (const f of fallbackOrder) {
+        anim = getBasicAnimation(f, direction);
+        if (this.availableAnims.includes(anim)) break;
+      }
+    }
+    if (this.availableAnims.includes(anim)) {
+      this.instance.play(anim, true, true);
+    }
   }
 
   setVelocity(x: number, y?: number) {
@@ -180,7 +219,7 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     // Update object depth based on y
     this.instance.depth = this.instance.y / TILE_SIZE;
-    this.shadow.setPosition(this.instance.x, this.instance.y);
-    this.shadow.setDepth(this.instance.y / TILE_SIZE);
+    this.shadow.setPosition(this.instance.x, this.instance.y + 10);
+    this.shadow.setDepth(this.instance.y / 2 / TILE_SIZE);
   }
 }

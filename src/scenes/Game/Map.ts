@@ -7,6 +7,12 @@ import GameDialogue from "../Game/Dialogue";
 import GameInteraction from "./Interaction";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
+import { useGameState } from "stores/game";
+
+const spawnPoint = {
+  x: 5000,
+  y: 5600,
+};
 
 function getInteractHandler(properties: any, scene: GameMap) {
   return () => {
@@ -58,6 +64,7 @@ export default class GameMap extends Phaser.Scene {
   }
 
   preload() {
+    this.cameras.main.fadeOut(0);
     // Launch interaction scene
     const interactionScene = this.scene.get(
       SceneKey.GAME_INTERACTION
@@ -69,7 +76,6 @@ export default class GameMap extends Phaser.Scene {
 
     const data = this.scene.settings.data as Record<string, any>;
     const { main } = this.cache.json.get("config");
-    const interactionMapping = this.cache.json.get("interaction");
 
     // Now load assets
     const tilesetSource = Object.fromEntries(
@@ -83,6 +89,71 @@ export default class GameMap extends Phaser.Scene {
       tileWidth: TILE_SIZE,
       tileHeight: TILE_SIZE,
     });
+    const { layers = [], tilesets = [] } = this.map;
+
+    // Load tilesets
+    tilesets.forEach((tileset) => {
+      // Do nothing if texture was already loaded
+      if (this.textures.exists(tileset.name)) {
+        return;
+      }
+
+      this.load.image(tileset.name, `/tiles/${tilesetSource[tileset.name]}`);
+    });
+
+    // Load the sprite in each layer
+    layers.forEach((layer) => {
+      layer.data.forEach((row) => {
+        row.forEach((tile) => {
+          const spriteImage = tile.properties.spriteImage;
+          const spriteJSON = tile.properties.spriteJSON ?? "";
+          const spriteKey = spriteJSON.split("/").pop()?.slice(0, -5);
+          const isMultiAtlas = tile.properties.multiatlas ?? false;
+          if (spriteKey && spriteJSON) {
+            // Do nothing if texture was already loaded
+            if (this.textures.exists(spriteKey)) {
+              return;
+            }
+
+            if (isMultiAtlas) {
+              const path = spriteJSON.split("/");
+              path.pop();
+              path.unshift("tiles");
+              this.load.multiatlas(
+                spriteKey,
+                `/tiles/${spriteJSON}`,
+                path.join("/")
+              );
+            } else {
+              this.load.atlas(
+                spriteKey,
+                `/tiles/${spriteImage}`,
+                `/tiles/${spriteJSON}`
+              );
+            }
+          }
+        });
+      });
+    });
+
+    // Set world bounds
+    this.bounds = {
+      min: { x: 0, y: 0 },
+      max: { x: this.map.widthInPixels, y: this.map.heightInPixels },
+    };
+    this.matter.world.setBounds(
+      this.bounds.min.x,
+      this.bounds.min.y,
+      this.bounds.max.x,
+      this.bounds.max.y
+    );
+  }
+
+  create() {
+    const interactionScene = this.scene.get(
+      SceneKey.GAME_INTERACTION
+    ) as GameInteraction;
+    const interactionMapping = this.cache.json.get("interaction");
     const { objects = [], layers = [], tilesets = [] } = this.map;
 
     // TODO: Move/Divide this into separate classes for better handling, e.g:
@@ -143,6 +214,7 @@ export default class GameMap extends Phaser.Scene {
               instance.setCollisionCategory(COLLISION_CATEGORY.NPC);
               instance.setCollidesWith(COLLISION_CATEGORY.PLAYER);
               instance.setDepth(y / TILE_SIZE);
+              char.update();
             });
           } else if (object.point) {
             this.matter.add.circle(x, y, TILE_SIZE, {
@@ -251,70 +323,6 @@ export default class GameMap extends Phaser.Scene {
       }
     });
 
-    // Load tilesets
-    tilesets.forEach((tileset) => {
-      // Do nothing if texture was already loaded
-      if (this.textures.exists(tileset.name)) {
-        return;
-      }
-
-      this.load.image(tileset.name, `/tiles/${tilesetSource[tileset.name]}`);
-    });
-
-    // Load the sprite in each layer
-    layers.forEach((layer) => {
-      layer.data.forEach((row) => {
-        row.forEach((tile) => {
-          const spriteImage = tile.properties.spriteImage;
-          const spriteJSON = tile.properties.spriteJSON ?? "";
-          const spriteKey = spriteJSON.split("/").pop()?.slice(0, -5);
-          const isMultiAtlas = tile.properties.multiatlas ?? false;
-          if (spriteKey && spriteJSON) {
-            // Do nothing if texture was already loaded
-            if (this.textures.exists(spriteKey)) {
-              return;
-            }
-
-            if (isMultiAtlas) {
-              const path = spriteJSON.split("/");
-              path.pop();
-              path.unshift("tiles");
-              this.load.multiatlas(
-                spriteKey,
-                `/tiles/${spriteJSON}`,
-                path.join("/")
-              );
-            } else {
-              this.load.atlas(
-                spriteKey,
-                `/tiles/${spriteImage}`,
-                `/tiles/${spriteJSON}`
-              );
-            }
-          }
-        });
-      });
-    });
-
-    // Set world bounds
-    this.bounds = {
-      min: { x: 0, y: 0 },
-      max: { x: this.map.widthInPixels, y: this.map.heightInPixels },
-    };
-    this.matter.world.setBounds(
-      this.bounds.min.x,
-      this.bounds.min.y,
-      this.bounds.max.x,
-      this.bounds.max.y
-    );
-  }
-
-  create() {
-    // Fade in
-    this.cameras.main.fadeIn(500);
-
-    const { layers = [], tilesets = [] } = this.map;
-
     // Add loaded tilesets to the map
     tilesets.forEach((tileset) => this.map.addTilesetImage(tileset.name));
 
@@ -371,24 +379,30 @@ export default class GameMap extends Phaser.Scene {
 
       return c;
     });
-    this.player = new Player({
-      scene: this,
-      spine: "Neko",
-      id: 3,
-      spineConfig: {
-        x: 5000,
-        y: 5600,
-        scale: 0.4,
-      },
-    });
+    const { player } = useGameState.getState();
+    if (player) {
+      this.player = new Player({
+        scene: this,
+        spine: player.spine,
+        id: player.id,
+        spineConfig: {
+          ...spawnPoint,
+          scale: 0.4,
+        },
+        animSuffix: player.animSuffix,
+      });
 
-    this.player.character?.loadPromise.then((instance) => {
-      this.matter.add.gameObject(instance);
-      instance.setFixedRotation();
+      this.player.character?.loadPromise.then((instance) => {
+        this.matter.add.gameObject(instance);
+        instance.setFixedRotation();
 
-      // Follow the first character
-      this.cameras.main.startFollow(instance, true, 0.05, 0.05);
-    });
+        // Follow the first character
+        this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+
+        // Fade in
+        this.cameras.main.fadeIn(500);
+      });
+    }
   }
 
   update() {

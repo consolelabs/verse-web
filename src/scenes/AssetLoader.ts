@@ -44,9 +44,6 @@ export default class AssetLoader extends Phaser.Scene {
         this.load.image(`${e[0]}-${c[0]}`, `/emotions/${e[0]}/${c[1]}`);
       });
     });
-
-    // Load character shadow
-    this.load.image("char-shadow", "/characters/shadow.png");
   }
 
   create() {

@@ -9,5 +9,5 @@ export interface NFT {
   rarity: string;
   token_address: string;
   token_id: string;
-  type?: CharacterSpine;
+  type: CharacterSpine;
 }

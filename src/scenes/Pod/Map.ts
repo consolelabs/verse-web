@@ -4,6 +4,7 @@ import { PROD, TILE_SIZE } from "../../constants";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
 import { PodPlacedItem } from "objects/PodPlacedItem";
+import { useGameState } from "stores/game";
 
 // 64 tiles * tile size
 const WORLD_WIDTH = 64 * TILE_SIZE;
@@ -117,24 +118,27 @@ export default class PodMap extends Phaser.Scene {
 
       return c;
     });
-    this.player = new Player({
-      scene: this,
-      spine: "Neko",
-      id: 3,
-      spineConfig: {
-        x: 500,
-        y: 500,
-        scale: 0.4,
-      },
-    });
+    const { player } = useGameState.getState();
+    if (player) {
+      this.player = new Player({
+        scene: this,
+        spine: player.spine,
+        id: player.id,
+        spineConfig: {
+          x: 500,
+          y: 500,
+          scale: 0.4,
+        },
+      });
 
-    this.player.character?.loadPromise.then((instance) => {
-      this.matter.add.gameObject(instance);
-      instance.setFixedRotation();
+      this.player.character?.loadPromise.then((instance) => {
+        this.matter.add.gameObject(instance);
+        instance.setFixedRotation();
 
-      // Follow the first character
-      this.cameras.main.startFollow(instance, true, 0.05, 0.05);
-    });
+        // Follow the first character
+        this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+      });
+    }
 
     // Set world bounds
 

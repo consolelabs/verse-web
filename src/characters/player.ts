@@ -3,31 +3,31 @@ import { TILE_SIZE } from "../constants";
 import { AnimationDirection, CharacterSpine } from "../types/character";
 import { Character } from "./character";
 
+type Config = {
+  scene: Phaser.Scene;
+  id: number;
+  spine: CharacterSpine;
+  isPreview?: boolean;
+  spineConfig?: SpineGameObjectConfig;
+  animSuffix?: string;
+};
+
 export class Player extends Phaser.GameObjects.GameObject {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: any;
   public character?: Character;
-  public isPreview: boolean;
   idle = false;
 
-  constructor(config: {
-    scene: Phaser.Scene;
-    id: number;
-    spine: CharacterSpine;
-    isPreview?: boolean;
-    spineConfig?: SpineGameObjectConfig;
-  }) {
+  constructor(public config: Config) {
     super(config.scene, "player");
-    const { scene, id, spine, spineConfig = {}, isPreview = false } = config;
-    this.isPreview = isPreview;
-    this.cursors = scene.input.keyboard.createCursorKeys();
-    this.keys = scene.input.keyboard.addKeys("W,A,S,D,Shift");
-    this.character = new Character({
-      scene,
-      id,
-      spine,
-      spineConfig,
-    });
+    this.character = new Character(config);
+
+    this.registerMovementHandlers();
+  }
+
+  registerMovementHandlers() {
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,Shift");
   }
 
   destroy(...args: any[]) {
@@ -95,7 +95,7 @@ export class Player extends Phaser.GameObjects.GameObject {
         speed = 7;
       }
 
-      if (this.isPreview) {
+      if (this.config.isPreview) {
         speed = 0;
       }
 

@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
 import CharSelectScene from "scenes/CharSelect";
+import { API_BASE_URL } from "envs";
 
 const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {
   "0x7aCeE5D0acC520faB33b3Ea25D4FEEF1FfebDE73": "Neko",
@@ -107,16 +108,34 @@ export const CharStats = () => {
 };
 
 export const CharSelect = () => {
-  const { nfts, getActiveScene, setActiveSceneKey } = useGameState();
-  // const [selectedChars, setSelectedChars] = useState<NFT[]>([]);
+  const {
+    nfts,
+    getActiveScene,
+    activeSceneKey,
+    setActiveSceneKey,
+    player,
+    setPlayer,
+  } = useGameState();
   const [previewChar, setPreviewChar] = useState<NFT>();
 
   const selectCharToPreview = (item: NFT) => {
-    setPreviewChar(item);
-    (getActiveScene() as CharSelectScene).loadPlayer(
-      item.type,
-      Number(item.token_id)
-    );
+    fetch(`${API_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`)
+      .then((res) => (res.ok ? res.json() : new Error()))
+      .then((nftDetail) => {
+        const { anim_type } = nftDetail;
+        const animSuffix = anim_type ? `_${anim_type}` : "";
+        const id = Number(item.token_id);
+        const spine = item.type;
+
+        setPlayer({
+          animSuffix,
+          id,
+          spine,
+        });
+        setPreviewChar(item);
+        (getActiveScene() as CharSelectScene).loadPlayer(spine, id, animSuffix);
+      })
+      .catch(() => null);
   };
 
   const chars: Record<CharacterSpine, NFT[]> = useMemo(() => {
@@ -146,10 +165,29 @@ export const CharSelect = () => {
   }, [nfts]);
 
   useEffect(() => {
-    if (Array.isArray(nfts) && nfts.length > 1 && !previewChar) {
-      setPreviewChar(nfts[0]);
+    if (activeSceneKey !== SceneKey.CHAR_SELECT) return;
+    const firstNonEmptyCol = Object.entries(chars).find((e) => {
+      const [_, items] = e;
+      return Array.isArray(items) && items.length > 0;
+    });
+    if (!previewChar) {
+      if (firstNonEmptyCol) {
+        const [type, items] = firstNonEmptyCol;
+        selectCharToPreview({
+          ...items[0],
+          type: type as CharacterSpine,
+        });
+      } else {
+        setPlayer({
+          animSuffix: "",
+          id: 0,
+          spine: "GhostNeko",
+        });
+        // load ghost neko
+        (getActiveScene() as CharSelectScene).loadPlayer("GhostNeko", 0);
+      }
     }
-  }, [nfts]);
+  }, [chars]);
 
   // const isPreviewingATeamMember = Boolean(
   //   selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
@@ -282,14 +320,16 @@ export const CharSelect = () => {
                 </div>
                 <button
                   type="button"
-                  className="bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6"
+                  className="disabled:filter-grayscale disabled:opacity-25 bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6"
                   onClick={() => {
-                    const activeScene = getActiveScene();
-                    // Mock: Only send the char type for now
-                    activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
-                      chars: [previewChar],
-                    });
-                    setActiveSceneKey(SceneKey.GAME);
+                    if (player) {
+                      const activeScene = getActiveScene();
+                      // Mock: Only send the char type for now
+                      activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
+                        chars: [previewChar],
+                      });
+                      setActiveSceneKey(SceneKey.BLANK);
+                    }
                   }}
                 >
                   Play Game

@@ -26,10 +26,19 @@ export default class CharSelect extends Phaser.Scene {
       "char-select-light",
       "/assets/images/char-select/light.png"
     );
+    // Load character shadow
+    this.load.image("char-shadow", "/characters/shadow.png");
+
+    this.cameras.main.setBackgroundColor("#151321");
+
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
+      useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
+    );
   }
 
   // TODO: Should load ghost-face by default?
-  loadPlayer(spine: CharacterSpine = "Neko", id = 1) {
+  loadPlayer(spine: CharacterSpine = "Neko", id = 1, animSuffix = "") {
+    this.cameras.main.fadeIn(250);
     // Destroy existing player before creating new one
     if (this.player) {
       this.player.destroy(true);
@@ -45,12 +54,16 @@ export default class CharSelect extends Phaser.Scene {
         y: window.innerHeight / 1.575,
         scale: 0.8,
       },
+      animSuffix,
     });
+
     this.player.character?.loadPromise.then((instance) => {
       this.matter.add.gameObject(instance);
     });
+  }
 
-    this.cameras.main.setBackgroundColor("#151321");
+  create() {
+    this.cameras.main.fadeIn(250);
     this.light = this.add
       .image(
         window.innerWidth / 2,
@@ -67,16 +80,6 @@ export default class CharSelect extends Phaser.Scene {
       )
     );
     this.bg.setX(0 - (this.bg.displayWidth - this.cameras.main.width) / 2);
-
-    this.cameras.main
-      .fadeIn(250)
-      .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
-        useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
-      );
-  }
-
-  create() {
-    this.loadPlayer("Neko", 3);
   }
 
   update() {
