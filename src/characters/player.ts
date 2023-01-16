@@ -30,6 +30,11 @@ export class Player extends Phaser.GameObjects.GameObject {
     });
   }
 
+  destroy(...args: any[]) {
+    this.character?.instance?.destroy(...args);
+    super.destroy(...args);
+  }
+
   // TODO: move this
   // loadCharacters(
   //   characters: CharacterType[],

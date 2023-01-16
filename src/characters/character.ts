@@ -45,9 +45,7 @@ export class Character extends Phaser.GameObjects.GameObject {
     super(scene, "character");
 
     this.scene = scene;
-    const atlas = `${CHARACTER_ASSET_PATH}/${spine}/Web/${
-      spine === "TV-head" ? "" : `${id}/`
-    }${spine}.atlas`;
+    const atlas = `/api/atlas?spine=${spine}&id=${id}`;
     const texture = `${CHARACTER_ASSET_PATH}/${spine}/Web/${
       spine === "TV-head" ? "" : `${id}/`
     }${spine}.png`;
@@ -105,7 +103,7 @@ export class Character extends Phaser.GameObjects.GameObject {
         }
       });
 
-      this.scene.load.image(`${spine}.png`, texture);
+      this.scene.load.image(`${spine}/${id}.png`, texture);
 
       this.scene.load.spine(
         `${spine}/${id}-character`,
