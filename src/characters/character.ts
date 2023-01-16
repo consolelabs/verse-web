@@ -145,6 +145,11 @@ export class Character extends Phaser.GameObjects.GameObject {
     });
   }
 
+  destroy(...args: any) {
+    this.shadow?.destroy(...args);
+    super.destroy(...args);
+  }
+
   playAnimation(state: AnimationState, direction: AnimationDirection) {
     if (!this.instance) return;
     this.state = state;

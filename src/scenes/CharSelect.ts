@@ -63,6 +63,7 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   create() {
+    this.loadPlayer("GhostNeko", 0, "");
     this.cameras.main.fadeIn(250);
     this.light = this.add
       .image(

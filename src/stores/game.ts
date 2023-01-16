@@ -66,7 +66,7 @@ interface State {
   setOpenMenu: (o: boolean) => void;
   init: () => void;
 
-  player?: {
+  player: {
     animSuffix: string;
     spine: CharacterSpine;
     id: number;
@@ -126,6 +126,12 @@ export const useGameState = create<State>((set, get) => ({
     return game.scene.keys[activeSceneKey];
   },
 
+  // default char
+  player: {
+    id: 0,
+    spine: "GhostNeko",
+    animSuffix: "",
+  },
   setPlayer: (player) => set({ player }),
 
   openMenu: false,

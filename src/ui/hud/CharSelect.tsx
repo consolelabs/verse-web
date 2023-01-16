@@ -1,6 +1,6 @@
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
@@ -17,13 +17,26 @@ const isTheSame = (a: NFT, b: NFT) => {
   return a.token_address === b.token_address && a.token_id === b.token_id;
 };
 
-export const CharStats = () => {
+const ghostNekoItem: NFT = {
+  token_id: "0",
+  name: "Nez",
+  type: "GhostNeko",
+  image: "",
+  amount: "",
+  rarity: "",
+  description:
+    "Nez (Neko Soul) is the default character in the PodTown metaverse",
+  token_address: "",
+  collection_name: "",
+};
+
+export const CharStats = (props: NFT) => {
   return (
     <div className="flex flex-col">
-      <div className="text-2xl font-semibold mb-4">Cyber Neko 55</div>
+      <div className="text-2xl font-semibold mb-4">{props.name}</div>
       <div>
-        <div className="text-typo-secondary">Level</div>
-        <div className="flex items-center space-x-2 mb-6">
+        <div className="hidden text-typo-secondary">Level</div>
+        <div className="hidden items-center space-x-2 mb-6">
           <div className="h-1 rounded-2px bg-background-tertiary flex-1 relative overflow-hidden">
             <div
               className=" absolute top-0 left-0 h-1 bg-#00FFEA"
@@ -35,7 +48,7 @@ export const CharStats = () => {
             /2000
           </div>
         </div>
-        <div className="flex flex-col space-y-2 mb-12">
+        <div className="hidden flex-col space-y-2 mb-12">
           {[
             [
               "XP",
@@ -96,46 +109,44 @@ export const CharStats = () => {
             );
           })}
         </div>
-        <div className="text-typo-tertiary">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </div>
+        <div className="text-typo-tertiary">{props.description}</div>
       </div>
     </div>
   );
 };
 
 export const CharSelect = () => {
-  const {
-    nfts,
-    getActiveScene,
-    activeSceneKey,
-    setActiveSceneKey,
-    player,
-    setPlayer,
-  } = useGameState();
-  const [previewChar, setPreviewChar] = useState<NFT>();
+  const { nfts, getActiveScene, setActiveSceneKey, player, setPlayer } =
+    useGameState();
+  const [previewChar, setPreviewChar] = useState<NFT>(ghostNekoItem);
+
+  const loadCharacter = (item: NFT, animSuffix: string) => {
+    const id = Number(item.token_id);
+    const spine = item.type;
+
+    setPlayer({
+      animSuffix,
+      id,
+      spine,
+    });
+    setPreviewChar(item);
+    (getActiveScene() as CharSelectScene).loadPlayer(spine, id, animSuffix);
+  };
 
   const selectCharToPreview = (item: NFT) => {
-    fetch(`${API_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`)
-      .then((res) => (res.ok ? res.json() : new Error()))
-      .then((nftDetail) => {
-        const { anim_type } = nftDetail;
-        const animSuffix = anim_type ? `_${anim_type}` : "";
-        const id = Number(item.token_id);
-        const spine = item.type;
+    if (item.type === "GhostNeko") {
+      loadCharacter(item, "");
+    } else {
+      fetch(`${API_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`)
+        .then((res) => (res.ok ? res.json() : new Error()))
+        .then((nftDetail) => {
+          const { anim_type } = nftDetail;
+          const animSuffix = anim_type ? `_${anim_type}` : "";
 
-        setPlayer({
-          animSuffix,
-          id,
-          spine,
-        });
-        setPreviewChar(item);
-        (getActiveScene() as CharSelectScene).loadPlayer(spine, id, animSuffix);
-      })
-      .catch(() => null);
+          loadCharacter(item, animSuffix);
+        })
+        .catch(() => null);
+    }
   };
 
   const chars: Record<CharacterSpine, NFT[]> = useMemo(() => {
@@ -164,31 +175,6 @@ export const CharSelect = () => {
     );
   }, [nfts]);
 
-  useEffect(() => {
-    if (activeSceneKey !== SceneKey.CHAR_SELECT) return;
-    const firstNonEmptyCol = Object.entries(chars).find((e) => {
-      const [_, items] = e;
-      return Array.isArray(items) && items.length > 0;
-    });
-    if (!previewChar) {
-      if (firstNonEmptyCol) {
-        const [type, items] = firstNonEmptyCol;
-        selectCharToPreview({
-          ...items[0],
-          type: type as CharacterSpine,
-        });
-      } else {
-        setPlayer({
-          animSuffix: "",
-          id: 0,
-          spine: "GhostNeko",
-        });
-        // load ghost neko
-        (getActiveScene() as CharSelectScene).loadPlayer("GhostNeko", 0);
-      }
-    }
-  }, [chars]);
-
   // const isPreviewingATeamMember = Boolean(
   //   selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
   // );
@@ -200,6 +186,27 @@ export const CharSelect = () => {
         <div className="flex-1 overflow-hidden">
           <div className="flex h-full overflow-hidden">
             <div className="w-20vw overflow-auto">
+              <div className="mb-12">
+                <p className="mb-2 font-semibold text-2xl text-typo-secondary">
+                  Default Character
+                </p>
+                <button
+                  className={clsx(
+                    "p-0 bg-transparent aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
+                    {
+                      "border-white brightness-100":
+                        previewChar.type === "GhostNeko",
+                      "brightness-50": previewChar.type !== "GhostNeko",
+                    }
+                  )}
+                  onClick={() => selectCharToPreview(ghostNekoItem)}
+                >
+                  <img
+                    src="/assets/images/default-char.png"
+                    className="w-14 h-14"
+                  />
+                </button>
+              </div>
               {[
                 {
                   title: "Cyber Neko",
@@ -256,7 +263,7 @@ export const CharSelect = () => {
                               {/* {isSelectedForTheTeam && (
                                 <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
                               )} */}
-                              <img src={item.image} className="w-full h-full" />
+                              <img src={item.image} className="w-14 h-14" />
                             </div>
                           );
                         })}
@@ -337,7 +344,7 @@ export const CharSelect = () => {
               </div>
             </div>
             <div className="w-20vw">
-              <CharStats />
+              <CharStats {...previewChar} />
             </div>
           </div>
         </div>
