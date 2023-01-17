@@ -363,22 +363,6 @@ export default class GameMap extends Phaser.Scene {
     });
 
     // Load characters
-    // The list of characters will be saved in the global game object
-    // Refer to ConfigLoader scene
-    // @ts-ignore
-    let charsToLoad = this.game.chars;
-    // Change rabby and other to some other spines because we don't have spines for those yet
-    charsToLoad = charsToLoad.map((c: string) => {
-      if (c === "rabby") {
-        return "ghost-neko";
-      }
-
-      if (c === "other") {
-        return "tv-head";
-      }
-
-      return c;
-    });
     const { player } = useGameState.getState();
     if (player) {
       this.player = new Player({

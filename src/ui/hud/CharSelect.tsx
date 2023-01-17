@@ -6,6 +6,8 @@ import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
 import CharSelectScene from "scenes/CharSelect";
 import { API_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
+import { CharStats } from "components/char-select/CharStats";
+import { CharSelectGridSkeleton } from "components/skeletons/CharSelectGridSkeleton";
 
 const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {
   [NEKO_COL]: "Neko",
@@ -27,91 +29,6 @@ const ghostNekoItem: NFT = {
     "Nez (Neko Soul) is the default character in the PodTown metaverse.",
   token_address: "",
   collection_name: "",
-};
-
-export const CharStats = (props: NFT) => {
-  return (
-    <div className="flex flex-col">
-      <div className="text-2xl font-semibold mb-4">{props.name}</div>
-      <div>
-        <div className="hidden text-typo-secondary">Level</div>
-        <div className="hidden items-center space-x-2 mb-6">
-          <div className="h-1 rounded-2px bg-background-tertiary flex-1 relative overflow-hidden">
-            <div
-              className=" absolute top-0 left-0 h-1 bg-#00FFEA"
-              style={{ width: "75%" }}
-            />
-          </div>
-          <div className="text-typo-tertiary text-xs">
-            <span className="text-typo-secondary">1500</span>
-            /2000
-          </div>
-        </div>
-        <div className="hidden flex-col space-y-2 mb-12">
-          {[
-            [
-              "XP",
-              <div className="flex items-center space-x-2">
-                <span>1500</span>
-                <img src="/assets/images/stats/star.png" className="w-5 h-5" />
-              </div>,
-            ],
-            [
-              "Cookie",
-              <div className="flex items-center space-x-2">
-                <span>123</span>
-                <img
-                  src="/assets/images/stats/cookie.png"
-                  className="w-5 h-5"
-                />
-              </div>,
-            ],
-            [
-              "Elemental",
-              <div className="flex items-center space-x-2">
-                <span>Water</span>
-                <img
-                  src="/assets/images/stats/element-water.png"
-                  className="w-5 h-5"
-                />
-              </div>,
-            ],
-            [
-              "Aspect",
-              <div className="flex items-center space-x-2">
-                <span>Yin</span>
-                <img
-                  src="/assets/images/stats/yin-yang.png"
-                  className="w-5 h-5"
-                />
-              </div>,
-            ],
-            [
-              "Blood Type",
-              <div className="flex items-center space-x-2">
-                <span>O</span>
-                <img src="/assets/images/stats/blood.png" className="w-5 h-5" />
-              </div>,
-            ],
-            [
-              "Rarity",
-              <div className="flex items-center justify-center px-2 py-1 bg-#00FFEA59 rounded-md text-sm">
-                Uncommon
-              </div>,
-            ],
-          ].map((item, index) => {
-            return (
-              <div className="flex justify-between space-x-2" key={index}>
-                <div className="text-typo-secondary">{item[0]}</div>
-                {item[1]}
-              </div>
-            );
-          })}
-        </div>
-        <div className="text-typo-tertiary">{props.description}</div>
-      </div>
-    </div>
-  );
 };
 
 export const CharSelect = () => {
@@ -223,70 +140,77 @@ export const CharSelect = () => {
                   />
                 </button>
               </div>
-              {[
-                {
-                  title: "Cyber Neko",
-                  icon: "/assets/images/char-select/icon-neko.png",
-                  items: chars["Neko"] || [],
-                },
-                {
-                  title: "Cyber Rabby",
-                  icon: "/assets/images/char-select/icon-rabby.png",
-                  items: chars["Rabby"] || [],
-                },
-                // {
-                //   title: "Fukuro",
-                //   icon: "/assets/images/char-select/icon-fukuro.png",
-                //   items: fukuro,
-                // },
-                {
-                  title: "Other",
-                  icon: "/assets/images/char-select/icon-other.png",
-                  items: chars["TV-head"] || [],
-                },
-              ]
-                .filter((section) => section.items.length > 0)
-                .map((section, index) => {
-                  return (
-                    <div className="mb-12" key={index}>
-                      <div className="flex items-center space-x-2 mb-2">
-                        <img src={section.icon} className="w-6 h-6" />
-                        <div className="font-semibold text-2xl text-typo-secondary">
-                          {section.title} ({section.items.length})
+              {!nfts ? (
+                <CharSelectGridSkeleton />
+              ) : (
+                [
+                  {
+                    title: "Cyber Neko",
+                    icon: "/assets/images/char-select/icon-neko.png",
+                    items: chars["Neko"] || [],
+                  },
+                  {
+                    title: "Cyber Rabby",
+                    icon: "/assets/images/char-select/icon-rabby.png",
+                    items: chars["Rabby"] || [],
+                  },
+                  // {
+                  //   title: "Fukuro",
+                  //   icon: "/assets/images/char-select/icon-fukuro.png",
+                  //   items: fukuro,
+                  // },
+                  {
+                    title: "Other",
+                    icon: "/assets/images/char-select/icon-other.png",
+                    items: chars["TV-head"] || [],
+                  },
+                ]
+                  .filter((section) => section.items.length > 0)
+                  .map((section, index) => {
+                    return (
+                      <div className="mb-12" key={index}>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <img src={section.icon} className="w-6 h-6" />
+                          <div className="font-semibold text-2xl text-typo-secondary">
+                            {section.title} ({section.items.length})
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {section.items.map((item) => {
-                          const isSelectedForPreviewing =
-                            previewChar && isTheSame(item, previewChar);
-                          // const isSelectedForTheTeam = selectedChars.find((c) =>
-                          //   isTheSame(c, item)
-                          // );
+                        <div className="flex flex-wrap gap-1">
+                          {section.items.map((item) => {
+                            const isSelectedForPreviewing =
+                              previewChar && isTheSame(item, previewChar);
+                            // const isSelectedForTheTeam = selectedChars.find((c) =>
+                            //   isTheSame(c, item)
+                            // );
 
-                          return (
-                            <button
-                              key={`${item.token_address}-${item.token_id}`}
-                              className={clsx(
-                                "outline-none p-0 bg-transparent w-14 h-14 aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
-                                {
-                                  "border-white brightness-100":
-                                    isSelectedForPreviewing,
-                                  "brightness-50": !isSelectedForPreviewing,
-                                }
-                              )}
-                              onClick={() => selectCharToPreview(item)}
-                            >
-                              {/* {isSelectedForTheTeam && (
+                            return (
+                              <button
+                                key={`${item.token_address}-${item.token_id}`}
+                                className={clsx(
+                                  "outline-none p-0 bg-transparent w-14 h-14 aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
+                                  {
+                                    "border-white brightness-100":
+                                      isSelectedForPreviewing,
+                                    "brightness-50": !isSelectedForPreviewing,
+                                  }
+                                )}
+                                onClick={() => selectCharToPreview(item)}
+                              >
+                                {/* {isSelectedForTheTeam && (
                                 <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
                               )} */}
-                              <img src={item.image} className="w-full h-full" />
-                            </button>
-                          );
-                        })}
+                                <img
+                                  src={item.image}
+                                  className="w-full h-full"
+                                />
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+              )}
             </div>
             <div className="flex-1 flex flex-col relative">
               <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-12">

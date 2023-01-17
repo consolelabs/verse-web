@@ -102,22 +102,6 @@ export default class PodMap extends Phaser.Scene {
     this.cameras.main.fadeIn(500);
 
     // Load characters
-    // The list of characters will be saved in the global game object
-    // Refer to ConfigLoader scene
-    // @ts-ignore
-    let charsToLoad = this.game.chars;
-    // Change rabby and other to some other spines because we don't have spines for those yet
-    charsToLoad = charsToLoad.map((c: string) => {
-      if (c === "rabby") {
-        return "ghost-neko";
-      }
-
-      if (c === "other") {
-        return "tv-head";
-      }
-
-      return c;
-    });
     const { player } = useGameState.getState();
     if (player) {
       this.player = new Player({
@@ -129,6 +113,7 @@ export default class PodMap extends Phaser.Scene {
           y: 500,
           scale: 0.4,
         },
+        animSuffix: player.animSuffix,
         collection: player.collection,
       });
 

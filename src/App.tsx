@@ -9,6 +9,7 @@ import { Pod } from "ui/hud/Pod";
 import { Menu } from "./components/Menu";
 import { CharSelect } from "ui/hud/CharSelect";
 import { Boot } from "ui/hud/Boot";
+import { Toaster } from "react-hot-toast";
 
 const client = createClient(
   getDefaultClient({
@@ -72,6 +73,15 @@ const App = () => {
         )}
         {contentRender}
         <Menu />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: "#151321",
+              color: "#FFFFFF",
+            },
+          }}
+        />
       </ConnectKitProvider>
     </WagmiConfig>
   );

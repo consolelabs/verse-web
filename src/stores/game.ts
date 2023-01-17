@@ -16,6 +16,7 @@ import { FullResponse } from "types/apis";
 import { NFT } from "types/nfts";
 import { API_BASE_URL } from "envs";
 import { CharacterSpine } from "types/character";
+import { toast } from "react-hot-toast";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -111,8 +112,9 @@ export const useGameState = create<State>((set, get) => ({
 
         page += 1;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(error?.message || "Could not fetch NFTs");
     }
 
     set({ nfts });

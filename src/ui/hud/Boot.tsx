@@ -27,20 +27,17 @@ export const Boot = () => {
         className="absolute w-full h-full object-cover top-0 left-0"
         src="/assets/images/title-screen-bg.jpeg"
       />
-      <ConnectKitButton.Custom>
-        {({ show, isConnected }) => {
-          return (
-            <button
-              id="start"
-              type="button"
-              onClick={isConnected ? startGame : show}
-              className="relative m-auto text-xl bg-white rounded"
-            >
-              {isConnected ? "Start Game" : "Connect Wallet"}
-            </button>
-          );
-        }}
-      </ConnectKitButton.Custom>
+      <div className="relative m-auto flex flex-col items-center justify-center space-y-4">
+        <ConnectKitButton />
+        <button
+          type="button"
+          disabled={!account.isConnected}
+          className="text-xl bg-white rounded"
+          onClick={startGame}
+        >
+          Start Game
+        </button>
+      </div>
     </div>
   );
 };
