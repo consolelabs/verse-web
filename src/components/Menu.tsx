@@ -33,7 +33,26 @@ export const Menu = () => {
         <div className="p-10">
           <GridButtons cols={3} rows={3} gap="md">
             {[
-              { img: "character.png", text: "Character" },
+              {
+                img: "character.png",
+                text: "Character",
+                onClick: () => {
+                  const activeScene = getActiveScene();
+
+                  if (activeScene) {
+                    // Fade out & prepare for scene transition
+                    activeScene.cameras.main.fadeOut(500, 0, 0, 0);
+                    activeScene.cameras.main.once(
+                      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+                      () => {
+                        activeScene.scene.stop(SceneKey.GAME_INTERACTION);
+                        activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
+                        activeScene.scene.start(SceneKey.CHAR_SELECT);
+                      }
+                    );
+                  }
+                },
+              },
               {
                 img: "pod.png",
                 text: "Pod",

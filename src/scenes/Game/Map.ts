@@ -8,6 +8,7 @@ import GameInteraction from "./Interaction";
 import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
 import { useGameState } from "stores/game";
+import { TitleBg } from "objects/TitleBg";
 
 const spawnPoint = {
   x: 5000,
@@ -47,6 +48,7 @@ export default class GameMap extends Phaser.Scene {
   public player!: Player;
   public map!: Phaser.Tilemaps.Tilemap;
   public bounds!: IBound;
+  private bg!: TitleBg;
 
   constructor() {
     super({
@@ -64,7 +66,8 @@ export default class GameMap extends Phaser.Scene {
   }
 
   preload() {
-    this.cameras.main.fadeOut(0);
+    this.bg = new TitleBg({ scene: this });
+    this.bg.instance.setDepth(9999);
     // Launch interaction scene
     const interactionScene = this.scene.get(
       SceneKey.GAME_INTERACTION
@@ -381,11 +384,21 @@ export default class GameMap extends Phaser.Scene {
         this.matter.add.gameObject(instance);
         instance.setFixedRotation();
 
-        // Follow the first character
-        this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+        this.cameras.main
+          .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+            this.bg.instance.destroy(true);
 
-        // Fade in
-        this.cameras.main.fadeIn(500);
+            // Follow the first character
+            this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+
+            // Fade in
+            this.cameras.main
+              .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
+                useGameState.setState({ activeSceneKey: SceneKey.GAME });
+              })
+              .fadeIn(200);
+          })
+          .fadeOut(200);
       });
     }
   }

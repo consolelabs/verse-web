@@ -29,15 +29,8 @@ export default class CharSelect extends Phaser.Scene {
     this.load.image("TV-head-base.png", "/characters/tv-head/TV-head-base.png");
     // Load character shadow
     this.load.image("char-shadow", "/characters/shadow.png");
-
-    this.cameras.main.setBackgroundColor("#151321");
-
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
-      useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
-    );
   }
 
-  // TODO: Should load ghost-face by default?
   loadPlayer(
     spine: CharacterSpine = "Neko",
     id = 1,
@@ -70,6 +63,11 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   create() {
+    this.cameras.main.setBackgroundColor("#151321");
+
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
+      useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
+    );
     this.loadPlayer("GhostNeko", 0, "");
     this.cameras.main.fadeIn(250);
     this.light = this.add

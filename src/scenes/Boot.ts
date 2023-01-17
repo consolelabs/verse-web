@@ -1,3 +1,4 @@
+import { TitleBg } from "objects/TitleBg";
 import Phaser from "phaser";
 import { SceneKey } from "../constants/scenes";
 
@@ -11,5 +12,9 @@ export default class Boot extends Phaser.Scene {
   preload() {
     this.load.image("title-screen-bg", "/assets/images/title-screen-bg.jpeg");
     this.load.image("consolelabslogo", "/assets/images/consolelabslogo.png");
+  }
+
+  create() {
+    new TitleBg({ scene: this });
   }
 }

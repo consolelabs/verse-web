@@ -1,10 +1,8 @@
+import { TitleBg } from "objects/TitleBg";
 import Phaser from "phaser";
-import { useGameState } from "stores/game";
 import { SceneKey } from "../constants/scenes";
 
 export default class WorldLoader extends Phaser.Scene {
-  private proceed = false;
-
   constructor() {
     super({
       key: SceneKey.WORLD_LOADER,
@@ -12,6 +10,8 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   preload() {
+    new TitleBg({ scene: this });
+
     const config = this.cache.json.get("config");
     if (
       !config ||
@@ -29,25 +29,6 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   create() {
-    this.load.once("complete", () => {
-      this.proceed = true;
-      this.cameras.main.fadeOut(100, 0, 0, 0);
-    });
-
-    // Start scene transition when camera is fully fade out
-    this.cameras.main.once(
-      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-      () => {
-        if (this.proceed) {
-          // Pass the data through
-          this.scene.start(SceneKey.GAME);
-          useGameState.setState({ activeSceneKey: SceneKey.GAME });
-        } else {
-          // TODO: maybe show error scene
-        }
-      }
-    );
-
-    this.load.start();
+    this.scene.start(SceneKey.GAME);
   }
 }

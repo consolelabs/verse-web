@@ -7,7 +7,7 @@ body {
 
 * {
   box-sizing: border-box;
-  cursor: url("/assets/images/cursor.png"), pointer;
+  cursor: url("/assets/images/cursor.png") 10 10, pointer !important;
   font-family: "Chakra Petch", "PT Sans", "PT Mono", sans-serif;
 }
 

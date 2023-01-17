@@ -10,9 +10,14 @@ export const Boot = () => {
   const account = useAccount();
 
   const startGame = () => {
+    const activeScene = getActiveScene();
     getNFTs();
-    getActiveScene()?.scene.start(SceneKey.INTRO);
-    setActiveSceneKey(SceneKey.INTRO);
+    activeScene?.cameras.main
+      .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+        activeScene.scene.start(SceneKey.INTRO);
+        setActiveSceneKey(SceneKey.INTRO);
+      })
+      .fadeOut(200);
   };
 
   useEffect(() => {
@@ -22,22 +27,16 @@ export const Boot = () => {
   }, [account.isConnected]);
 
   return (
-    <div className="fixed w-full h-full flex">
-      <img
-        className="absolute w-full h-full object-cover top-0 left-0"
-        src="/assets/images/title-screen-bg.jpeg"
-      />
-      <div className="relative m-auto flex flex-col items-center justify-center space-y-4">
-        <ConnectKitButton />
-        <button
-          type="button"
-          disabled={!account.isConnected}
-          className="text-xl bg-white rounded"
-          onClick={startGame}
-        >
-          Start Game
-        </button>
-      </div>
+    <div className="fixed w-screen h-screen flex flex-col items-center justify-center space-y-4">
+      <ConnectKitButton />
+      <button
+        type="button"
+        disabled={!account.isConnected}
+        className="text-xl bg-white rounded"
+        onClick={startGame}
+      >
+        Start Game
+      </button>
     </div>
   );
 };

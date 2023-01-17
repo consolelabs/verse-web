@@ -271,11 +271,18 @@ export const CharSelect = () => {
                   onClick={() => {
                     if (player) {
                       const activeScene = getActiveScene();
-                      // Mock: Only send the char type for now
-                      activeScene?.scene.start(SceneKey.CONFIG_LOADER, {
-                        chars: [previewChar],
-                      });
-                      setActiveSceneKey(SceneKey.BLANK);
+                      activeScene?.cameras.main
+                        .once(
+                          Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+                          () => {
+                            // Mock: Only send the char type for now
+                            activeScene.scene.start(SceneKey.CONFIG_LOADER, {
+                              chars: [previewChar],
+                            });
+                            setActiveSceneKey(SceneKey.BLANK);
+                          }
+                        )
+                        .fadeOut(200);
                     }
                   }}
                 >

@@ -1,4 +1,5 @@
 import { SceneKey } from "constants/scenes";
+import { TitleBg } from "objects/TitleBg";
 import Phaser from "phaser";
 
 export default class AssetLoader extends Phaser.Scene {
@@ -9,6 +10,8 @@ export default class AssetLoader extends Phaser.Scene {
   }
 
   preload() {
+    new TitleBg({ scene: this });
+
     this.load.image("pod-builder-icon", "/assets/images/pod-builder.png");
     this.load.image("world-icon", "/assets/images/world.png");
     this.load.image("inventory-icon", "/assets/images/inventory.png");
