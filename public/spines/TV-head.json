@@ -756,7 +756,10 @@
       "drawOrder": [{}]
     },
     "anim_idle_front": {
-      "slots": { "mask": { "attachment": [{ "name": "mask" }] } },
+      "slots": {
+        "body": { "attachment": [{ "name": "front_body" }] },
+        "mask": { "attachment": [{ "name": "mask" }] }
+      },
       "bones": {
         "body": {
           "translate": [
@@ -1153,6 +1156,7 @@
     },
     "anim_run_front": {
       "slots": {
+        "body": { "attachment": [{ "name": "front_body" }] },
         "L_leg": {
           "color": [
             { "color": "797979ff" },
@@ -1921,6 +1925,7 @@
     },
     "anim_walk_front": {
       "slots": {
+        "body": { "attachment": [{ "name": "front_body" }] },
         "L_hand": {
           "attachment": [
             { "name": "front_L_hand" },

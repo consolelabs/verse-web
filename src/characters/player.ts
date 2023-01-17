@@ -10,6 +10,7 @@ type Config = {
   isPreview?: boolean;
   spineConfig?: SpineGameObjectConfig;
   animSuffix?: string;
+  collection?: string;
 };
 
 export class Player extends Phaser.GameObjects.GameObject {

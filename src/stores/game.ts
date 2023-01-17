@@ -67,12 +67,14 @@ interface State {
   init: () => void;
 
   player: {
+    collection?: string;
     animSuffix: string;
     spine: CharacterSpine;
     id: number;
   };
 
   setPlayer: (p: {
+    collection?: string;
     animSuffix: string;
     spine: CharacterSpine;
     id: number;

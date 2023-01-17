@@ -1,5 +1,5 @@
 
-TV-head.png
+TV-head-base.png
 size: 512, 512
 format: RGBA8888
 filter: Linear,Linear
@@ -116,9 +116,15 @@ side_head
   orig: 256, 256
   offset: 12, 14
   index: -1
+
+TV-head.png
+size: 140, 140
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
 skin/head/screen
   rotate: false
-  xy: 210, 150
+  xy: 0, 0
   size: 140, 140
   orig: 140, 140
   offset: 0, 0

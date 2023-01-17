@@ -129,6 +129,7 @@ export default class PodMap extends Phaser.Scene {
           y: 500,
           scale: 0.4,
         },
+        collection: player.collection,
       });
 
       this.player.character?.loadPromise.then((instance) => {

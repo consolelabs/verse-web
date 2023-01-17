@@ -26,6 +26,7 @@ export default class CharSelect extends Phaser.Scene {
       "char-select-light",
       "/assets/images/char-select/light.png"
     );
+    this.load.image("TV-head-base.png", "/characters/tv-head/TV-head-base.png");
     // Load character shadow
     this.load.image("char-shadow", "/characters/shadow.png");
 
@@ -37,7 +38,12 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   // TODO: Should load ghost-face by default?
-  loadPlayer(spine: CharacterSpine = "Neko", id = 1, animSuffix = "") {
+  loadPlayer(
+    spine: CharacterSpine = "Neko",
+    id = 1,
+    animSuffix = "",
+    collection = ""
+  ) {
     this.cameras.main.fadeIn(250);
     // Destroy existing player before creating new one
     if (this.player) {
@@ -55,6 +61,7 @@ export default class CharSelect extends Phaser.Scene {
         scale: 0.8,
       },
       animSuffix,
+      collection,
     });
 
     this.player.character?.loadPromise.then((instance) => {

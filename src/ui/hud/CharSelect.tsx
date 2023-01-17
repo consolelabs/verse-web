@@ -5,12 +5,11 @@ import clsx from "clsx";
 import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
 import CharSelectScene from "scenes/CharSelect";
-import { API_BASE_URL } from "envs";
+import { API_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
 
 const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {
-  "0x7aCeE5D0acC520faB33b3Ea25D4FEEF1FfebDE73": "Neko",
-  "0x7D1070fdbF0eF8752a9627a79b00221b53F231fA": "Rabby",
-  "": "TV-head",
+  [NEKO_COL]: "Neko",
+  [RABBY_COL]: "Rabby",
 };
 
 const isTheSame = (a: NFT, b: NFT) => {
@@ -25,7 +24,7 @@ const ghostNekoItem: NFT = {
   amount: "",
   rarity: "",
   description:
-    "Nez (Neko Soul) is the default character in the PodTown metaverse",
+    "Nez (Neko Soul) is the default character in the PodTown metaverse.",
   token_address: "",
   collection_name: "",
 };
@@ -123,19 +122,36 @@ export const CharSelect = () => {
   const loadCharacter = (item: NFT, animSuffix: string) => {
     const id = Number(item.token_id);
     const spine = item.type;
+    const collection = item.token_address;
 
     setPlayer({
       animSuffix,
       id,
       spine,
+      collection,
     });
     setPreviewChar(item);
-    (getActiveScene() as CharSelectScene).loadPlayer(spine, id, animSuffix);
+    (getActiveScene() as CharSelectScene).loadPlayer(
+      spine,
+      id,
+      animSuffix,
+      collection
+    );
   };
 
   const selectCharToPreview = (item: NFT) => {
     if (item.type === "GhostNeko") {
       loadCharacter(item, "");
+    } else if (item.type === "TV-head") {
+      loadCharacter(
+        {
+          ...item,
+          name: "TV-Head",
+          description:
+            "Another default character of the Verse, but this time players get some degree of personalization with the NFT being the TV screen.",
+        },
+        ""
+      );
     } else {
       fetch(`${API_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`)
         .then((res) => (res.ok ? res.json() : new Error()))
@@ -157,7 +173,7 @@ export const CharSelect = () => {
     return nfts.reduce(
       (result, current) => {
         const next = { ...result };
-        const type = COLLECTION_TO_SPINE[current.token_address];
+        const type = COLLECTION_TO_SPINE[current.token_address] || "TV-head";
 
         // @ts-ignore
         next[type].push({
@@ -185,14 +201,14 @@ export const CharSelect = () => {
         <div className="text-3xl font-bold py-12">Select Characters</div>
         <div className="flex-1 overflow-hidden">
           <div className="flex h-full overflow-hidden">
-            <div className="w-20vw overflow-auto">
+            <div className="w-250px overflow-auto">
               <div className="mb-12">
                 <p className="mb-2 font-semibold text-2xl text-typo-secondary">
                   Default Character
                 </p>
                 <button
                   className={clsx(
-                    "p-0 bg-transparent aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
+                    "outline-none w-14 h-14 p-0 bg-transparent aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
                     {
                       "border-white brightness-100":
                         previewChar.type === "GhostNeko",
@@ -203,7 +219,7 @@ export const CharSelect = () => {
                 >
                   <img
                     src="/assets/images/default-char.png"
-                    className="w-14 h-14"
+                    className="w-full h-full"
                   />
                 </button>
               </div>
@@ -239,7 +255,7 @@ export const CharSelect = () => {
                           {section.title} ({section.items.length})
                         </div>
                       </div>
-                      <div className="grid grid-cols-4 gap-1">
+                      <div className="flex flex-wrap gap-1">
                         {section.items.map((item) => {
                           const isSelectedForPreviewing =
                             previewChar && isTheSame(item, previewChar);
@@ -248,10 +264,10 @@ export const CharSelect = () => {
                           // );
 
                           return (
-                            <div
+                            <button
                               key={`${item.token_address}-${item.token_id}`}
                               className={clsx(
-                                "aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
+                                "outline-none p-0 bg-transparent w-14 h-14 aspect-square rounded-md overflow-hidden border-solid border-2 border-transparent relative",
                                 {
                                   "border-white brightness-100":
                                     isSelectedForPreviewing,
@@ -263,8 +279,8 @@ export const CharSelect = () => {
                               {/* {isSelectedForTheTeam && (
                                 <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
                               )} */}
-                              <img src={item.image} className="w-14 h-14" />
-                            </div>
+                              <img src={item.image} className="w-full h-full" />
+                            </button>
                           );
                         })}
                       </div>

@@ -1,4 +1,4 @@
-import { CHARACTER_ASSET_PATH } from "envs";
+import { CHARACTER_ASSET_PATH, NEKO_COL, RABBY_COL } from "envs";
 import { TILE_SIZE } from "../constants";
 import {
   AnimationDirection,
@@ -20,6 +20,17 @@ function getBasicAnimation(
 
 const fallbackOrder: Array<AnimationState> = ["run", "walk", "idle"];
 
+function getCol(spine: CharacterSpine) {
+  switch (spine) {
+    case "Neko":
+      return NEKO_COL;
+    case "Rabby":
+      return RABBY_COL;
+    default:
+      return "";
+  }
+}
+
 export class Character extends Phaser.GameObjects.GameObject {
   public scene: Phaser.Scene;
   public instance?: Instance;
@@ -31,13 +42,15 @@ export class Character extends Phaser.GameObjects.GameObject {
   public loadPromise: Promise<Instance>;
   public animSuffix = "";
   public availableAnims: Array<Anim> = [];
+  public key: string;
 
   private shadow?: Phaser.GameObjects.Image;
 
   constructor(props: {
     scene: Phaser.Scene;
     id: number;
-    spine?: CharacterSpine;
+    spine: CharacterSpine;
+    collection?: string;
     followee?: Character;
     follower?: Character;
     spineConfig?: SpineGameObjectConfig;
@@ -47,6 +60,7 @@ export class Character extends Phaser.GameObjects.GameObject {
       scene,
       id,
       spine = "Neko",
+      collection = getCol(spine),
       followee,
       follower,
       spineConfig = {},
@@ -55,8 +69,10 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     super(scene, "character");
 
+    this.key = `${spine}/${collection}/${id}`;
+
     this.scene = scene;
-    let atlas = `/api/atlas?spine=${spine}&id=${id}`;
+    let atlas = `/api/atlas?spine=${spine}&collection=${collection}&id=${id}`;
     let texture = `${CHARACTER_ASSET_PATH}/${spine}/Web`;
 
     switch (spine) {
@@ -65,7 +81,7 @@ export class Character extends Phaser.GameObjects.GameObject {
         texture = "";
         break;
       case "TV-head":
-        texture += `/${spine}.png`;
+        texture = `/api/resize?collection=${collection}&id=${id}`;
         break;
       default:
         texture += `/${id}`;
@@ -81,7 +97,7 @@ export class Character extends Phaser.GameObjects.GameObject {
         // @ts-ignore Ignore, we'll add the Matter physics later
         this.instance = this.scene.make.spine({
           ...spineConfig,
-          key: `${spine}/${id}-character`,
+          key: `${this.key}-character`,
           skinName: "char_default",
           animationName: getBasicAnimation("idle", "front", this.animSuffix),
           loop: true,
@@ -132,11 +148,11 @@ export class Character extends Phaser.GameObjects.GameObject {
       });
 
       if (texture) {
-        this.scene.load.image(`${spine}/${id}.png`, texture);
+        this.scene.load.image(`${this.key}.png`, texture);
       }
 
       this.scene.load.spine(
-        `${spine}/${id}-character`,
+        `${this.key}-character`,
         `/spines/${spine}.json`,
         atlas
       );
@@ -224,7 +240,7 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     // Update object depth based on y
     this.instance.depth = this.instance.y / TILE_SIZE;
-    this.shadow.setPosition(this.instance.x, this.instance.y + 10);
+    this.shadow.setPosition(this.instance.x, this.instance.y);
     this.shadow.setDepth(this.instance.y / 2 / TILE_SIZE);
   }
 }

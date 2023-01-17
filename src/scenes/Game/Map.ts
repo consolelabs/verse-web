@@ -390,6 +390,7 @@ export default class GameMap extends Phaser.Scene {
           scale: 0.4,
         },
         animSuffix: player.animSuffix,
+        collection: player.collection,
       });
 
       this.player.character?.loadPromise.then((instance) => {
