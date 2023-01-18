@@ -12,4 +12,6 @@ export enum SceneKey {
   GAME_DIALOGUE = "game-dialogue",
 
   POD = "pod",
+
+  MINIMAP = "minimap",
 }

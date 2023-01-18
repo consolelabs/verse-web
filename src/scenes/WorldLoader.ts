@@ -28,7 +28,7 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   create() {
-    // this.scene.start(SceneKey.GAME);
-    this.scene.start(SceneKey.POD);
+    this.scene.start(SceneKey.GAME);
+    // this.scene.start(SceneKey.POD);
   }
 }

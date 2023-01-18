@@ -329,6 +329,7 @@ export default class GameMap extends Phaser.Scene {
     // Add loaded tilesets to the map
     tilesets.forEach((tileset) => this.map.addTilesetImage(tileset.name));
 
+    const createdLayers: Array<Phaser.Tilemaps.TilemapLayer> = [];
     // Loop through the layers & create them (& the sprites they refer to)
     layers.forEach((layer) => {
       const isStatic =
@@ -338,8 +339,9 @@ export default class GameMap extends Phaser.Scene {
       const tilesets =
         // @ts-ignore
         layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
-
-      this.map.createLayer(layer.name, tilesets.split(","), 0, 0);
+      createdLayers.push(
+        this.map.createLayer(layer.name, tilesets.split(","), 0, 0)
+      );
 
       if (!isStatic) {
         layer.data.forEach((row, y) => {
@@ -395,6 +397,13 @@ export default class GameMap extends Phaser.Scene {
             this.cameras.main
               .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
                 useGameState.setState({ activeSceneKey: SceneKey.GAME });
+
+                this.scene.launch(SceneKey.MINIMAP, {
+                  player: this.player,
+                  layers: createdLayers,
+                  w: this.map.widthInPixels,
+                  h: this.map.heightInPixels,
+                });
               })
               .fadeIn(200);
           })

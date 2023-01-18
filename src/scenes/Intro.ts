@@ -70,7 +70,7 @@ export default class Intro extends Phaser.Scene {
       this.cameras.main
         .fadeIn(500)
         .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
-          this.time.delayedCall(2000, () => {
+          this.time.delayedCall(1500, () => {
             this.cameras.main
               .fadeOut(500)
               .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {

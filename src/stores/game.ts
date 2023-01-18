@@ -17,6 +17,7 @@ import { NFT } from "types/nfts";
 import { API_BASE_URL } from "envs";
 import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
+import Minimap from "scenes/Game/Minimap";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -39,6 +40,7 @@ const config: Phaser.Types.Core.GameConfig = {
     GameInteraction,
     GameDialogue,
     PodMap,
+    Minimap,
   ],
   plugins: {
     scene: [

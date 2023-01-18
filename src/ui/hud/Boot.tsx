@@ -11,21 +11,21 @@ export const Boot = () => {
 
   const startGame = () => {
     const activeScene = getActiveScene();
-    // getNFTs();
-    // activeScene?.cameras.main
-    //   .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-    //     activeScene.scene.start(SceneKey.INTRO);
-    //     setActiveSceneKey(SceneKey.INTRO);
-    //   })
-    //   .fadeOut(200);
-
-    // Debug for POD, do not delete
+    getNFTs();
     activeScene?.cameras.main
       .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-        activeScene.scene.start(SceneKey.CONFIG_LOADER);
-        setActiveSceneKey(SceneKey.POD);
+        activeScene.scene.start(SceneKey.INTRO);
+        setActiveSceneKey(SceneKey.INTRO);
       })
       .fadeOut(200);
+
+    // Debug for POD, do not delete
+    // activeScene?.cameras.main
+    //   .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+    //     activeScene.scene.start(SceneKey.CONFIG_LOADER);
+    //     setActiveSceneKey(SceneKey.POD);
+    //   })
+    //   .fadeOut(200);
   };
 
   useEffect(() => {
@@ -33,12 +33,6 @@ export const Boot = () => {
       setAccount(account.address);
     }
   }, [account.isConnected]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      startGame();
-    }, 1000);
-  }, []);
 
   return (
     <div className="fixed w-screen h-screen flex flex-col items-center justify-center space-y-4">
