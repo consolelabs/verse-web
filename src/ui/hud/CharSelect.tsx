@@ -275,10 +275,7 @@ export const CharSelect = () => {
                         .once(
                           Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
                           () => {
-                            // Mock: Only send the char type for now
-                            activeScene.scene.start(SceneKey.CONFIG_LOADER, {
-                              chars: [previewChar],
-                            });
+                            activeScene.scene.start(SceneKey.CONFIG_LOADER);
                             setActiveSceneKey(SceneKey.BLANK);
                           }
                         )

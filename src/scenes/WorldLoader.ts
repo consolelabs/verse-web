@@ -22,13 +22,13 @@ export default class WorldLoader extends Phaser.Scene {
     )
       return;
 
-    this.load.tilemapTiledJSON("pod", "/tiles/pod.json");
     Object.entries<string>(config.maps).forEach((entry) => {
       this.load.tilemapTiledJSON(entry[0], entry[1]);
     });
   }
 
   create() {
-    this.scene.start(SceneKey.GAME);
+    // this.scene.start(SceneKey.GAME);
+    this.scene.start(SceneKey.POD);
   }
 }

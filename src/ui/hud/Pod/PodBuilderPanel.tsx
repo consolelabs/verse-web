@@ -129,13 +129,13 @@ export const PodBuilderPanel = (props: Props) => {
   const selectWall = (item: ItemProps) => {
     setSelectedWall(item);
 
-    activeScene.setWall(item.key || "");
+    // activeScene.setWall(item.key || "");
   };
 
   const selectFloor = (item: ItemProps) => {
     setSelectedFloor(item);
 
-    activeScene.setFloor(item.key || "");
+    // activeScene.setFloor(item.key || "");
   };
 
   const selectHousewareItem = (item: ItemProps) => {
