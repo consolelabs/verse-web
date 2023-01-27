@@ -7,40 +7,40 @@ import { Tabs } from "ui/components/Tabs";
 import { ItemGrid, ItemProps } from "./ItemGrid";
 
 const mockItems = {
-  floors: [
-    {
-      key: "floor-1",
-      name: "Floor 1",
-      src: "/tiles/pod/floors/1.png",
-    },
-    {
-      key: "floor-2",
-      name: "Floor 2",
-      src: "/tiles/pod/floors/2.png",
-    },
-    {
-      key: "floor-3",
-      name: "Floor 3",
-      src: "/tiles/pod/floors/3.png",
-    },
-  ],
-  walls: [
-    {
-      key: "wall-1",
-      name: "Wall 1",
-      src: "/tiles/pod/walls/1.png",
-    },
-    {
-      key: "wall-2",
-      name: "Wall 2",
-      src: "/tiles/pod/walls/2.png",
-    },
-    {
-      key: "wall-3",
-      name: "Wall 3",
-      src: "/tiles/pod/walls/3.png",
-    },
-  ],
+  // floors: [
+  //   {
+  //     key: "floor-1",
+  //     name: "Floor 1",
+  //     src: "/tiles/pod/floors/1.png",
+  //   },
+  //   {
+  //     key: "floor-2",
+  //     name: "Floor 2",
+  //     src: "/tiles/pod/floors/2.png",
+  //   },
+  //   {
+  //     key: "floor-3",
+  //     name: "Floor 3",
+  //     src: "/tiles/pod/floors/3.png",
+  //   },
+  // ],
+  // walls: [
+  //   {
+  //     key: "wall-1",
+  //     name: "Wall 1",
+  //     src: "/tiles/pod/walls/1.png",
+  //   },
+  //   {
+  //     key: "wall-2",
+  //     name: "Wall 2",
+  //     src: "/tiles/pod/walls/2.png",
+  //   },
+  //   {
+  //     key: "wall-3",
+  //     name: "Wall 3",
+  //     src: "/tiles/pod/walls/3.png",
+  //   },
+  // ],
   housewares: [
     {
       key: "bench-1",
@@ -117,26 +117,12 @@ export const PodBuilderPanel = (props: Props) => {
   const { isOpen, open, close } = useDisclosure();
 
   const [data, setData] = useState(mockItems);
-  const [selectedFloor, setSelectedFloor] = useState(mockItems.floors[0]);
-  const [selectedWall, setSelectedWall] = useState(mockItems.walls[0]);
   const [selectedHousewareItem, setSelectedHousewareItem] =
     useState<ItemProps>();
 
   const activeScene = useMemo(() => {
     return getActiveScene() as PodMap;
   }, [activeSceneKey]);
-
-  const selectWall = (item: ItemProps) => {
-    setSelectedWall(item);
-
-    // activeScene.setWall(item.key || "");
-  };
-
-  const selectFloor = (item: ItemProps) => {
-    setSelectedFloor(item);
-
-    // activeScene.setFloor(item.key || "");
-  };
 
   const selectHousewareItem = (item: ItemProps) => {
     if (item.key === selectedHousewareItem?.key) {
@@ -186,28 +172,28 @@ export const PodBuilderPanel = (props: Props) => {
     >
       <Tabs
         tabs={[
-          {
-            key: "floors",
-            label: "Floors",
-            content: (
-              <ItemGrid
-                items={data.floors}
-                selectedItem={selectedFloor}
-                onSelect={selectFloor}
-              />
-            ),
-          },
-          {
-            key: "walls",
-            label: "Walls",
-            content: (
-              <ItemGrid
-                items={data.walls}
-                selectedItem={selectedWall}
-                onSelect={selectWall}
-              />
-            ),
-          },
+          // {
+          //   key: "floors",
+          //   label: "Floors",
+          //   content: (
+          //     <ItemGrid
+          //       items={data.floors}
+          //       selectedItem={selectedFloor}
+          //       onSelect={selectFloor}
+          //     />
+          //   ),
+          // },
+          // {
+          //   key: "walls",
+          //   label: "Walls",
+          //   content: (
+          //     <ItemGrid
+          //       items={data.walls}
+          //       selectedItem={selectedWall}
+          //       onSelect={selectWall}
+          //     />
+          //   ),
+          // },
           {
             key: "housewares",
             label: "Housewares",
