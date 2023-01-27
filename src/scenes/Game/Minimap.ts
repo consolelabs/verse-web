@@ -75,16 +75,16 @@ export default class Minimap extends Phaser.Scene {
 
     // decorations
     const ring1 = this.add.graphics();
-    ring1.lineStyle(3, 0x03ffcf);
+    ring1.lineStyle(4, 0x03ffcf);
     ring1.strokeCircle(
       this.mapFrame.x - PADDING,
       this.mapFrame.h / 2,
-      this.mapFrame.h / 2 + PADDING - 1.5
+      this.mapFrame.h / 2 + PADDING - 2
     );
     ring1.setScrollFactor(0);
 
     const ring2 = this.add.graphics();
-    ring2.lineStyle(5, 0x77777f);
+    ring2.lineStyle(6, 0x77777f);
     ring2.strokeCircle(
       this.mapFrame.x - PADDING,
       this.mapFrame.h / 2,
