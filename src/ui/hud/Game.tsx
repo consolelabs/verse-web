@@ -2,9 +2,13 @@ import { GridButtons } from "components/GridButtons";
 import { useGameState } from "stores/game";
 
 export const Game = () => {
-  const { setOpenMenu } = useGameState();
+  const { setOpenMenu, getActiveScene } = useGameState();
 
-  const openMenu = () => setOpenMenu(true);
+  const openMenu = () => {
+    const activeScene = getActiveScene();
+    activeScene?.sound.play("success-audio", { volume: 0.05 });
+    setOpenMenu(true);
+  };
 
   return (
     <div className="fixed bottom-0 right-0 mb-4 mr-8 flex space-x-4">

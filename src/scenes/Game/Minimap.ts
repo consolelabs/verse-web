@@ -3,8 +3,8 @@ import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
 
 const SCALE = 0.05;
-const ZOOM = 0.8;
 const PADDING = 20;
+const MAP_FRAME_SIZE = 160;
 
 export default class Minimap extends Phaser.Scene {
   renderTexture?: Phaser.GameObjects.RenderTexture;
@@ -42,16 +42,15 @@ export default class Minimap extends Phaser.Scene {
   }) {
     this.player = player;
     this.cameras.main.setBackgroundColor(0x000000);
-    const mapFrameSize = (w * SCALE) / 2;
     this.mapFrame = {
-      x: mapFrameSize / 2 + PADDING,
-      y: window.innerHeight - (mapFrameSize / 2 + PADDING),
-      w: mapFrameSize,
-      h: mapFrameSize,
+      x: MAP_FRAME_SIZE / 2 + PADDING,
+      y: window.innerHeight - (MAP_FRAME_SIZE / 2 + PADDING),
+      w: MAP_FRAME_SIZE,
+      h: MAP_FRAME_SIZE,
     };
     this.map = {
       ...this.map,
-      y: window.innerHeight - mapFrameSize * 2,
+      y: window.innerHeight - MAP_FRAME_SIZE * 2,
       h,
       w,
     };
@@ -79,7 +78,7 @@ export default class Minimap extends Phaser.Scene {
     ring1.strokeCircle(
       this.mapFrame.x - PADDING,
       this.mapFrame.h / 2,
-      this.mapFrame.h / 2 + PADDING - 2
+      this.mapFrame.h / 2 - 2
     );
     ring1.setScrollFactor(0);
 
@@ -88,23 +87,22 @@ export default class Minimap extends Phaser.Scene {
     ring2.strokeCircle(
       this.mapFrame.x - PADDING,
       this.mapFrame.h / 2,
-      this.mapFrame.h / 2 + PADDING - 6
+      this.mapFrame.h / 2 - 6
     );
     ring2.setScrollFactor(0);
 
     // camera
     this.cameras.main.setMask(mask);
-    this.cameras.main.setZoom(ZOOM);
     this.cameras.main.setViewport(
       PADDING,
-      window.innerHeight - (mapFrameSize + PADDING),
-      mapFrameSize,
-      mapFrameSize
+      window.innerHeight - (MAP_FRAME_SIZE + PADDING),
+      MAP_FRAME_SIZE,
+      MAP_FRAME_SIZE
     );
 
     this.charShape = this.add.graphics({});
     this.charShape.fillStyle(0xff0000);
-    this.charShape.fillRoundedRect(0, 0, 5, 5, 2);
+    this.charShape.fillRoundedRect(0, 0, 4, 4, 2);
     this.charShape.setDepth(9999);
 
     this.cameras.main.startFollow(this.charShape);
