@@ -19,6 +19,8 @@ import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
 
+type Minigame = "tripod" | "hunger-game";
+
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: "game",
@@ -75,7 +77,6 @@ interface State {
     spine: CharacterSpine;
     id: number;
   };
-
   setPlayer: (p: {
     collection?: string;
     animSuffix: string;
@@ -84,6 +85,9 @@ interface State {
   }) => void;
 
   stopScenes: (...scenes: Array<SceneKey>) => void;
+  minigame?: Minigame;
+  startMinigame: (game: Minigame) => void;
+  stopMinigame: () => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -152,5 +156,25 @@ export const useGameState = create<State>((set, get) => ({
     if (!activeScene) return;
 
     scenes.forEach((s) => activeScene.scene.stop(s));
+  },
+
+  minigame: undefined,
+  startMinigame: (minigame: Minigame) => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = false;
+    }
+
+    set(() => ({ minigame }));
+  },
+  stopMinigame: () => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = true;
+    }
+
+    set(() => ({ minigame: undefined }));
   },
 }));

@@ -5,7 +5,8 @@ import { GradientContainer } from "./GradientContainer";
 import { GridButtons } from "./GridButtons";
 
 export const Menu = () => {
-  const { setOpenMenu, openMenu, getActiveScene, stopScenes } = useGameState();
+  const { setOpenMenu, openMenu, getActiveScene, stopScenes, startMinigame } =
+    useGameState();
 
   const closeMenu = () => {
     const activeScene = getActiveScene();
@@ -34,7 +35,7 @@ export const Menu = () => {
       />
       <GradientContainer>
         <div className="p-10">
-          <GridButtons cols={3} rows={3} gap="md">
+          <GridButtons cols={4} rows={3} gap="md">
             {[
               {
                 img: "character.png",
@@ -86,6 +87,13 @@ export const Menu = () => {
               { img: "achievement.png", text: "Achievement" },
               { img: "market.png", text: "Market" },
               { img: "airdrop.png", text: "Airdrop" },
+              {
+                img: "tripod.png",
+                text: "Tripod",
+                onClick: () => {
+                  startMinigame("tripod");
+                },
+              },
               { img: "quit.png", text: "Save & quit" },
             ].map((b) => {
               return (
