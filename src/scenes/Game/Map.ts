@@ -45,9 +45,9 @@ function getInteractHandler(properties: any, scene: GameMap) {
 }
 
 export default class GameMap extends Phaser.Scene {
-  public player!: Player;
-  public map!: Phaser.Tilemaps.Tilemap;
-  public bounds!: IBound;
+  player!: Player;
+  map!: Phaser.Tilemaps.Tilemap;
+  bounds!: IBound;
   private bg!: TitleBg;
 
   constructor() {

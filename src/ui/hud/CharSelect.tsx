@@ -119,7 +119,7 @@ export const CharSelect = () => {
         <div className="flex h-full overflow-hidden">
           <div className="max-w-1/5 overflow-auto">
             <div className="mb-12">
-              <p className="mb-2 font-semibold text-2xl text-typo-secondary">
+              <p className="mb-2 font-semibold text-xl text-typo-secondary">
                 Default Character
               </p>
               <button
@@ -170,7 +170,7 @@ export const CharSelect = () => {
                     <div className="mb-12" key={index}>
                       <div className="flex items-center space-x-2 mb-2">
                         <img src={section.icon} className="w-6 h-6" />
-                        <div className="font-semibold text-2xl text-typo-secondary">
+                        <div className="font-semibold text-xl text-typo-secondary">
                           {section.title} ({section.items.length})
                         </div>
                       </div>
@@ -263,19 +263,24 @@ export const CharSelect = () => {
               </div>
               <button
                 type="button"
-                className="disabled:filter-grayscale disabled:opacity-25 bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6"
+                className="disabled:filter-grayscale disabled:opacity-25 bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6 hover:brightness-110 transition-all duration-75 ease-in-out"
                 onClick={() => {
                   if (player) {
                     const activeScene = getActiveScene();
-                    activeScene?.cameras.main
-                      .once(
-                        Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-                        () => {
-                          activeScene.scene.start(SceneKey.CONFIG_LOADER);
-                          setActiveSceneKey(SceneKey.BLANK);
-                        }
-                      )
-                      .fadeOut(200);
+                    activeScene?.sound
+                      .add("start-game-audio", { volume: 0.5 })
+                      .once(Phaser.Sound.Events.COMPLETE, () => {
+                        activeScene?.cameras.main
+                          .once(
+                            Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+                            () => {
+                              activeScene.scene.start(SceneKey.CONFIG_LOADER);
+                              setActiveSceneKey(SceneKey.BLANK);
+                            }
+                          )
+                          .fadeOut(200);
+                      })
+                      .play();
                   }
                 }}
               >

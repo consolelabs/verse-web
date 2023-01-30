@@ -5,10 +5,13 @@ import { GradientContainer } from "./GradientContainer";
 import { GridButtons } from "./GridButtons";
 
 export const Menu = () => {
-  const { setOpenMenu, openMenu, setActiveSceneKey, getActiveScene } =
-    useGameState();
+  const { setOpenMenu, openMenu, getActiveScene, stopScenes } = useGameState();
 
-  const closeMenu = () => setOpenMenu(false);
+  const closeMenu = () => {
+    const activeScene = getActiveScene();
+    activeScene?.sound.play("success-audio", { volume: 0.05 });
+    setOpenMenu(false);
+  };
 
   useEffect(() => {
     function esc(e: KeyboardEvent) {
@@ -45,8 +48,11 @@ export const Menu = () => {
                     activeScene.cameras.main.once(
                       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
                       () => {
-                        activeScene.scene.stop(SceneKey.GAME_INTERACTION);
-                        activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
+                        stopScenes(
+                          SceneKey.GAME_INTERACTION,
+                          SceneKey.GAME,
+                          SceneKey.MINIMAP
+                        );
                         activeScene.scene.start(SceneKey.CHAR_SELECT);
                       }
                     );
@@ -57,21 +63,21 @@ export const Menu = () => {
                 img: "pod.png",
                 text: "Pod",
                 onClick: () => {
-                  const activeScene = getActiveScene();
-
-                  if (activeScene) {
-                    // Fade out & prepare for scene transition
-                    activeScene.cameras.main.fadeOut(500, 0, 0, 0);
-                    activeScene.cameras.main.once(
-                      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-                      () => {
-                        activeScene.scene.stop(SceneKey.GAME_INTERACTION);
-                        activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
-                        activeScene.scene.start(SceneKey.POD);
-                        setActiveSceneKey(SceneKey.POD);
-                      }
-                    );
-                  }
+                  // const activeScene = getActiveScene();
+                  //
+                  // if (activeScene) {
+                  //   // Fade out & prepare for scene transition
+                  //   activeScene.cameras.main.fadeOut(500, 0, 0, 0);
+                  //   activeScene.cameras.main.once(
+                  //     Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+                  //     () => {
+                  //       activeScene.scene.stop(SceneKey.GAME_INTERACTION);
+                  //       activeScene.scene.stop(SceneKey.GAME_DIALOGUE);
+                  //       activeScene.scene.start(SceneKey.POD);
+                  //       setActiveSceneKey(SceneKey.POD);
+                  //     }
+                  //   );
+                  // }
                 },
               },
               { img: "mail.png", text: "Mail" },

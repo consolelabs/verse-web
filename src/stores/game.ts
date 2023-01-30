@@ -82,6 +82,8 @@ interface State {
     spine: CharacterSpine;
     id: number;
   }) => void;
+
+  stopScenes: (...scenes: Array<SceneKey>) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -143,4 +145,12 @@ export const useGameState = create<State>((set, get) => ({
   openMenu: false,
   setOpenMenu: (openMenu) => set(() => ({ openMenu })),
   init: () => set(() => ({ game: new Phaser.Game(config) })),
+
+  stopScenes: (...scenes) => {
+    const { getActiveScene } = get();
+    const activeScene = getActiveScene();
+    if (!activeScene) return;
+
+    scenes.forEach((s) => activeScene.scene.stop(s));
+  },
 }));

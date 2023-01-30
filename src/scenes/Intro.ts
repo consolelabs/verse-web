@@ -74,6 +74,10 @@ export default class Intro extends Phaser.Scene {
             this.cameras.main
               .fadeOut(500)
               .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.sound.play("background-audio", {
+                  volume: 0.025,
+                  loop: true,
+                });
                 this.scene.start(SceneKey.CHAR_SELECT);
               });
           });
