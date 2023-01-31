@@ -18,6 +18,7 @@ import { API_BASE_URL } from "envs";
 import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
+import { Menu, Minigame } from "constants/game";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -65,8 +66,6 @@ interface State {
   getActiveScene: () => Phaser.Scene | undefined;
 
   game?: Phaser.Game;
-  openMenu: boolean;
-  setOpenMenu: (o: boolean) => void;
   init: () => void;
 
   player: {
@@ -75,7 +74,6 @@ interface State {
     spine: CharacterSpine;
     id: number;
   };
-
   setPlayer: (p: {
     collection?: string;
     animSuffix: string;
@@ -84,6 +82,14 @@ interface State {
   }) => void;
 
   stopScenes: (...scenes: Array<SceneKey>) => void;
+
+  menu?: Menu;
+  openMenu: (menu: Menu) => void;
+  closeMenu: () => void;
+
+  minigame?: Minigame;
+  startMinigame: (game: Minigame) => void;
+  stopMinigame: () => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -142,8 +148,6 @@ export const useGameState = create<State>((set, get) => ({
   },
   setPlayer: (player) => set({ player }),
 
-  openMenu: false,
-  setOpenMenu: (openMenu) => set(() => ({ openMenu })),
   init: () => set(() => ({ game: new Phaser.Game(config) })),
 
   stopScenes: (...scenes) => {
@@ -152,5 +156,33 @@ export const useGameState = create<State>((set, get) => ({
     if (!activeScene) return;
 
     scenes.forEach((s) => activeScene.scene.stop(s));
+  },
+
+  menu: undefined,
+  openMenu: (m: Menu) => {
+    set(() => ({ menu: m }));
+  },
+  closeMenu: () => {
+    set(() => ({ menu: undefined }));
+  },
+
+  minigame: undefined,
+  startMinigame: (minigame: Minigame) => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = false;
+    }
+
+    set(() => ({ minigame }));
+  },
+  stopMinigame: () => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = true;
+    }
+
+    set(() => ({ minigame: undefined }));
   },
 }));

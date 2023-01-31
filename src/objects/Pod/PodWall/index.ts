@@ -6,7 +6,6 @@ export class PodWall {
   public type: "top" | "bottom" | "left" | "right";
   public collection: string;
   public position: { x: number; y: number };
-  public collides?: boolean;
   public width = 0;
   public height = 0;
 
@@ -15,21 +14,18 @@ export class PodWall {
   constructor({
     scene,
     type,
-    collection = "cyber-neko",
+    collection = "cyber",
     position,
-    collides = true,
   }: {
     scene: PodMap;
     type: "top" | "bottom" | "left" | "right";
     collection?: string;
     position: { x: number; y: number };
-    collides?: boolean;
   }) {
     this.scene = scene;
     this.type = type;
     this.collection = collection;
     this.position = position;
-    this.collides = collides;
 
     this.spriteKey = type;
 
@@ -97,10 +93,10 @@ export class PodWall {
       }
     }
 
-    this.loadWall();
+    this.load();
   }
 
-  loadWall() {
+  load() {
     const texture = this.scene.add.renderTexture(0, 0, this.width, this.height);
 
     texture.draw(
@@ -113,17 +109,13 @@ export class PodWall {
       this.position.y * POD_TILE_SIZE
     );
 
-    if (this.collides) {
-      this.scene.matter.add.gameObject(texture, { isStatic: true });
+    this.scene.matter.add.gameObject(texture, { isStatic: true });
 
-      // Offset origin to bottom left
-      texture.setPosition(
-        texture.x + texture.width / 2,
-        texture.y - texture.height / 2
-      );
-    } else {
-      texture.setOrigin(0, 1);
-    }
+    // Offset origin to bottom left
+    texture.setPosition(
+      texture.x + texture.width / 2,
+      texture.y - texture.height / 2
+    );
   }
 }
 

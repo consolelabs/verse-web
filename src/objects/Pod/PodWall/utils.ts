@@ -12,7 +12,7 @@ const getTopWall = (scene: Phaser.Scene) => {
     const topEdge = scene.add.image(
       OFFWORLD_ORIGIN.x + index * POD_TILE_SIZE,
       OFFWORLD_ORIGIN.y,
-      `cyber-neko/top-mid`
+      `cyber/top-mid`
     );
     topEdge.setScale(scale);
     topEdge.setOrigin(0, 0);
@@ -23,7 +23,7 @@ const getTopWall = (scene: Phaser.Scene) => {
     const wall = scene.add.image(
       OFFWORLD_ORIGIN.x,
       OFFWORLD_ORIGIN.y + POD_TILE_SIZE * (2 * index + 1),
-      `cyber-neko/wall`
+      `cyber/wall`
     );
     wall.setScale(scale);
     wall.setOrigin(0, 0);
@@ -32,6 +32,7 @@ const getTopWall = (scene: Phaser.Scene) => {
 
   return group;
 };
+
 const getSideWall = (
   scene: Phaser.Scene,
   side: "left" | "right",
@@ -46,11 +47,11 @@ const getSideWall = (
   const isTopCorner = corner === "top";
   const isBottomCorner = corner === "bottom";
 
-  let topKey = `cyber-neko/${side}-mid`;
+  let topKey = `cyber/${side}-mid`;
   if (end === "top") {
-    topKey = `cyber-neko/${side}-top`;
+    topKey = `cyber/${side}-top`;
   } else if (isTopCorner) {
-    topKey = `cyber-neko/corner-${corner}-${side}`;
+    topKey = `cyber/corner-${corner}-${side}`;
   }
   const top = scene.add.image(OFFWORLD_ORIGIN.x, OFFWORLD_ORIGIN.y, topKey);
   top.setScale(scale);
@@ -59,11 +60,11 @@ const getSideWall = (
     top.displayOriginX += POD_TILE_SIZE / scale;
   }
 
-  let bottomKey = `cyber-neko/${side}-mid`;
+  let bottomKey = `cyber/${side}-mid`;
   if (end === "bottom") {
-    bottomKey = `cyber-neko/${side}-bottom`;
+    bottomKey = `cyber/${side}-bottom`;
   } else if (isBottomCorner) {
-    bottomKey = `cyber-neko/corner-${corner}-${side}`;
+    bottomKey = `cyber/corner-${corner}-${side}`;
   }
   const bottom = scene.add.image(
     OFFWORLD_ORIGIN.x,
@@ -86,9 +87,7 @@ const getSideWall = (
       OFFWORLD_ORIGIN.y +
         (bottom.y - OFFWORLD_ORIGIN.y) +
         POD_TILE_SIZE * (index + 1),
-      `cyber-neko/${side}-${
-        index === 0 ? "top" : index === 1 ? "mid" : "bottom"
-      }`
+      `cyber/${side}-${index === 0 ? "top" : index === 1 ? "mid" : "bottom"}`
     );
     base.setScale(scale);
     base.setOrigin(0, 0);
@@ -113,7 +112,7 @@ const getBottomWall = (scene: Phaser.Scene) => {
     const topEdge = scene.add.image(
       OFFWORLD_ORIGIN.x + index * POD_TILE_SIZE,
       OFFWORLD_ORIGIN.y + POD_TILE_SIZE / 2,
-      `cyber-neko/bottom-mid`
+      `cyber/bottom-mid`
     );
     topEdge.setScale(scale);
     topEdge.setOrigin(0, 0);
@@ -124,7 +123,7 @@ const getBottomWall = (scene: Phaser.Scene) => {
     const wall = scene.add.image(
       OFFWORLD_ORIGIN.x,
       OFFWORLD_ORIGIN.y + POD_TILE_SIZE,
-      `cyber-neko/wall`
+      `cyber/wall`
     );
     wall.setScale(scale);
     wall.setOrigin(0, 0);

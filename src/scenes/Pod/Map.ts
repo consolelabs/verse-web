@@ -5,8 +5,10 @@ import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
 import { PodPlacedItem } from "objects/PodPlacedItem";
 import { useGameState } from "stores/game";
-import { initWallAndFloorSprites, PodWall } from "objects/PodWall";
-import { getMockData } from "./mockData";
+import { initWallAndFloorSprites, PodWall } from "objects/Pod/PodWall";
+import { getMockFloorData, getMockWallData } from "./mockData";
+import { initGroundSprites } from "objects/Pod/PodFloor/utils";
+import { PodFloor } from "objects/Pod/PodFloor";
 
 export const POD_TILE_SIZE = 64;
 export const WORLD_SIZE = 16;
@@ -30,6 +32,10 @@ export default class PodMap extends Phaser.Scene {
   // Mock
   public spatialMap!: Phaser.GameObjects.RenderTexture[][][];
   public wallSprites: Record<string, Phaser.GameObjects.Group | undefined> = {};
+  public floorSprites: Record<string, Phaser.GameObjects.Group | undefined> =
+    {};
+
+  public floorTexture!: Phaser.GameObjects.RenderTexture;
 
   constructor() {
     super({
@@ -72,7 +78,11 @@ export default class PodMap extends Phaser.Scene {
       );
     });
 
-    // Load cyber neko walls
+    /**
+     * Test
+     */
+
+    // Load cyber walls
     [
       "bottom-mid",
       "corner-bottom-left",
@@ -88,14 +98,20 @@ export default class PodMap extends Phaser.Scene {
       "top-mid",
       "wall",
     ].forEach((key) => {
-      const finalKey = `cyber-neko/${key}`;
+      const finalKey = `cyber/${key}`;
 
       // Do nothing if texture was already loaded
       if (this.textures.exists(finalKey)) {
         return;
       }
 
-      this.load.image(finalKey, `/tiles/pod/walls/cyber-neko/${key}.png`);
+      this.load.image(finalKey, `/tiles/pod/walls/cyber/${key}.png`);
+    });
+
+    // Load cyber floor
+    ["ground"].forEach((key) => {
+      const finalKey = `cyber/${key}`;
+      this.load.image(finalKey, `/tiles/pod/floors/cyber/${key}.png`);
     });
   }
 
@@ -140,24 +156,51 @@ export default class PodMap extends Phaser.Scene {
       this.bounds.max.y
     );
 
-    // Test
-    const mockData = getMockData(WORLD_SIZE);
+    /**
+     * Test
+     */
+
     this.spatialMap = new Array(WORLD_SIZE).fill(0).map(() => {
       return new Array(WORLD_SIZE).fill(0).map(() => new Array(0));
     });
 
+    // Load floors
+    const mockFloorData = getMockFloorData(WORLD_SIZE);
+    this.floorTexture = this.add.renderTexture(
+      0,
+      0,
+      WORLD_SIZE * POD_TILE_SIZE,
+      WORLD_SIZE * POD_TILE_SIZE
+    );
+
     // Loop through the wall sprites & populate the spatial map
-    mockData.forEach((sprite: any) => {
+    // NOTE: This will also need to be done while users are building the pod
+    // e.g. whenever users move/put/delete a piece
+    mockFloorData.forEach((sprite: any) => {
+      this.spatialMap[sprite.position.y][sprite.position.x].push(sprite);
+    });
+
+    this.floorSprites = initGroundSprites(this);
+    mockFloorData.forEach((sprite: any) => {
+      new PodFloor({ ...sprite, scene: this, collection: "cyber" });
+    });
+
+    // Load walls
+    const mockWallData = getMockWallData(WORLD_SIZE);
+
+    // Loop through the wall sprites & populate the spatial map
+    // NOTE: This will also need to be done while users are building the pod
+    // e.g. whenever users move/put/delete a piece
+    mockWallData.forEach((sprite: any) => {
       this.spatialMap[sprite.position.y][sprite.position.x].push(sprite);
     });
 
     this.wallSprites = initWallAndFloorSprites(this);
-    // Load walls
     // NOTE: We are using BOTTOM LEFT origin, with coord NOT in pixel but in GRID SIZE UNIT
     // for the sake of calculation. We'll be converting the unit to actual world pixel
     // in the PodWall class
-    mockData.forEach((sprite: any) => {
-      new PodWall({ ...sprite, scene: this, collection: "cyber-neko" });
+    mockWallData.forEach((sprite: any) => {
+      new PodWall({ ...sprite, scene: this, collection: "cyber" });
     });
   }
 

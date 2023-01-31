@@ -10,6 +10,7 @@ import { Menu } from "./components/Menu";
 import { CharSelect } from "ui/hud/CharSelect";
 import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
+import { MinigameIframes } from "components/minigames/MinigameIframes";
 
 const client = createClient(
   getDefaultClient({
@@ -82,6 +83,7 @@ const App = () => {
             },
           }}
         />
+        <MinigameIframes />
       </ConnectKitProvider>
     </WagmiConfig>
   );

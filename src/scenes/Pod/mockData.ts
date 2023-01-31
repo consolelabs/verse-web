@@ -1,6 +1,6 @@
 import { WORLD_SIZE } from "./Map";
 
-export const getMockData = (size: number) => [
+export const getMockWallData = (size: number) => [
   ...(new Array(size).fill(0).reduce((result, _, index) => {
     const sprites = [];
 
@@ -96,3 +96,31 @@ export const getMockData = (size: number) => [
   //   },
   // },
 ];
+
+export const getMockFloorData = (size: number) => {
+  return [
+    ...(new Array(size).fill(0).reduce((result, _, row) => {
+      if (row === 0 || row === size - 1) {
+        return [...result];
+      }
+
+      const sprites: any[] = [];
+
+      new Array(size).fill(0).forEach((_, col) => {
+        if (col === 0 || col === size - 1) {
+          return;
+        }
+
+        sprites.push({
+          type: "ground",
+          position: {
+            x: col,
+            y: row,
+          },
+        });
+      });
+
+      return [...result, ...sprites];
+    }, []) as Array<any>),
+  ];
+};
