@@ -27,7 +27,7 @@ export const MinigameIframes = () => {
         contentClassName="h-full flex flex-col"
       >
         <div className="h-12 flex justify-between items-center p-4">
-          <span>{minigame}</span>
+          <span className="capitalize text-white">{minigame}</span>
           <button
             type="button"
             className="border-none outline-none p-0 bg-transparent text-white"
