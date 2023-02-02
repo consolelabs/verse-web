@@ -90,10 +90,19 @@ interface State {
   minigame?: Minigame;
   startMinigame: (game: Minigame) => void;
   stopMinigame: () => void;
+  updateGamePoint: (info: {
+    address: string;
+    name: string;
+    point: number;
+    game: string;
+  }) => Promise<void>;
 }
 
 export const useGameState = create<State>((set, get) => ({
   account: undefined,
+  updateGamePoint: async () => {
+    return;
+  },
   setAccount: (account: `0x${string}`) =>
     set(() => ({
       account,

@@ -1,20 +1,39 @@
 import { useGameState } from "stores/game";
 import { GradientContainer } from "components/GradientContainer";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Postmate from "postmate";
 
 export const MinigameIframes = () => {
+  const [child, setChild] = useState<Postmate.ParentAPI>();
   const { minigame, stopMinigame } = useGameState();
 
   const src = useMemo(() => {
     switch (minigame) {
       case "tripod": {
-        return "https://tripod-web.vercel.app/";
+        return "http://localhost:3001";
       }
       default: {
         return "";
       }
     }
   }, [minigame]);
+
+  useEffect(() => {
+    if (src) {
+      const hs = new Postmate({
+        container: document.getElementById("minigame-frame"),
+        url: src,
+        name: minigame,
+        classListArray: ["flex-1"],
+      });
+
+      hs.then((child) => {
+        setChild(child);
+      });
+    } else {
+      child?.destroy();
+    }
+  }, [src]);
 
   if (!src) {
     return null;
@@ -24,7 +43,7 @@ export const MinigameIframes = () => {
     <div className="fixed top-0 left-0 w-full h-full flex bg-black/50">
       <GradientContainer
         className="w-90vw h-90vh m-auto"
-        contentClassName="h-full flex flex-col"
+        contentClassName="h-full flex flex-col overflow-hidden"
       >
         <div className="h-12 flex justify-between items-center p-4">
           <span className="capitalize text-white">{minigame}</span>
@@ -36,7 +55,7 @@ export const MinigameIframes = () => {
             Quit
           </button>
         </div>
-        <iframe className="flex-1 bg-black/50 border-none" src={src} />
+        <div className="flex-1 flex" id="minigame-frame"></div>
       </GradientContainer>
     </div>
   );
