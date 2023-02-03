@@ -40,7 +40,7 @@ export const Boot = () => {
       <button
         type="button"
         disabled={!account.isConnected}
-        className="text-xl bg-white rounded"
+        className="disabled:opacity-20 text-xl bg-white rounded border border-black px-2 py-0.5"
         onClick={startGame}
       >
         Start Game

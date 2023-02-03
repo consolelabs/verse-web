@@ -1,6 +1,6 @@
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
@@ -32,6 +32,7 @@ const ghostNekoItem: NFT = {
 };
 
 export const CharSelect = () => {
+  const [playGame, setPlayGame] = useState(false);
   const { nfts, getActiveScene, setActiveSceneKey, player, setPlayer } =
     useGameState();
   const [previewChar, setPreviewChar] = useState<NFT>(ghostNekoItem);
@@ -107,6 +108,23 @@ export const CharSelect = () => {
       }
     );
   }, [nfts]);
+
+  useEffect(() => {
+    if (playGame && player) {
+      const activeScene = getActiveScene();
+      activeScene?.sound
+        .add("start-game-audio", { volume: 0.5 })
+        .once(Phaser.Sound.Events.COMPLETE, () => {
+          activeScene?.cameras.main
+            .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+              activeScene.scene.start(SceneKey.CONFIG_LOADER);
+              setActiveSceneKey(SceneKey.BLANK);
+            })
+            .fadeOut(200);
+        })
+        .play();
+    }
+  }, [playGame]);
 
   // const isPreviewingATeamMember = Boolean(
   //   selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
@@ -265,23 +283,7 @@ export const CharSelect = () => {
                 type="button"
                 className="disabled:filter-grayscale disabled:opacity-25 bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6 hover:brightness-110 transition-all duration-75 ease-in-out"
                 onClick={() => {
-                  if (player) {
-                    const activeScene = getActiveScene();
-                    activeScene?.sound
-                      .add("start-game-audio", { volume: 0.5 })
-                      .once(Phaser.Sound.Events.COMPLETE, () => {
-                        activeScene?.cameras.main
-                          .once(
-                            Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-                            () => {
-                              activeScene.scene.start(SceneKey.CONFIG_LOADER);
-                              setActiveSceneKey(SceneKey.BLANK);
-                            }
-                          )
-                          .fadeOut(200);
-                      })
-                      .play();
-                  }
+                  setPlayGame(true);
                 }}
               >
                 Play Game

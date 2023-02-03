@@ -10,10 +10,7 @@ type Props = {
 export const GradientContainer = (props: Props) => {
   return (
     <div
-      className={clsx(
-        "relative p-1.5px rounded-lg overflow-hidden",
-        props.className
-      )}
+      className={clsx("relative p-1.5px rounded-lg", props.className)}
       style={{ background: "linear-gradient(45deg, #EF3EFF, #2FD4D6)" }}
     >
       <div className={clsx("bg-#140F29 rounded-lg", props.contentClassName)}>
