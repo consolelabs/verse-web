@@ -10,7 +10,7 @@ export const MinigameIframes = () => {
   const src = useMemo(() => {
     switch (minigame) {
       case "tripod": {
-        return "http://tripod-web.vercel.app";
+        return "https://tripod-web.vercel.app";
       }
       default: {
         return "";
