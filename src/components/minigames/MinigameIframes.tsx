@@ -5,12 +5,12 @@ import Postmate from "postmate";
 
 export const MinigameIframes = () => {
   const [child, setChild] = useState<Postmate.ParentAPI>();
-  const { minigame, stopMinigame } = useGameState();
+  const { minigame, stopMinigame, updateGamePoints } = useGameState();
 
   const src = useMemo(() => {
     switch (minigame) {
       case "tripod": {
-        return "https://tripod-web.vercel.app";
+        return "http://localhost:3001";
       }
       default: {
         return "";
@@ -29,6 +29,8 @@ export const MinigameIframes = () => {
 
       hs.then((child) => {
         setChild(child);
+
+        child.on("game-point", updateGamePoints);
       });
     } else {
       child?.destroy();
