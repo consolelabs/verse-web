@@ -14,7 +14,7 @@ import CharSelect from "scenes/CharSelect";
 import Intro from "scenes/Intro";
 import { FullResponse } from "types/apis";
 import { NFT } from "types/nfts";
-import { API_BASE_URL } from "envs";
+import { API_BASE_URL, API_POD_BASE_URL } from "envs";
 import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
@@ -55,8 +55,14 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 interface State {
+  token?: string;
+  updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
+  login: (
+    address: `0x${string}`,
+    signature: `0x${string}`,
+    message: string
+  ) => Promise<void>;
   account?: `0x${string}`;
-  setAccount: (account: `0x${string}`) => void;
 
   nfts?: NFT[];
   getNFTs: () => Promise<void>;
@@ -90,23 +96,45 @@ interface State {
   minigame?: Minigame;
   startMinigame: (game: Minigame) => void;
   stopMinigame: () => void;
-  updateGamePoint: (info: {
-    address: string;
-    name: string;
-    point: number;
-    game: string;
-  }) => Promise<void>;
 }
 
 export const useGameState = create<State>((set, get) => ({
-  account: undefined,
-  updateGamePoint: async () => {
-    return;
+  updateGamePoints: async (d) => {
+    const token = get().token;
+    if (token) {
+      await fetch(`${API_BASE_URL}/game-points`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(d),
+      });
+    }
   },
-  setAccount: (account: `0x${string}`) =>
-    set(() => ({
-      account,
-    })),
+  login: async (
+    address: `0x${string}`,
+    signature: `0x${string}`,
+    message: string
+  ) => {
+    const res = await fetch(`${API_BASE_URL}/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        address,
+        signature,
+        message,
+        is_new: true,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      set({ token: data.token, account: address });
+    }
+  },
+  account: undefined,
 
   nfts: undefined,
   getNFTs: async () => {
@@ -117,7 +145,7 @@ export const useGameState = create<State>((set, get) => ({
       // Fetch till break
       while (true) {
         const data: FullResponse<NFT> = await fetch(
-          `${API_BASE_URL}/verse/nfts?user_address=${
+          `${API_POD_BASE_URL}/verse/nfts?user_address=${
             get().account
           }&page=${page}`
         ).then((res) => res.json());

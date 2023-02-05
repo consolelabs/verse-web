@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
 import CharSelectScene from "scenes/CharSelect";
-import { API_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
+import { API_POD_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
 import { CharStats } from "components/char-select/CharStats";
 import { CharSelectGridSkeleton } from "components/skeletons/CharSelectGridSkeleton";
 
@@ -71,7 +71,9 @@ export const CharSelect = () => {
         ""
       );
     } else {
-      fetch(`${API_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`)
+      fetch(
+        `${API_POD_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`
+      )
         .then((res) => (res.ok ? res.json() : new Error()))
         .then((nftDetail) => {
           const { anim_type } = nftDetail;

@@ -1,13 +1,14 @@
 import { useGameState } from "stores/game";
 import { ConnectKitButton } from "connectkit";
-import { useAccount } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { useEffect } from "react";
 import { SceneKey } from "constants/scenes";
 
 export const Boot = () => {
-  const { getNFTs, setAccount, getActiveScene, setActiveSceneKey } =
+  const { getNFTs, login, getActiveScene, setActiveSceneKey, token } =
     useGameState();
   const account = useAccount();
+  const { signMessageAsync } = useSignMessage();
 
   const startGame = () => {
     const activeScene = getActiveScene();
@@ -30,7 +31,11 @@ export const Boot = () => {
 
   useEffect(() => {
     if (account.isConnected && account.address) {
-      setAccount(account.address);
+      const message = `${Date.now().toString()}\nSigning this message proves you are the owner of this wallet address`;
+      signMessageAsync({ message }).then((sig) => {
+        if (!account.address) return;
+        login(account.address, sig, message);
+      });
     }
   }, [account.isConnected]);
 
@@ -39,11 +44,15 @@ export const Boot = () => {
       <ConnectKitButton />
       <button
         type="button"
-        disabled={!account.isConnected}
-        className="disabled:opacity-20 text-xl bg-white rounded border border-black px-2 py-0.5"
+        disabled={!account.isConnected || !token}
+        className="disabled:opacity-40 text-xl bg-white rounded border border-black px-2 py-0.5"
         onClick={startGame}
       >
-        Start Game
+        {!account.isConnected
+          ? "Connect first☝️"
+          : !token
+          ? "Sign Message"
+          : "Start Game"}
       </button>
     </div>
   );

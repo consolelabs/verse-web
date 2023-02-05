@@ -4,6 +4,8 @@ import { useGameState } from "stores/game";
 import { GradientContainer } from "./GradientContainer";
 import { GridButtons } from "./GridButtons";
 import { Minigame, Menu as MenuKey } from "constants/game";
+import useSWR from "swr";
+import { API_BASE_URL } from "envs";
 
 const MinigameMenu = () => {
   const { closeMenu, startMinigame } = useGameState();
@@ -118,14 +120,14 @@ const MainMenu = () => {
 };
 
 const Leaderboard = () => {
-  const data = new Array(10).fill({
-    address: "0x123456789",
-    name: "Anonymous",
-    point: {
-      value: 1000,
-      game: "tripod",
-    },
-  });
+  const { data: leaderboard } = useSWR<
+    Array<{ point: number; address: string; game: string }>
+  >(`${API_BASE_URL}/leaderboard`, (url) =>
+    fetch(url).then((res) => {
+      if (res.ok) return res.json();
+      throw new Error();
+    })
+  );
   return (
     <div className="-m-8 -mt-5">
       <div className="mx-10 relative -top-12 flex items-center justify-center">
@@ -155,7 +157,7 @@ const Leaderboard = () => {
         />
       </div>
       <div className="overflow-auto rounded-md border border-purple-300 max-h-[300px]">
-        {data.map((d, i) => {
+        {leaderboard?.map((d, i) => {
           return (
             <div
               key={`leaderboard-${i}`}
@@ -173,15 +175,14 @@ const Leaderboard = () => {
                 </div>
               )}
               <div className="ml-2">
-                <p>{d.name}</p>
-                <p>{d.address}</p>
+                <p>{`${d.address.slice(0, 5)}...${d.address.slice(-5)}`}</p>
               </div>
               <div className="ml-auto flex items-center">
                 <div className="relative z-10 bg-black p-1.5 rounded-[10px]">
                   <img className="w-6 h-6" src="/assets/images/tripod.png" />
                 </div>
                 <span className="-ml-1.5 px-2 py-0.5 rounded-r-md bg-black text-white font-medium">
-                  {d.point.value}
+                  {d.point}
                 </span>
               </div>
             </div>
