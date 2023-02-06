@@ -283,7 +283,7 @@ export const CharSelect = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-primary-blue"
+                className="btn btn-primary-blue btn-lg mt-6"
                 onClick={() => {
                   setPlayGame(true);
                 }}
