@@ -283,7 +283,7 @@ export const CharSelect = () => {
               </div>
               <button
                 type="button"
-                className="disabled:filter-grayscale disabled:opacity-25 bg-#19A8F5 uppercase text-2xl font-semibold rounded px-8 py-2 text-white border-none mt-6 hover:brightness-110 transition-all duration-75 ease-in-out"
+                className="btn btn-primary-blue"
                 onClick={() => {
                   setPlayGame(true);
                 }}

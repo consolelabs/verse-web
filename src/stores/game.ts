@@ -19,6 +19,13 @@ import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
 import { Menu, Minigame } from "constants/game";
+import { utils } from "ethers";
+
+const DEFAULT_PLAYER = {
+  id: 0,
+  spine: "GhostNeko" as CharacterSpine,
+  animSuffix: "",
+};
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -57,11 +64,9 @@ const config: Phaser.Types.Core.GameConfig = {
 interface State {
   token?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
-  login: (
-    address: `0x${string}`,
-    signature: `0x${string}`,
-    message: string
-  ) => Promise<void>;
+  getSession: () => Promise<void>;
+  login: (signature: `0x${string}`, message: string) => Promise<void>;
+  logout: () => Promise<boolean>;
   account?: `0x${string}`;
 
   nfts?: NFT[];
@@ -112,18 +117,20 @@ export const useGameState = create<State>((set, get) => ({
       });
     }
   },
-  login: async (
-    address: `0x${string}`,
-    signature: `0x${string}`,
-    message: string
-  ) => {
+  getSession: async () => {
+    const sessionStr = localStorage.getItem("session");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      set({ token: session.token });
+    }
+  },
+  login: async (signature: `0x${string}`, message: string) => {
     const res = await fetch(`${API_BASE_URL}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        address,
         signature,
         message,
         is_new: true,
@@ -131,8 +138,28 @@ export const useGameState = create<State>((set, get) => ({
     });
     if (res.ok) {
       const data = await res.json();
-      set({ token: data.token, account: address });
+      set({ token: data.token, account: utils.getAddress(data.user.wallet) });
+      localStorage.setItem(
+        "session",
+        JSON.stringify({
+          token: data.token,
+          address: utils.getAddress(data.user.wallet),
+          chainId: 1,
+        })
+      );
     }
+  },
+  logout: async () => {
+    localStorage.removeItem("session");
+    set({
+      minigame: undefined,
+      token: undefined,
+      account: undefined,
+      nfts: undefined,
+      player: DEFAULT_PLAYER,
+      activeSceneKey: SceneKey.BOOT,
+    });
+    return true;
   },
   account: undefined,
 
@@ -178,11 +205,7 @@ export const useGameState = create<State>((set, get) => ({
   },
 
   // default char
-  player: {
-    id: 0,
-    spine: "GhostNeko",
-    animSuffix: "",
-  },
+  player: DEFAULT_PLAYER,
   setPlayer: (player) => set({ player }),
 
   init: () => set(() => ({ game: new Phaser.Game(config) })),
