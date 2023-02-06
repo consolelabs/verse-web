@@ -1,4 +1,5 @@
 import presetUno from "@unocss/preset-uno";
+import presetIcons from "@unocss/preset-icons";
 import transformerVariantGroup from "@unocss/transformer-variant-group";
 import { defineConfig } from "unocss";
 
@@ -12,11 +13,15 @@ const rows = Array(5)
   .join(" ");
 
 export const config = defineConfig({
-  presets: [presetUno()],
+  presets: [presetIcons(), presetUno()],
   transformers: [transformerVariantGroup()],
   shortcuts: {
-    "btn-control":
-      "w-24 h-24 bg-transparent border-none hover:(brightness-150 scale-110) transition-all disabled:(pointer-events-none brightness-50)",
+    btn: "shadow-md flex items-center z-10 disabled:filter-grayscale disabled:opacity-90 uppercase font-semibold rounded disabled:hover:brightness-100 hover:brightness-110 transition-all duration-75 ease-in-out",
+    "btn-primary-blue": "bg-#19A8F5 text-white",
+    "btn-primary-pink": "bg-#ef3fff text-white",
+    "btn-lg": "text-2xl px-8 py-2",
+    "btn-md": "text-lg px-6 py-1",
+    "btn-sm": "text-base px-4 py-1",
   },
   safelist: `${cols} ${rows}`.split(" "),
   theme: {

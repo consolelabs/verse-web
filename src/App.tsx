@@ -1,5 +1,5 @@
 import { WagmiConfig, createClient } from "wagmi";
-import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { ConnectKitProvider, getDefaultClient, SIWEProvider } from "connectkit";
 
 import { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
@@ -11,6 +11,36 @@ import { CharSelect } from "ui/hud/CharSelect";
 import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
 import { MinigameIframes } from "components/minigames/MinigameIframes";
+import { SiweMessage } from "siwe";
+
+const siweConfig = {
+  getNonce: async () => Date.now().toString(),
+  createMessage: ({ address, chainId, nonce }: any) =>
+    new SiweMessage({
+      version: "1",
+      domain: window.location.host,
+      uri: window.location.origin,
+      address,
+      chainId,
+      nonce,
+      statement: "Welcome to Pod Town Metaverse! Please sign in to enter verse",
+    }).prepareMessage(),
+  verifyMessage: async ({ message, signature }: any) => {
+    await useGameState.getState().login(signature, message);
+    return true;
+  },
+  getSession: async () => {
+    const sessionStr = localStorage.getItem("session");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      useGameState.setState({ token: session.token });
+      return session;
+    }
+    return null;
+  },
+  signOut: useGameState.getState().logout,
+  signOutOnNetworkChange: false,
+};
 
 const client = createClient(
   getDefaultClient({
@@ -19,7 +49,7 @@ const client = createClient(
 );
 
 const App = () => {
-  const { activeSceneKey, game, init } = useGameState();
+  const { activeSceneKey, game, init, getSession } = useGameState();
   const [fps, setFPS] = useState(0);
 
   const contentRender = useMemo(() => {
@@ -60,31 +90,37 @@ const App = () => {
   useEffect(() => {
     if (!game) {
       init();
+      getSession();
     }
   }, []);
 
   return (
     <WagmiConfig client={client}>
-      <ConnectKitProvider>
-        <div className="fixed top-0 left-0 w-full h-full bg-black" id="game" />
-        {game && (
-          <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
-            {Math.floor(fps)}
-          </div>
-        )}
-        {contentRender}
-        <Menu />
-        <Toaster
-          position="bottom-center"
-          toastOptions={{
-            style: {
-              background: "#151321",
-              color: "#FFFFFF",
-            },
-          }}
-        />
-        <MinigameIframes />
-      </ConnectKitProvider>
+      <SIWEProvider {...siweConfig}>
+        <ConnectKitProvider>
+          <div
+            className="fixed top-0 left-0 w-full h-full bg-black"
+            id="game"
+          />
+          {game && (
+            <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
+              {Math.floor(fps)}
+            </div>
+          )}
+          {contentRender}
+          <Menu />
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              style: {
+                background: "#151321",
+                color: "#FFFFFF",
+              },
+            }}
+          />
+          <MinigameIframes />
+        </ConnectKitProvider>
+      </SIWEProvider>
     </WagmiConfig>
   );
 };
