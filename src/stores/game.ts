@@ -33,7 +33,7 @@ const config: Phaser.Types.Core.GameConfig = {
   width: window.innerWidth,
   height: window.innerHeight,
   scale: {
-    mode: Phaser.Scale.ENVELOP,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
   },
   // Boot screen -> Load world & world assets -> Game
@@ -138,6 +138,7 @@ export const useGameState = create<State>((set, get) => ({
     });
     if (res.ok) {
       const data = await res.json();
+      console.log(data.user.wallet);
       set({ token: data.token, account: utils.getAddress(data.user.wallet) });
       localStorage.setItem(
         "session",

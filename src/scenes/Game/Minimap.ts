@@ -20,6 +20,7 @@ export default class Minimap extends Phaser.Scene {
     w: 0,
     h: 0,
   };
+  mask?: Phaser.Display.Masks.GeometryMask;
   charShape?: Phaser.GameObjects.Graphics;
   player?: Player;
 
@@ -42,6 +43,7 @@ export default class Minimap extends Phaser.Scene {
   }) {
     this.player = player;
     this.cameras.main.setBackgroundColor(0x000000);
+
     this.mapFrame = {
       x: MAP_FRAME_SIZE / 2 + PADDING,
       y: window.innerHeight - (MAP_FRAME_SIZE / 2 + PADDING),
@@ -55,6 +57,53 @@ export default class Minimap extends Phaser.Scene {
       w,
     };
 
+    this.renderTexture = this.add.renderTexture(0, 0, this.map.w, this.map.h);
+    this.renderTexture.setScale(SCALE);
+    this.renderTexture.draw(layers);
+
+    // Create a new mask instance
+    this.mask = this.createMask();
+
+    // camera
+    this.cameras.main.setMask(this.mask);
+    this.cameras.main.setViewport(
+      PADDING,
+      window.innerHeight - (MAP_FRAME_SIZE + PADDING),
+      MAP_FRAME_SIZE,
+      MAP_FRAME_SIZE
+    );
+
+    this.charShape = this.add.graphics({});
+    this.charShape.fillStyle(0xff0000);
+    this.charShape.fillRoundedRect(0, 0, 4, 4, 2);
+    this.charShape.setDepth(9999);
+
+    this.cameras.main.startFollow(this.charShape);
+
+    // Handlers for on-resize
+    window.addEventListener("resize", () => {
+      // Destroy previous mask instance
+      this.mask?.destroy();
+
+      // Update the new frame/map position
+      this.mapFrame.y = window.innerHeight - (MAP_FRAME_SIZE / 2 + PADDING);
+      this.map.y = window.innerHeight - MAP_FRAME_SIZE * 2;
+
+      // Create a new mask instance
+      this.mask = this.createMask();
+
+      // Update the camera mask & viewport
+      this.cameras.main.setMask(this.mask);
+      this.cameras.main.setViewport(
+        PADDING,
+        window.innerHeight - (MAP_FRAME_SIZE + PADDING),
+        MAP_FRAME_SIZE,
+        MAP_FRAME_SIZE
+      );
+    });
+  }
+
+  createMask() {
     const shape = this.make.graphics({});
     shape.fillStyle(0xffffff);
     shape.arc(
@@ -66,11 +115,6 @@ export default class Minimap extends Phaser.Scene {
     );
     shape.fillPath();
     const mask = shape.createGeometryMask();
-
-    this.renderTexture = this.add.renderTexture(0, 0, this.map.w, this.map.h);
-    this.renderTexture.setScale(SCALE);
-
-    this.renderTexture.draw(layers);
 
     // decorations
     const ring1 = this.add.graphics();
@@ -91,21 +135,7 @@ export default class Minimap extends Phaser.Scene {
     );
     ring2.setScrollFactor(0);
 
-    // camera
-    this.cameras.main.setMask(mask);
-    this.cameras.main.setViewport(
-      PADDING,
-      window.innerHeight - (MAP_FRAME_SIZE + PADDING),
-      MAP_FRAME_SIZE,
-      MAP_FRAME_SIZE
-    );
-
-    this.charShape = this.add.graphics({});
-    this.charShape.fillStyle(0xff0000);
-    this.charShape.fillRoundedRect(0, 0, 4, 4, 2);
-    this.charShape.setDepth(9999);
-
-    this.cameras.main.startFollow(this.charShape);
+    return mask;
   }
 
   update() {
