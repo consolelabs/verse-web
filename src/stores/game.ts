@@ -121,7 +121,7 @@ export const useGameState = create<State>((set, get) => ({
     const sessionStr = localStorage.getItem("session");
     if (sessionStr) {
       const session = JSON.parse(sessionStr);
-      set({ token: session.token });
+      set({ token: session.token, account: session.address });
     }
   },
   login: async (signature: `0x${string}`, message: string) => {
