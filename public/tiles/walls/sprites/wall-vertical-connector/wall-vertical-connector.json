@@ -1,7 +1,7 @@
 {
 	"textures": [
 		{
-			"image": "wall.png",
+			"image": "walls.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 82,
@@ -10,7 +10,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "wall-vertical-connector.png",
+					"filename": "City big wall connector vertical_01.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:9dbdca1d90ed38802169bbe2bc010ccb:65314b27cac57f073ea2ff8618404670:fac4f515bf266e4f4ed746fa4fe7351a$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d4f207df9f3895fda554175036fe6450:5332af0d9b821a87f1f0a6de130feb91:5c2f5c663ae0680c530bc1f885567038$"
 	}
 }
