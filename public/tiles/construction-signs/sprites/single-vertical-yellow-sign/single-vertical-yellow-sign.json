@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "walls.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 32,
+				"h": 96
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "StreetSign_5_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 96
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 96
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 96
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:21f65e6f5f90117e3a31d4e9360608cd:6e14869c7449d5382e638336c01ee21c:5c2f5c663ae0680c530bc1f885567038$"
+	}
+}
