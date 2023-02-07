@@ -12,6 +12,7 @@ import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
 import { MinigameIframes } from "components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
+import clsx from "clsx";
 
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
@@ -49,7 +50,7 @@ const client = createClient(
 );
 
 const App = () => {
-  const { activeSceneKey, game, init, getSession } = useGameState();
+  const { activeSceneKey, game, showLoader, init, getSession } = useGameState();
   const [fps, setFPS] = useState(0);
 
   const contentRender = useMemo(() => {
@@ -117,6 +118,12 @@ const App = () => {
                 color: "#FFFFFF",
               },
             }}
+          />
+          <div
+            className={clsx(
+              "absolute bottom-0 right-0 mr-8 mb-8 i-svg-spinners-tadpole w-12 h-12 text-white transition-opacity",
+              { "opacity-100": showLoader, "opacity-0": !showLoader }
+            )}
           />
           <MinigameIframes />
         </ConnectKitProvider>

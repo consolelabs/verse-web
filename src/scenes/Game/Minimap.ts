@@ -2,9 +2,9 @@ import { Player } from "characters/player";
 import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
 
-const SCALE = 0.05;
+const SCALE = 0.1;
 const PADDING = 20;
-const MAP_FRAME_SIZE = 160;
+const MAP_FRAME_SIZE = 200;
 
 export default class Minimap extends Phaser.Scene {
   renderTexture?: Phaser.GameObjects.RenderTexture;
@@ -79,6 +79,7 @@ export default class Minimap extends Phaser.Scene {
     this.charShape.setDepth(9999);
 
     this.cameras.main.startFollow(this.charShape);
+    this.cameras.main.roundPixels = true;
 
     // Handlers for on-resize
     window.addEventListener("resize", () => {

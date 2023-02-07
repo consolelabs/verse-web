@@ -101,6 +101,9 @@ interface State {
   minigame?: Minigame;
   startMinigame: (game: Minigame) => void;
   stopMinigame: () => void;
+
+  showLoader?: boolean;
+  setShowLoader: (v: boolean) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -246,4 +249,7 @@ export const useGameState = create<State>((set, get) => ({
 
     set(() => ({ minigame: undefined }));
   },
+
+  showLoader: false,
+  setShowLoader: (showLoader: boolean) => set(() => ({ showLoader })),
 }));

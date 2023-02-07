@@ -33,8 +33,14 @@ const ghostNekoItem: NFT = {
 
 export const CharSelect = () => {
   const [playGame, setPlayGame] = useState(false);
-  const { nfts, getActiveScene, setActiveSceneKey, player, setPlayer } =
-    useGameState();
+  const {
+    nfts,
+    getActiveScene,
+    setActiveSceneKey,
+    player,
+    setPlayer,
+    setShowLoader,
+  } = useGameState();
   const [previewChar, setPreviewChar] = useState<NFT>(ghostNekoItem);
 
   const loadCharacter = (item: NFT, animSuffix: string) => {
@@ -286,6 +292,7 @@ export const CharSelect = () => {
                 className="btn btn-primary-blue btn-lg mt-6"
                 onClick={() => {
                   setPlayGame(true);
+                  setShowLoader(true);
                 }}
               >
                 Play Game
