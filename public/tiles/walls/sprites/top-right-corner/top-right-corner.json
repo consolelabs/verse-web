@@ -1,7 +1,7 @@
 {
 	"textures": [
 		{
-			"image": "wall.png",
+			"image": "walls.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 146,
@@ -10,7 +10,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "top-right-corner.png",
+					"filename": "City big wall corner 1_02 copy.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:8cacd3db26ce713de3576dd2c75cba0a:5ce26f99470ddb7e8a93bea4037e2d15:fac4f515bf266e4f4ed746fa4fe7351a$"
+		"smartupdate": "$TexturePacker:SmartUpdate:acd0f4f049928e06d8c433d31329759c:904a67781505184634b87272d35d7b45:5c2f5c663ae0680c530bc1f885567038$"
 	}
 }

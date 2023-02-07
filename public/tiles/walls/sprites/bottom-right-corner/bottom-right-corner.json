@@ -1,7 +1,7 @@
 {
 	"textures": [
 		{
-			"image": "wall.png",
+			"image": "walls.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 146,
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:07404b6ab6f35119f8f80fb483cc19bd:fef3428db40a95443cddedeccc52dfaf:fac4f515bf266e4f4ed746fa4fe7351a$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d8df8d469a160bdf6d7e1e66b1252ca3:a2c5312b126033a0f0387415c998c254:5c2f5c663ae0680c530bc1f885567038$"
 	}
 }

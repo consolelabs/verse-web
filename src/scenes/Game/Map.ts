@@ -339,9 +339,12 @@ export default class GameMap extends Phaser.Scene {
       const tilesets =
         // @ts-ignore
         layer.properties.find((p) => p.name === "tilesets")?.value ?? "";
-      createdLayers.push(
-        this.map.createLayer(layer.name, tilesets.split(","), 0, 0)
-      );
+
+      if (tilesets) {
+        createdLayers.push(
+          this.map.createLayer(layer.name, tilesets.split(","), 0, 0)
+        );
+      }
 
       if (!isStatic) {
         layer.data.forEach((row, y) => {
