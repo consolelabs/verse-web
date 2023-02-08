@@ -47,6 +47,7 @@ export default class GameInteraction extends Phaser.Scene {
         .play("j-control-press")
         .setDisplaySize(32, 32),
       text: this.add.text(0, 0, interactionData.text, {
+        fontFamily: "Chakra Petch",
         fontSize: "1.25rem",
         color: "white",
       }),

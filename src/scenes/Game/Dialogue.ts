@@ -78,6 +78,7 @@ export default class GameDialogue extends Phaser.Scene {
         )
         .setStrokeStyle(2, COLOR_SECONDARY),
       text: this.add.text(0, 0, this.dialogue.character.name, {
+        fontFamily: "Chakra Petch",
         fontSize: "1.125rem",
         color: "white",
       }),
@@ -117,6 +118,7 @@ export default class GameDialogue extends Phaser.Scene {
       text: this.add.existing(
         new BBCodeText(this, 0, 0, "", {
           fixedWidth: window.innerWidth / 3,
+          fontFamily: "Chakra Petch",
           fontSize: "20px",
           wrap: {
             mode: "word",

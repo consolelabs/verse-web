@@ -27,8 +27,8 @@
     "type": "dialogue",
     "value": 1010000,
     "character": {
-      "id": 1,
-      "spine": "Neko"
+      "id": 25,
+      "spine": "Rabby"
     }
   }
 ]
