@@ -28,7 +28,8 @@
     "value": 1010000,
     "character": {
       "id": 25,
-      "spine": "Rabby"
+      "spine": "Rabby",
+      "animSuffix": 1
     }
   }
 ]

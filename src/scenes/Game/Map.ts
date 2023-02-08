@@ -187,6 +187,9 @@ export default class GameMap extends Phaser.Scene {
               scene: this,
               id: properties.character.id,
               spine: properties.character.spine,
+              animSuffix: properties.character.animSuffix
+                ? `_${properties.character.animSuffix}`
+                : "",
               spineConfig: {
                 x,
                 y,
