@@ -120,17 +120,13 @@ export const CharSelect = () => {
   useEffect(() => {
     if (playGame && player) {
       const activeScene = getActiveScene();
-      activeScene?.sound
-        .add("start-game-audio", { volume: 0.5 })
-        .once(Phaser.Sound.Events.COMPLETE, () => {
-          activeScene?.cameras.main
-            .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-              activeScene.scene.start(SceneKey.CONFIG_LOADER);
-              setActiveSceneKey(SceneKey.BLANK);
-            })
-            .fadeOut(200);
+      activeScene?.sound.add("start-game-audio", { volume: 0.5 }).play();
+      activeScene?.cameras.main
+        .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+          activeScene.scene.start(SceneKey.CONFIG_LOADER);
+          setActiveSceneKey(SceneKey.BLANK);
         })
-        .play();
+        .fadeOut(200);
     }
   }, [playGame]);
 
