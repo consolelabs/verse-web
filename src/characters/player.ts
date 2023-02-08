@@ -32,7 +32,7 @@ export class Player extends Phaser.GameObjects.GameObject {
   }
 
   destroy(...args: any[]) {
-    this.character?.instance?.destroy(...args);
+    this.character?.destroy(...args);
     super.destroy(...args);
   }
 

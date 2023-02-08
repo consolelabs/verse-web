@@ -94,74 +94,78 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     this.loadPromise = new Promise((r) => {
       this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
-        // @ts-ignore Ignore, we'll add the Matter physics later
-        this.instance = this.scene.make.spine({
-          ...spineConfig,
-          key: `${this.key}-character`,
-          skinName: "char_default",
-          animationName: getBasicAnimation("idle", "front", this.animSuffix),
-          loop: true,
-        });
+        if (this.scene) {
+          // @ts-ignore Ignore, we'll add the Matter physics later
+          this.instance = this.scene.make.spine({
+            ...spineConfig,
+            key: `${this.key}-character`,
+            skinName: "char_default",
+            animationName: getBasicAnimation("idle", "front", this.animSuffix),
+            loop: true,
+          });
 
-        if (this.instance) {
-          this.availableAnims = this.instance.getAnimationList() as Array<Anim>;
+          if (this.instance) {
+            this.availableAnims =
+              this.instance.getAnimationList() as Array<Anim>;
 
-          const char = this.instance.findSkin("char");
-          const clothes = this.instance.findSkin("clothes");
-          if (char && clothes) {
-            char.addSkin(clothes);
+            const char = this.instance.findSkin("char");
+            const clothes = this.instance.findSkin("clothes");
+            if (char && clothes) {
+              char.addSkin(clothes);
 
-            this.instance.setSkin(char);
+              this.instance.setSkin(char);
+            }
+
+            if (this.follower) {
+              this.follower.followee = this;
+            }
+
+            this.instance.depth = (spineConfig?.y as number) || 0;
+
+            if (spineConfig?.scale && typeof spineConfig?.scale === "number") {
+              const trueWidth = this.instance.width * spineConfig.scale;
+              const trueHeight = this.instance.height * spineConfig.scale;
+              this.instance.width = trueWidth;
+              this.instance.height = trueHeight / 5;
+            }
+
+            this.maximumDistanceToFollower = 60;
+            if (follower?.instance) {
+              this.instance.x = follower.instance.x;
+              this.instance.y =
+                follower.instance.y - this.maximumDistanceToFollower;
+              this.instance.depth = this.instance.y / TILE_SIZE;
+            }
+
+            // Create a shadow
+            this.shadow = this.scene.add.image(
+              this.instance.x,
+              this.instance.y,
+              "char-shadow"
+            );
+            this.shadow.setScale(0.175);
+            this.shadow.setAlpha(0.5);
+            r(this.instance);
           }
-
-          if (this.follower) {
-            this.follower.followee = this;
-          }
-
-          this.instance.depth = (spineConfig?.y as number) || 0;
-
-          if (spineConfig?.scale && typeof spineConfig?.scale === "number") {
-            const trueWidth = this.instance.width * spineConfig.scale;
-            const trueHeight = this.instance.height * spineConfig.scale;
-            this.instance.width = trueWidth;
-            this.instance.height = trueHeight / 5;
-          }
-
-          this.maximumDistanceToFollower = 60;
-          if (follower?.instance) {
-            this.instance.x = follower.instance.x;
-            this.instance.y =
-              follower.instance.y - this.maximumDistanceToFollower;
-            this.instance.depth = this.instance.y / TILE_SIZE;
-          }
-
-          // Create a shadow
-          this.shadow = this.scene.add.image(
-            this.instance.x,
-            this.instance.y,
-            "char-shadow"
-          );
-          this.shadow.setScale(0.175);
-          this.shadow.setAlpha(0.5);
-          r(this.instance);
         }
       });
 
       if (texture) {
-        this.scene.load.image(`${this.key}.png`, texture);
+        this.scene?.load.image(`${this.key}.png`, texture);
       }
 
-      this.scene.load.spine(
+      this.scene?.load.spine(
         `${this.key}-character`,
         `/spines/${spine}.json`,
         atlas
       );
 
-      this.scene.load.start();
+      this.scene?.load.start();
     });
   }
 
   destroy(...args: any) {
+    this.instance?.destroy(...args);
     this.shadow?.destroy(...args);
     super.destroy(...args);
   }
