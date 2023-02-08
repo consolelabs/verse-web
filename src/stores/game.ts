@@ -141,7 +141,6 @@ export const useGameState = create<State>((set, get) => ({
     });
     if (res.ok) {
       const data = await res.json();
-      console.log(data.user.wallet);
       set({ token: data.token, account: utils.getAddress(data.user.wallet) });
       localStorage.setItem(
         "session",
@@ -180,7 +179,7 @@ export const useGameState = create<State>((set, get) => ({
             get().account
           }&page=${page}`
         ).then((res) => res.json());
-        const nftThisBatch = data.data;
+        const nftThisBatch = data.data ?? [];
 
         nfts.push(...nftThisBatch);
 
