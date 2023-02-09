@@ -4,7 +4,7 @@ import { GridButtons } from "../GridButtons";
 import { Menu as MenuKey } from "constants/game";
 
 export const MainMenu = () => {
-  const { closeMenu, getActiveScene, stopScenes, openMenu } = useGameState();
+  const { closeMenu, transitionTo, openMenu } = useGameState();
 
   return (
     <GridButtons cols={3} rows={3} gap="md">
@@ -12,25 +12,12 @@ export const MainMenu = () => {
         {
           img: "character.png",
           text: "Character",
-          onClick: () => {
-            const activeScene = getActiveScene();
-
-            if (activeScene) {
-              // Fade out & prepare for scene transition
-              activeScene.cameras.main.fadeOut(500, 0, 0, 0);
-              activeScene.cameras.main.once(
-                Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-                () => {
-                  stopScenes(
-                    SceneKey.GAME_INTERACTION,
-                    SceneKey.GAME,
-                    SceneKey.MINIMAP
-                  );
-                  activeScene.scene.start(SceneKey.CHAR_SELECT);
-                }
-              );
-            }
-          },
+          onClick: () =>
+            transitionTo(SceneKey.CHAR_SELECT, SceneKey.BLANK, [
+              SceneKey.GAME_INTERACTION,
+              SceneKey.GAME,
+              SceneKey.MINIMAP,
+            ]),
         },
         {
           img: "pod.png",
@@ -65,7 +52,16 @@ export const MainMenu = () => {
         { img: "achievement.png", text: "Achievement" },
         { img: "market.png", text: "Market" },
         { img: "airdrop.png", text: "Airdrop" },
-        { img: "quit.png", text: "Save & quit" },
+        {
+          img: "quit.png",
+          text: "Quit",
+          onClick: () =>
+            transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+              SceneKey.GAME_INTERACTION,
+              SceneKey.GAME,
+              SceneKey.MINIMAP,
+            ]),
+        },
       ].map((b) => {
         return (
           <GridButtons.Button

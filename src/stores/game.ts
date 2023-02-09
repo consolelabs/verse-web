@@ -104,9 +104,45 @@ interface State {
 
   showLoader?: boolean;
   setShowLoader: (v: boolean) => void;
+
+  transitionTo: (
+    key: SceneKey,
+    hud: SceneKey,
+    scenesToStop?: Array<SceneKey>
+  ) => Promise<void>;
+
+  playSound: (
+    soundKey: string,
+    config?: Phaser.Types.Sound.SoundConfig
+  ) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
+  playSound: (soundKey, config) => {
+    const { getActiveScene } = get();
+    const activeScene = getActiveScene();
+    const sound = activeScene?.game.sound.get(soundKey);
+    if (sound?.isPlaying) return;
+    activeScene?.sound.add(soundKey, config).play();
+  },
+  transitionTo: (scene, hud, scenesToStop = []) => {
+    const { getActiveScene, stopScenes, setActiveSceneKey } = get();
+    const activeScene = getActiveScene();
+    if (activeScene) {
+      return new Promise((r) => {
+        // Fade out & prepare for scene transition
+        activeScene.cameras.main
+          .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+            stopScenes(...scenesToStop);
+            activeScene.scene.start(scene);
+            setActiveSceneKey(hud);
+            r();
+          })
+          .fadeOut(500, 0, 0, 0);
+      });
+    }
+    return Promise.resolve();
+  },
   updateGamePoints: async (d) => {
     const token = get().token;
     if (token) {
@@ -153,15 +189,22 @@ export const useGameState = create<State>((set, get) => ({
     }
   },
   logout: async () => {
+    const { transitionTo } = get();
     localStorage.removeItem("session");
-    set({
-      minigame: undefined,
-      token: undefined,
-      account: undefined,
-      nfts: undefined,
-      player: DEFAULT_PLAYER,
-      activeSceneKey: SceneKey.BOOT,
-    });
+    transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+      SceneKey.GAME_INTERACTION,
+      SceneKey.GAME,
+      SceneKey.MINIMAP,
+    ]).then(() =>
+      set({
+        minigame: undefined,
+        token: undefined,
+        account: undefined,
+        nfts: undefined,
+        player: DEFAULT_PLAYER,
+        activeSceneKey: SceneKey.BOOT,
+      })
+    );
     return true;
   },
   account: undefined,

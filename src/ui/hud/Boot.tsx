@@ -5,19 +5,13 @@ import { ConnectButton } from "ui/components/ConnectButton";
 import { useModal } from "connectkit";
 
 export const Boot = () => {
-  const { getNFTs, getActiveScene, setActiveSceneKey, token } = useGameState();
+  const { transitionTo, getNFTs, token } = useGameState();
   const { setOpen } = useModal();
   const account = useAccount();
 
   const startGame = () => {
-    const activeScene = getActiveScene();
     getNFTs();
-    activeScene?.cameras.main
-      .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-        activeScene.scene.start(SceneKey.INTRO);
-        setActiveSceneKey(SceneKey.INTRO);
-      })
-      .fadeOut(200);
+    transitionTo(SceneKey.INTRO, SceneKey.INTRO);
 
     // Debug for POD, do not delete
     // activeScene?.cameras.main

@@ -3,6 +3,9 @@ import { TILE_SIZE } from "../constants";
 import { AnimationDirection, CharacterSpine } from "../types/character";
 import { Character } from "./character";
 
+const SPEED_WALK = 7;
+const SPEED_RUN = 8;
+
 type Config = {
   scene: Phaser.Scene;
   id: number;
@@ -76,7 +79,7 @@ export class Player extends Phaser.GameObjects.GameObject {
     const char = this.character;
     const directions: AnimationDirection[] = [];
 
-    let speed = 2;
+    let speed = SPEED_WALK;
 
     if (
       this.cursors.up.isDown ||
@@ -93,7 +96,7 @@ export class Player extends Phaser.GameObjects.GameObject {
       let animDirection: AnimationDirection = "front";
 
       if (this.keys.Shift.isDown) {
-        speed = 7;
+        speed = SPEED_RUN;
       }
 
       if (this.config.isPreview) {
