@@ -94,7 +94,7 @@ export default class Minimap extends Phaser.Scene {
       this.mask = this.createMask();
 
       // Update the camera mask & viewport
-      this.cameras.main.setMask(this.mask);
+      this.cameras.main?.setMask(this.mask);
       this.cameras.main.setViewport(
         PADDING,
         window.innerHeight - (MAP_FRAME_SIZE + PADDING),

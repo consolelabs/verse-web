@@ -1,4 +1,4 @@
-import { WagmiConfig, createClient } from "wagmi";
+import { WagmiConfig, createClient, useAccount } from "wagmi";
 import { ConnectKitProvider, getDefaultClient, SIWEProvider } from "connectkit";
 
 import { useEffect, useMemo, useState } from "react";
@@ -50,8 +50,10 @@ const client = createClient(
 );
 
 const App = () => {
-  const { activeSceneKey, game, showLoader, init, getSession } = useGameState();
+  const { transitionTo, activeSceneKey, game, showLoader, init, getSession } =
+    useGameState();
   const [fps, setFPS] = useState(0);
+  const { isConnected } = useAccount();
 
   const contentRender = useMemo(() => {
     switch (activeSceneKey) {
@@ -95,6 +97,16 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!isConnected && activeSceneKey !== SceneKey.BOOT) {
+      transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+        SceneKey.GAME_INTERACTION,
+        SceneKey.GAME,
+        SceneKey.MINIMAP,
+      ]);
+    }
+  }, [isConnected]);
+
   return (
     <WagmiConfig client={client}>
       <SIWEProvider {...siweConfig}>
@@ -122,7 +134,10 @@ const App = () => {
           <div
             className={clsx(
               "absolute bottom-0 right-0 mr-8 mb-8 i-svg-spinners-tadpole w-12 h-12 text-white transition-opacity",
-              { "opacity-100": showLoader, "opacity-0": !showLoader }
+              {
+                "opacity-100": showLoader,
+                "opacity-0 pointer-events-none": !showLoader,
+              }
             )}
           />
           <MinigameIframes />
