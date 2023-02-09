@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.1.8",
+    "@sentry/vite-plugin": "^0.4.0",
     "@types/node": "^18.11.18",
     "@types/postmate": "^1.5.2",
     "@types/react": "^18.0.26",
