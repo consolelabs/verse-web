@@ -28,6 +28,8 @@
   "dependencies": {
     "@fontsource/chakra-petch": "^4.5.9",
     "@iconify-json/svg-spinners": "^1.1.0",
+    "@sentry/react": "^7.36.0",
+    "@sentry/tracing": "^7.36.0",
     "@unocss/preset-uno": "^0.48.3",
     "@unocss/transformer-variant-group": "^0.48.3",
     "@unocss/vite": "^0.48.3",
