@@ -22,10 +22,14 @@ import { Menu, Minigame } from "constants/game";
 import { utils } from "ethers";
 import * as Sentry from "@sentry/react";
 
-const DEFAULT_PLAYER = {
+export const DEFAULT_PLAYER = {
   id: 0,
   spine: "GhostNeko" as CharacterSpine,
   animSuffix: "",
+  urls: {
+    atlasURL: "/characters/ghost-neko/char.atlas",
+    textureURL: "",
+  },
 };
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -85,12 +89,20 @@ interface State {
     animSuffix: string;
     spine: CharacterSpine;
     id: number;
+    urls: {
+      atlasURL: string;
+      textureURL: string;
+    };
   };
   setPlayer: (p: {
     collection?: string;
     animSuffix: string;
     spine: CharacterSpine;
     id: number;
+    urls: {
+      atlasURL: string;
+      textureURL: string;
+    };
   }) => void;
 
   stopScenes: (...scenes: Array<SceneKey>) => void;

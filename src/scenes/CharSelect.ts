@@ -1,7 +1,6 @@
 import { Player } from "characters/player";
 import Phaser from "phaser";
 import { useGameState } from "stores/game";
-import { CharacterSpine } from "types/character";
 import { SceneKey } from "../constants/scenes";
 
 export default class CharSelect extends Phaser.Scene {
@@ -31,12 +30,9 @@ export default class CharSelect extends Phaser.Scene {
     this.load.image("char-shadow", "/characters/shadow.png");
   }
 
-  loadPlayer(
-    spine: CharacterSpine = "Neko",
-    id = 1,
-    animSuffix = "",
-    collection = ""
-  ) {
+  loadPlayer() {
+    const { player } = useGameState.getState();
+    const { spine, id, animSuffix, collection, urls } = player;
     this.cameras.main.fadeIn(250);
     // Destroy existing player before creating new one
     if (this.player) {
@@ -55,6 +51,7 @@ export default class CharSelect extends Phaser.Scene {
       },
       animSuffix,
       collection,
+      urls,
     });
 
     this.player.character?.loadPromise.then((instance) => {
@@ -68,7 +65,7 @@ export default class CharSelect extends Phaser.Scene {
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () =>
       useGameState.setState({ activeSceneKey: SceneKey.CHAR_SELECT })
     );
-    this.loadPlayer("GhostNeko", 0, "");
+    this.loadPlayer();
     this.cameras.main.fadeIn(250);
     this.light = this.add
       .image(

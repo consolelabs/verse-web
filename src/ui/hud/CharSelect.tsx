@@ -1,5 +1,5 @@
 import { SceneKey } from "constants/scenes";
-import { useGameState } from "stores/game";
+import { DEFAULT_PLAYER, useGameState } from "stores/game";
 import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import { NFT } from "types/nfts";
@@ -44,7 +44,14 @@ export const CharSelect = () => {
   } = useGameState();
   const [previewChar, setPreviewChar] = useState<NFT>(ghostNekoItem);
 
-  const loadCharacter = (item: NFT, animSuffix: string) => {
+  const loadCharacter = (
+    item: NFT,
+    animSuffix: string,
+    urls: {
+      atlasURL: string;
+      textureURL: string;
+    }
+  ) => {
     const id = Number(item.token_id);
     const spine = item.type;
     const collection = item.token_address;
@@ -54,41 +61,46 @@ export const CharSelect = () => {
       id,
       spine,
       collection,
+      urls,
     });
     setPreviewChar(item);
-    (getActiveScene() as CharSelectScene).loadPlayer(
-      spine,
-      id,
-      animSuffix,
-      collection
-    );
+    (getActiveScene() as CharSelectScene).loadPlayer();
   };
 
   const selectCharToPreview = (item: NFT) => {
     if (item.type === "GhostNeko") {
-      loadCharacter(item, "");
-    } else if (item.type === "TV-head") {
-      loadCharacter(
-        {
-          ...item,
-          name: "TV-Head",
-          description:
-            "Another default character of the Verse, but this time players get some degree of personalization with the NFT being the TV screen.",
-        },
-        ""
-      );
+      loadCharacter(item, "", DEFAULT_PLAYER.urls);
     } else {
       fetch(
         `${API_POD_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`
       )
-        .then((res) => (res.ok ? res.json() : new Error()))
+        .then((res) =>
+          res.ok ? res.json() : new Error("Cound't load nfts of user")
+        )
         .then((nftDetail) => {
-          const { anim_type } = nftDetail;
+          const { anim_type, character_type, asset, image } = nftDetail;
+          const webAsset = asset.find((a: any) => a.type === "Web");
           const animSuffix = anim_type ? `_${anim_type}` : "";
+          const isTVhead = character_type.toLowerCase() === "tv-head";
 
-          loadCharacter(item, animSuffix);
-        })
-        .catch(() => null);
+          loadCharacter(
+            {
+              ...item,
+              ...(isTVhead
+                ? {
+                    name: "TV-Head",
+                    description:
+                      "Another default character of the Verse, but this time players get some degree of personalization with the NFT being the TV screen.",
+                  }
+                : {}),
+            },
+            animSuffix,
+            {
+              atlasURL: webAsset.atlas,
+              textureURL: isTVhead ? image : webAsset.img,
+            }
+          );
+        });
     }
   };
 

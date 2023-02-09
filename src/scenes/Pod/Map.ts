@@ -133,6 +133,7 @@ export default class PodMap extends Phaser.Scene {
         },
         animSuffix: player.animSuffix,
         collection: player.collection,
+        urls: player.urls,
       });
 
       this.player.character?.loadPromise.then((instance) => {
