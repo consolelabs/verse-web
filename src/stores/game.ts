@@ -21,6 +21,7 @@ import Minimap from "scenes/Game/Minimap";
 import { Menu, Minigame } from "constants/game";
 import { utils } from "ethers";
 import * as Sentry from "@sentry/react";
+import type { Options as WebsocketOptions } from "react-use-websocket";
 
 export const DEFAULT_PLAYER = {
   id: 0,
@@ -67,6 +68,7 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 interface State {
+  websocketOptions: WebsocketOptions;
   token?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
   getSession: () => Promise<void>;
@@ -155,6 +157,10 @@ export const useGameState = create<State>((set, get) => ({
       });
     }
     return Promise.resolve();
+  },
+  websocketOptions: {
+    onOpen: () => console.log("[Verse] Websocket connection established"),
+    onError: () => console.error("[Verse] Websocket error"),
   },
   updateGamePoints: async (d) => {
     const token = get().token;

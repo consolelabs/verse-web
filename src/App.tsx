@@ -14,6 +14,9 @@ import { MinigameIframes } from "components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
 import clsx from "clsx";
 
+import useWebSocket from "react-use-websocket";
+import { API_WEBSOCKET_URL } from "envs";
+
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
   createMessage: ({ address, chainId, nonce }: any) =>
@@ -50,8 +53,16 @@ const client = createClient(
 );
 
 const App = () => {
-  const { transitionTo, activeSceneKey, game, showLoader, init, getSession } =
-    useGameState();
+  const {
+    transitionTo,
+    activeSceneKey,
+    game,
+    showLoader,
+    init,
+    getSession,
+    websocketOptions,
+  } = useGameState();
+  useWebSocket(API_WEBSOCKET_URL, websocketOptions);
   const [fps, setFPS] = useState(0);
   const { isConnected } = useAccount();
 
