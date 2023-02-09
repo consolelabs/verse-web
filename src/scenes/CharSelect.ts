@@ -86,6 +86,8 @@ export default class CharSelect extends Phaser.Scene {
       )
     );
     this.bg.setX(0 - (this.bg.displayWidth - this.cameras.main.width) / 2);
+
+    useGameState.setState({ showLoader: false });
   }
 
   update() {

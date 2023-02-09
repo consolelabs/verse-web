@@ -33,7 +33,7 @@ export default class GameDialogue extends Phaser.Scene {
 
   preload() {
     this.input.keyboard.on("keyup", (e: KeyboardEvent) => {
-      if (e.key === "j" && this.showing) {
+      if (e.key.toLowerCase() === "j" && this.showing) {
         if (this.textBox?.isTyping) {
           this.textBox.stop(true);
         } else {

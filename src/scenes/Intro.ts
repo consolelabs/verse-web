@@ -1,5 +1,6 @@
 import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
+import { useGameState } from "stores/game";
 
 export default class Intro extends Phaser.Scene {
   container!: Phaser.GameObjects.Container;
@@ -79,6 +80,7 @@ export default class Intro extends Phaser.Scene {
                   loop: true,
                 });
                 this.scene.start(SceneKey.CHAR_SELECT);
+                useGameState.setState({ showLoader: true });
               });
           });
         });
