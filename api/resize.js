@@ -1,3 +1,4 @@
+/* this api is used to resize the image that will be used in TV-Head's screen */
 /* eslint-disable no-undef */
 import sharp from "sharp";
 import fetch from "isomorphic-unfetch";

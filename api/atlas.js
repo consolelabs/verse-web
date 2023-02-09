@@ -1,3 +1,4 @@
+/* this api is used to rewrite the first line of the atlas file to be scoped to spine/collection/id */
 /* eslint-disable no-undef */
 import { Buffer } from "node:buffer";
 import fetch from "isomorphic-unfetch";
@@ -24,6 +25,7 @@ export default async function handler(req, res) {
     );
   }
 
+  // rewrite
   text = text.replace(`${spine}.png`, `${spine}/${collection}/${id}.png`);
   const buffer = Buffer.from(text);
 
