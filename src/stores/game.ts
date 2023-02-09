@@ -20,6 +20,7 @@ import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
 import { Menu, Minigame } from "constants/game";
 import { utils } from "ethers";
+import * as Sentry from "@sentry/react";
 
 const DEFAULT_PLAYER = {
   id: 0,
@@ -161,6 +162,7 @@ export const useGameState = create<State>((set, get) => ({
     if (sessionStr) {
       const session = JSON.parse(sessionStr);
       set({ token: session.token, account: session.address });
+      Sentry.setUser({ id: session.address });
     }
   },
   login: async (signature: `0x${string}`, message: string) => {
@@ -177,18 +179,21 @@ export const useGameState = create<State>((set, get) => ({
     });
     if (res.ok) {
       const data = await res.json();
-      set({ token: data.token, account: utils.getAddress(data.user.wallet) });
+      const address = utils.getAddress(data.user.wallet);
+      set({ token: data.token, account: address });
       localStorage.setItem(
         "session",
         JSON.stringify({
           token: data.token,
-          address: utils.getAddress(data.user.wallet),
+          address,
           chainId: 1,
         })
       );
+      Sentry.setUser({ id: address });
     }
   },
   logout: async () => {
+    Sentry.setUser(null);
     const { transitionTo } = get();
     localStorage.removeItem("session");
     transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
