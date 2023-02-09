@@ -4,11 +4,11 @@ import sharp from "sharp";
 import fetch from "isomorphic-unfetch";
 
 export default async function handler(req, res) {
-  const id = req.query.id;
-  const collection = req.query.collection;
+  const textureURL = decodeURI(req.query.textureURL);
 
   const image = await fetch(
-    `${process.env.VITE_TV_HEAD_IMAGE_PATH}/${collection}/${id}`
+    textureURL
+    // `${process.env.VITE_TV_HEAD_IMAGE_PATH}/${collection}/${id}`
   );
   const uintArray = new Uint8Array(await image.arrayBuffer());
   if (image.ok) {

@@ -14,6 +14,10 @@ type Config = {
   spineConfig?: SpineGameObjectConfig;
   animSuffix?: string;
   collection?: string;
+  urls: {
+    atlasURL: string;
+    textureURL: string;
+  };
 };
 
 export class Player extends Phaser.GameObjects.GameObject {

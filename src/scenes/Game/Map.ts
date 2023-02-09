@@ -195,6 +195,7 @@ export default class GameMap extends Phaser.Scene {
                 y,
                 scale: 0.4,
               },
+              urls: properties.character.urls,
             });
             char.loadPromise.then((instance) => {
               // since the NPC is not moving we might want to re extend the collision box so the player won't need to
@@ -386,6 +387,7 @@ export default class GameMap extends Phaser.Scene {
         },
         animSuffix: player.animSuffix,
         collection: player.collection,
+        urls: player.urls,
       });
 
       this.player.character?.loadPromise.then((instance) => {

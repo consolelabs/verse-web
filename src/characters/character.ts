@@ -1,4 +1,4 @@
-import { CHARACTER_ASSET_PATH, NEKO_COL, RABBY_COL } from "envs";
+import { NEKO_COL, RABBY_COL } from "envs";
 import { TILE_SIZE } from "../constants";
 import {
   AnimationDirection,
@@ -55,6 +55,10 @@ export class Character extends Phaser.GameObjects.GameObject {
     follower?: Character;
     spineConfig?: SpineGameObjectConfig;
     animSuffix?: string;
+    urls: {
+      atlasURL: string;
+      textureURL: string;
+    };
   }) {
     const {
       scene,
@@ -65,6 +69,7 @@ export class Character extends Phaser.GameObjects.GameObject {
       follower,
       spineConfig = {},
       animSuffix = "",
+      urls: { atlasURL, textureURL },
     } = props;
 
     super(scene, "character");
@@ -72,20 +77,15 @@ export class Character extends Phaser.GameObjects.GameObject {
     this.key = `${spine}/${collection}/${id}`;
 
     this.scene = scene;
-    let atlas = `/api/atlas?spine=${spine}&collection=${collection}&id=${id}`;
-    let texture = `${CHARACTER_ASSET_PATH}/${spine}/Web`;
-
-    switch (spine) {
-      case "GhostNeko":
-        atlas = "/characters/ghost-neko/char.atlas";
-        texture = "";
-        break;
-      case "TV-head":
-        texture = `/api/resize?collection=${collection}&id=${id}`;
-        break;
-      default:
-        texture += `/${id}`;
-        texture += `/${spine}.png`;
+    let atlas = atlasURL;
+    if (spine !== "GhostNeko") {
+      atlas = `/api/atlas?spine=${spine}&collection=${collection}&id=${id}&atlasURL=${encodeURI(
+        atlasURL
+      )}`;
+    }
+    let texture = textureURL;
+    if (spine === "TV-head") {
+      texture = `/api/resize?textureURL=${encodeURI(textureURL)}`;
     }
 
     this.followee = followee;

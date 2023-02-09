@@ -22,7 +22,11 @@
     "character": {
       "id": 25,
       "spine": "Rabby",
-      "animSuffix": 1
+      "animSuffix": 1,
+      "urls": {
+        "atlasURL": "https://storage.googleapis.com/pod-town/verse/char/Rabby/Web/25/Rabby.atlas",
+        "textureURL": "https://storage.googleapis.com/pod-town/verse/char/Rabby/Web/25/Rabby.png"
+      }
     }
   }
 ]

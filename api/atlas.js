@@ -6,14 +6,15 @@ import path from "path";
 import { readFileSync } from "fs";
 
 export default async function handler(req, res) {
-  const id = req.query.id;
+  const atlasURL = decodeURI(req.query.atlasURL);
   const spine = req.query.spine;
+  const id = req.query.id;
   const collection = req.query.collection;
   let text = "";
   if (spine !== "TV-head") {
-    const url = `${process.env.VITE_CHARACTER_ASSET_PATH}/${spine}/Web/${id}/${spine}.atlas`;
+    // const url = `${process.env.VITE_CHARACTER_ASSET_PATH}/${spine}/Web/${id}/${spine}.atlas`;
 
-    const atlasRes = await fetch(url);
+    const atlasRes = await fetch(atlasURL);
 
     if (!atlasRes.ok) return res.status(404).end();
 
