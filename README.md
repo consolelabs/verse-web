@@ -1,9 +1,5 @@
 <h1 align="center">Pod Town Metaverse</h1>
 <img src="./public/assets/images/title-screen-bg.jpeg" />
-<p align="center">
-<img src="https://img.shields.io/github/issues-pr-raw/consolelabs/mochi-discord" />
-<img src="https://img.shields.io/github/contributors/consolelabs/mochi-discord" />
-</p>
 
 ## :books: Built with
 - Phaser 3
