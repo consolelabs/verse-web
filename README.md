@@ -1,6 +1,12 @@
 <h1 align="center">Pod Town Metaverse</h1>
 <img src="./public/assets/images/title-screen-bg.jpeg" />
 
+## :roller_coaster: Previews
+| Env | Link | Description |
+| --- | --- | --- |
+| `prod` | https://explore.pod.town | Official page of Pod Town Metaverse |
+| `dev` | https://beta.pod.town | Tests are conducted here before releasing to production |
+
 ## :books: Built with
 - Phaser 3
 - React
