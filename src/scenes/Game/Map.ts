@@ -9,6 +9,7 @@ import { SceneKey } from "../../constants/scenes";
 import { IBound } from "matter";
 import { useGameState } from "stores/game";
 import { TitleBg } from "objects/TitleBg";
+import { AdImageSprite } from "objects/AdImageSprite";
 
 const spawnPoint = {
   x: 5000,
@@ -144,15 +145,9 @@ export default class GameMap extends Phaser.Scene {
     this.map.getObjectLayer("Ads").objects.forEach((object) => {
       const ad = ads.find((ad) => ad.code === object.name);
 
-      if (ad && object.x && object.y && object.width && object.height) {
-        const image = this.add.image(
-          object.x + object.width / 2,
-          object.y + object.height / 2,
-          `ads_${ad.code}`
-        );
-        image.displayWidth = object.width;
-        image.displayHeight = object.height;
-        image.setDepth((image.y + object.height / 2) / TILE_SIZE + 1);
+      if (object.polygon && ad) {
+        // @ts-ignore
+        new AdImageSprite(this, ad, object);
       }
     });
 
@@ -283,6 +278,7 @@ export default class GameMap extends Phaser.Scene {
           }
         });
       } else {
+        // FIXME: Should only create body for objects of certain type (e.g. collision)
         layer.objects.forEach((object) => {
           const x = object.x ?? 0;
           const y = object.y ?? 0;
