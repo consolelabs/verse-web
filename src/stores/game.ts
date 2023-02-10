@@ -75,6 +75,7 @@ interface State {
     ...element: Array<{ id: string; element: React.ReactNode }>
   ) => void;
   removeFromPSAqueue: (id: string) => void;
+  clearPSA: () => void;
   leaderboardChannel?: Channel;
   setLeaderboardChannel: (c: Channel) => void;
   socket?: Socket;
@@ -154,6 +155,7 @@ export const useGameState = create<State>((set, get) => ({
       psaQueue: s.psaQueue.filter((e) => e.id !== id),
     }));
   },
+  clearPSA: () => set({ psaQueue: [] }),
   playSound: (soundKey, config) => {
     const { getActiveScene } = get();
     const activeScene = getActiveScene();
@@ -255,6 +257,8 @@ export const useGameState = create<State>((set, get) => ({
         nfts: undefined,
         player: DEFAULT_PLAYER,
         activeSceneKey: SceneKey.BOOT,
+        psaQueue: [],
+        leaderboardChannel: undefined,
       })
     );
     return true;
