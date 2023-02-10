@@ -392,19 +392,40 @@ export default class GameMap extends Phaser.Scene {
     });
 
     // Load characters
-    const { player, account } = useGameState.getState();
+    const { players, account, previewChar } = useGameState.getState();
+    let player = players[0];
+    const followees = players.slice(1);
+    if (!player) {
+      player = previewChar;
+    }
     if (player) {
+      let followee: Character | undefined = undefined;
+      followees.reverse().forEach((f) => {
+        followee = new Character({
+          followee,
+          scene: this,
+          spine: f.type,
+          id: f.token_id,
+          spineConfig: {
+            scale: 0.4,
+          },
+          animSuffix: f.animSuffix,
+          collection: f.token_address,
+          urls: f.urls,
+        });
+      });
       this.player = new Player({
+        followee,
         name: `${account?.slice(0, 5)}...${account?.slice(-5)}`,
         scene: this,
-        spine: player.spine,
-        id: player.id,
+        spine: player.type,
+        id: player.token_id,
         spineConfig: {
           ...spawnPoint,
           scale: 0.4,
         },
         animSuffix: player.animSuffix,
-        collection: player.collection,
+        collection: player.token_address,
         urls: player.urls,
       });
 

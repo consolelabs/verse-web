@@ -31,6 +31,29 @@ function getCol(spine: CharacterSpine) {
   }
 }
 
+const scaleByChar: Record<CharacterSpine, number> = {
+  Neko: 0.2,
+  Rabby: 0.2,
+  GhostNeko: 0.4,
+  "TV-head": 0.3,
+};
+
+export type Config = {
+  scene: Phaser.Scene;
+  id: number;
+  spine: CharacterSpine;
+  followee?: Character;
+  follower?: Character;
+  spineConfig?: SpineGameObjectConfig;
+  animSuffix?: string;
+  collection?: string;
+  urls: {
+    atlasURL: string;
+    textureURL: string;
+  };
+  name?: string;
+};
+
 export class Character extends Phaser.GameObjects.GameObject {
   public scene: Phaser.Scene;
   public instance?: Instance;
@@ -44,24 +67,11 @@ export class Character extends Phaser.GameObjects.GameObject {
   public availableAnims: Array<Anim> = [];
   public key: string;
   public nameText?: Phaser.GameObjects.Text;
+  private originalHeight = 0;
 
   private shadow?: Phaser.GameObjects.Image;
 
-  constructor(props: {
-    scene: Phaser.Scene;
-    id: number;
-    spine: CharacterSpine;
-    collection?: string;
-    followee?: Character;
-    follower?: Character;
-    spineConfig?: SpineGameObjectConfig;
-    animSuffix?: string;
-    urls: {
-      atlasURL: string;
-      textureURL: string;
-    };
-    name?: string;
-  }) {
+  constructor(props: Config) {
     const {
       scene,
       id,
@@ -125,12 +135,10 @@ export class Character extends Phaser.GameObjects.GameObject {
 
             this.instance.depth = (spineConfig?.y as number) || 0;
 
-            if (spineConfig?.scale && typeof spineConfig?.scale === "number") {
-              const trueWidth = this.instance.width * spineConfig.scale;
-              const trueHeight = this.instance.height * spineConfig.scale;
-              this.instance.width = trueWidth;
-              this.instance.height = trueHeight / 5;
-            }
+            const newW = this.instance.width * Number(scaleByChar[spine]);
+            const newH = this.instance.height * Number(scaleByChar[spine]);
+            this.originalHeight = newH;
+            this.instance.setSize(newW, 20);
 
             this.maximumDistanceToFollower = 60;
             if (follower?.instance) {
@@ -270,7 +278,7 @@ export class Character extends Phaser.GameObjects.GameObject {
     this.shadow.setDepth(this.instance.y / 2 / TILE_SIZE);
     this.nameText?.setPosition(
       this.instance.x - this.nameText.width / 2,
-      this.instance.y - this.instance.height * 5 - this.nameText.height * 1.125
+      this.instance.y - this.originalHeight - this.nameText.height * 1.125
     );
     this.nameText?.setDepth(this.instance.y);
   }

@@ -27,14 +27,19 @@ import { Socket, Channel } from "phoenix-socket";
 import { Ad } from "types/ads";
 
 export const DEFAULT_PLAYER = {
-  id: 0,
-  spine: "GhostNeko" as CharacterSpine,
+  name: "Nez",
+  token_id: 0,
+  type: "GhostNeko" as CharacterSpine,
   animSuffix: "",
+  description:
+    "Nez (Neko Soul) is the default character in the PodTown metaverse.",
   urls: {
     atlasURL: "/characters/ghost-neko/char.atlas",
     textureURL: "",
   },
-};
+  image: "/assets/images/default-char.png",
+  token_address: "ghost_neko",
+} as NFT;
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -97,26 +102,11 @@ interface State {
   game?: Phaser.Game;
   init: () => void;
 
-  player: {
-    collection?: string;
-    animSuffix: string;
-    spine: CharacterSpine;
-    id: number;
-    urls: {
-      atlasURL: string;
-      textureURL: string;
-    };
-  };
-  setPlayer: (p: {
-    collection?: string;
-    animSuffix: string;
-    spine: CharacterSpine;
-    id: number;
-    urls: {
-      atlasURL: string;
-      textureURL: string;
-    };
-  }) => void;
+  previewChar: NFT;
+  setPreviewChar: (c: NFT) => void;
+
+  players: Array<NFT>;
+  setPlayers: (l: Array<NFT>) => void;
 
   stopScenes: (...scenes: Array<SceneKey>) => void;
 
@@ -259,7 +249,8 @@ export const useGameState = create<State>((set, get) => ({
         token: undefined,
         account: undefined,
         nfts: undefined,
-        player: DEFAULT_PLAYER,
+        previewChar: DEFAULT_PLAYER,
+        players: [],
         activeSceneKey: SceneKey.BOOT,
         psaQueue: [],
         leaderboardChannel: undefined,
@@ -310,9 +301,11 @@ export const useGameState = create<State>((set, get) => ({
     return game.scene.keys[activeSceneKey];
   },
 
-  // default char
-  player: DEFAULT_PLAYER,
-  setPlayer: (player) => set({ player }),
+  previewChar: DEFAULT_PLAYER,
+  setPreviewChar: (p) => set({ previewChar: p }),
+
+  players: [],
+  setPlayers: (players) => set({ players }),
 
   init: () => set(() => ({ game: new Phaser.Game(config) })),
 

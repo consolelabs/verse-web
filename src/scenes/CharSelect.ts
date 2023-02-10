@@ -31,8 +31,8 @@ export default class CharSelect extends Phaser.Scene {
   }
 
   loadPlayer() {
-    const { player } = useGameState.getState();
-    const { spine, id, animSuffix, collection, urls } = player;
+    const { previewChar } = useGameState.getState();
+    const { type, token_id, animSuffix, token_address, urls } = previewChar;
     this.cameras.main.fadeIn(250);
     // Destroy existing player before creating new one
     if (this.player) {
@@ -42,15 +42,15 @@ export default class CharSelect extends Phaser.Scene {
     this.player = new Player({
       scene: this,
       isPreview: true,
-      spine,
-      id,
+      spine: type,
+      id: token_id,
       spineConfig: {
         x: window.innerWidth / 2,
         y: window.innerHeight / 1.575,
         scale: 0.8,
       },
       animSuffix,
-      collection,
+      collection: token_address,
       urls,
     });
 

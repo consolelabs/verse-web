@@ -120,19 +120,23 @@ export default class PodMap extends Phaser.Scene {
     this.cameras.main.fadeIn(500);
 
     // Load characters
-    const { player } = useGameState.getState();
+    const { players, previewChar } = useGameState.getState();
+    let player = players[0];
+    if (!player) {
+      player = previewChar;
+    }
     if (player) {
       this.player = new Player({
         scene: this,
-        spine: player.spine,
-        id: player.id,
+        spine: player.type,
+        id: player.token_id,
         spineConfig: {
           x: 200,
           y: 200,
           scale: 0.4,
         },
         animSuffix: player.animSuffix,
-        collection: player.collection,
+        collection: player.token_address,
         urls: player.urls,
       });
 
