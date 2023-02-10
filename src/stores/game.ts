@@ -14,13 +14,16 @@ import CharSelect from "scenes/CharSelect";
 import Intro from "scenes/Intro";
 import { FullResponse } from "types/apis";
 import { NFT } from "types/nfts";
-import { API_BASE_URL, API_POD_BASE_URL } from "envs";
+import { API_BASE_URL, API_POD_BASE_URL, API_WEBSOCKET_URL } from "envs";
 import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
 import { Menu, Minigame } from "constants/game";
 import { utils } from "ethers";
 import * as Sentry from "@sentry/react";
+import unionBy from "lodash.unionby";
+// @ts-ignore
+import { Socket, Channel } from "phoenix-socket";
 
 export const DEFAULT_PLAYER = {
   id: 0,
@@ -67,6 +70,14 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 interface State {
+  psaQueue: Array<{ id: string; element: React.ReactNode }>;
+  addToPSAqueue: (
+    ...element: Array<{ id: string; element: React.ReactNode }>
+  ) => void;
+  removeFromPSAqueue: (id: string) => void;
+  leaderboardChannel?: Channel;
+  setLeaderboardChannel: (c: Channel) => void;
+  socket?: Socket;
   token?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
   getSession: () => Promise<void>;
@@ -131,6 +142,18 @@ interface State {
 }
 
 export const useGameState = create<State>((set, get) => ({
+  setLeaderboardChannel: (c) => set({ leaderboardChannel: c }),
+  psaQueue: [],
+  addToPSAqueue: (...ele) => {
+    set((s) => ({
+      psaQueue: unionBy(ele, s.psaQueue, (e) => e.id),
+    }));
+  },
+  removeFromPSAqueue: (id) => {
+    set((s) => ({
+      psaQueue: s.psaQueue.filter((e) => e.id !== id),
+    }));
+  },
   playSound: (soundKey, config) => {
     const { getActiveScene } = get();
     const activeScene = getActiveScene();
@@ -173,7 +196,13 @@ export const useGameState = create<State>((set, get) => ({
     const sessionStr = localStorage.getItem("session");
     if (sessionStr) {
       const session = JSON.parse(sessionStr);
-      set({ token: session.token, account: session.address });
+      const socket = new Socket(API_WEBSOCKET_URL);
+      socket.connect();
+      set({
+        token: session.token,
+        account: session.address,
+        socket,
+      });
       Sentry.setUser({ id: session.address });
     }
   },
@@ -192,7 +221,13 @@ export const useGameState = create<State>((set, get) => ({
     if (res.ok) {
       const data = await res.json();
       const address = utils.getAddress(data.user.wallet);
-      set({ token: data.token, account: address });
+      const socket = new Socket(API_WEBSOCKET_URL);
+      socket.connect();
+      set({
+        token: data.token,
+        account: address,
+        socket,
+      });
       localStorage.setItem(
         "session",
         JSON.stringify({

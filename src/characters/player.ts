@@ -18,6 +18,7 @@ type Config = {
     atlasURL: string;
     textureURL: string;
   };
+  name?: string;
 };
 
 export class Player extends Phaser.GameObjects.GameObject {

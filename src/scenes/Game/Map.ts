@@ -375,9 +375,10 @@ export default class GameMap extends Phaser.Scene {
     });
 
     // Load characters
-    const { player } = useGameState.getState();
+    const { player, account } = useGameState.getState();
     if (player) {
       this.player = new Player({
+        name: `${account?.slice(0, 5)}...${account?.slice(-5)}`,
         scene: this,
         spine: player.spine,
         id: player.id,
