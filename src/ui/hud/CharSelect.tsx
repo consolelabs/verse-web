@@ -18,58 +18,28 @@ const isTheSame = (a: NFT, b: NFT) => {
   return a.token_address === b.token_address && a.token_id === b.token_id;
 };
 
-const ghostNekoItem: NFT = {
-  token_id: "0",
-  name: "Nez",
-  type: "GhostNeko",
-  image: "",
-  amount: "",
-  rarity: "",
-  description:
-    "Nez (Neko Soul) is the default character in the PodTown metaverse.",
-  token_address: "",
-  collection_name: "",
-};
-
 export const CharSelect = () => {
   const [playGame, setPlayGame] = useState(false);
   const {
     nfts,
     getActiveScene,
-    player,
-    setPlayer,
+    setPlayers,
     setShowLoader,
     transitionTo,
     playSound,
+    previewChar,
+    setPreviewChar,
   } = useGameState();
-  const [previewChar, setPreviewChar] = useState<NFT>(ghostNekoItem);
+  const [selectedChars, setSelectedChars] = useState<Array<NFT>>([]);
 
-  const loadCharacter = (
-    item: NFT,
-    animSuffix: string,
-    urls: {
-      atlasURL: string;
-      textureURL: string;
-    }
-  ) => {
-    const id = Number(item.token_id);
-    const spine = item.type;
-    const collection = item.token_address;
-
-    setPlayer({
-      animSuffix,
-      id,
-      spine,
-      collection,
-      urls,
-    });
+  const loadCharacter = (item: NFT) => {
     setPreviewChar(item);
     (getActiveScene() as CharSelectScene).loadPlayer();
   };
 
   const selectCharToPreview = (item: NFT) => {
     if (item.type === "GhostNeko") {
-      loadCharacter(item, "", DEFAULT_PLAYER.urls);
+      loadCharacter(DEFAULT_PLAYER);
     } else {
       fetch(
         `${API_POD_BASE_URL}/verse/nfts/${item.token_address}/${item.token_id}`
@@ -83,23 +53,21 @@ export const CharSelect = () => {
           const animSuffix = anim_type ? `_${anim_type}` : "";
           const isTVhead = character_type.toLowerCase() === "tv-head";
 
-          loadCharacter(
-            {
-              ...item,
-              ...(isTVhead
-                ? {
-                    name: "TV-Head",
-                    description:
-                      "Another default character of the Verse, but this time players get some degree of personalization with the NFT being the TV screen.",
-                  }
-                : {}),
-            },
+          loadCharacter({
+            ...item,
+            ...(isTVhead
+              ? {
+                  name: "TV-Head",
+                  description:
+                    "Another default character of the Verse, but this time players get some degree of personalization with the NFT being the TV screen.",
+                }
+              : {}),
             animSuffix,
-            {
+            urls: {
               atlasURL: webAsset.atlas,
               textureURL: isTVhead ? image : webAsset.img,
-            }
-          );
+            },
+          });
         });
     }
   };
@@ -112,7 +80,8 @@ export const CharSelect = () => {
     return nfts.reduce(
       (result, current) => {
         const next = { ...result };
-        const type = COLLECTION_TO_SPINE[current.token_address] || "TV-head";
+        const type =
+          COLLECTION_TO_SPINE[current.token_address ?? ""] || "TV-head";
 
         // @ts-ignore
         next[type].push({
@@ -131,15 +100,15 @@ export const CharSelect = () => {
   }, [nfts]);
 
   useEffect(() => {
-    if (playGame && player) {
+    if (playGame) {
       playSound("start-game-audio", { volume: 0.5 });
       transitionTo(SceneKey.CONFIG_LOADER, SceneKey.BLANK);
     }
   }, [playGame]);
 
-  // const isPreviewingATeamMember = Boolean(
-  //   selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
-  // );
+  const isPreviewingATeamMember = Boolean(
+    selectedChars.find((c) => previewChar && isTheSame(c, previewChar))
+  );
 
   return (
     <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full h-screen md:max-w-700px lg:max-w-1000px text-white flex flex-col">
@@ -160,8 +129,11 @@ export const CharSelect = () => {
                     "brightness-50": previewChar.type !== "GhostNeko",
                   }
                 )}
-                onClick={() => selectCharToPreview(ghostNekoItem)}
+                onClick={() => selectCharToPreview(DEFAULT_PLAYER)}
               >
+                {selectedChars.some((c) => isTheSame(c, DEFAULT_PLAYER)) && (
+                  <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
+                )}
                 <img
                   src="/assets/images/default-char.png"
                   className="w-full h-full"
@@ -207,9 +179,9 @@ export const CharSelect = () => {
                         {section.items.map((item) => {
                           const isSelectedForPreviewing =
                             previewChar && isTheSame(item, previewChar);
-                          // const isSelectedForTheTeam = selectedChars.find((c) =>
-                          //   isTheSame(c, item)
-                          // );
+                          const isSelectedForTheTeam = selectedChars.find((c) =>
+                            isTheSame(c, item)
+                          );
 
                           return (
                             <button
@@ -224,9 +196,9 @@ export const CharSelect = () => {
                               )}
                               onClick={() => selectCharToPreview(item)}
                             >
-                              {/* {isSelectedForTheTeam && (
+                              {isSelectedForTheTeam && (
                                 <div className="absolute bottom-0 right-0 mr-1.5 mb-1.5 w-3 h-3 rounded-full bg-green" />
-                              )} */}
+                              )}
                               <img src={item.image} className="w-full h-full" />
                             </button>
                           );
@@ -238,49 +210,49 @@ export const CharSelect = () => {
             )}
           </div>
           <div className="w-3/5 flex-1 flex flex-col relative">
-            <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-12">
-              {/* <button
-                  type="button"
-                  className="bg-white uppercase font-semibold rounded px-4 py-2 border-none mb-6"
-                  onClick={() => {
-                    if (isPreviewingATeamMember) {
-                      setSelectedChars((o) =>
-                        o.filter(
-                          (o) => !previewChar || !isTheSame(o, previewChar)
-                        )
-                      );
-                    } else {
-                      if (previewChar) {
-                        setSelectedChars((o) => [...o, previewChar]);
-                      }
-                    }
-                  }}
-                  // Max 5 members
-                  disabled={
-                    !isPreviewingATeamMember && selectedChars.length === 5
-                  }
-                >
-                  {isPreviewingATeamMember ? "Remove From Team" : "Add To Team"}
-                </button>
-                <div className="text-typo-secondary mb-2">Team</div>
-                <div className="grid grid-cols-5 gap-2 w-320px">
-                  {new Array(5).fill(0).map((_, index) => {
-                    return (
-                      <div
-                        className="border border-solid border-background-secondary aspect-square overflow-hidden"
-                        key={index}
-                      >
-                        {selectedChars[index] && (
-                          <img
-                            src={selectedChars[index].image}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                      </div>
+            <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-6">
+              <button
+                type="button"
+                className="btn btn-sm btn-primary-pink"
+                onClick={() => {
+                  if (isPreviewingATeamMember) {
+                    setSelectedChars((o) =>
+                      o.filter(
+                        (o) => !previewChar || !isTheSame(o, previewChar)
+                      )
                     );
-                  })}
-                </div> */}
-              <div className="text-xl font-medium inline items-center text-teal-100 text-center">
+                  } else {
+                    if (previewChar) {
+                      setSelectedChars((o) => [...o, previewChar]);
+                    }
+                  }
+                }}
+                // Max 5 members
+                disabled={
+                  !isPreviewingATeamMember && selectedChars.length === 5
+                }
+              >
+                {isPreviewingATeamMember ? "Remove From Team" : "Add To Team"}
+              </button>
+              <div className="text-typo-secondary my-2">Team</div>
+              <div className="grid grid-cols-5 gap-2 w-250px">
+                {new Array(5).fill(0).map((_, index) => {
+                  return (
+                    <div
+                      className="border border-solid border-background-secondary aspect-square overflow-hidden"
+                      key={index}
+                    >
+                      {selectedChars[index] && (
+                        <img
+                          src={selectedChars[index].image}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-10 text-base font-medium inline items-center text-teal-100 text-center">
                 <span>TIP: try moving around with</span>
                 <kbd className="kbc-button kbc-button-xxs ml-3">W</kbd>
                 <kbd className="kbc-button kbc-button-xxs">A</kbd>
@@ -292,8 +264,9 @@ export const CharSelect = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-primary-blue btn-lg mt-6"
+                className="btn btn-primary-blue btn-md mt-6"
                 onClick={() => {
+                  setPlayers(selectedChars);
                   setPlayGame(true);
                   setShowLoader(true);
                 }}

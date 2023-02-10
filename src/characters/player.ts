@@ -1,24 +1,13 @@
 import Phaser from "phaser";
 import { TILE_SIZE } from "../constants";
-import { AnimationDirection, CharacterSpine } from "../types/character";
-import { Character } from "./character";
+import { AnimationDirection } from "../types/character";
+import { Character, Config as CharacterConfig } from "./character";
 
 const SPEED_WALK = 7;
 const SPEED_RUN = 8;
 
-type Config = {
-  scene: Phaser.Scene;
-  id: number;
-  spine: CharacterSpine;
+type PlayerConfig = CharacterConfig & {
   isPreview?: boolean;
-  spineConfig?: SpineGameObjectConfig;
-  animSuffix?: string;
-  collection?: string;
-  urls: {
-    atlasURL: string;
-    textureURL: string;
-  };
-  name?: string;
 };
 
 export class Player extends Phaser.GameObjects.GameObject {
@@ -27,7 +16,7 @@ export class Player extends Phaser.GameObjects.GameObject {
   public character?: Character;
   idle = false;
 
-  constructor(public config: Config) {
+  constructor(public config: PlayerConfig) {
     super(config.scene, "player");
     this.character = new Character(config);
 
