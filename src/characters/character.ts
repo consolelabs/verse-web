@@ -43,6 +43,7 @@ export class Character extends Phaser.GameObjects.GameObject {
   public animSuffix = "";
   public availableAnims: Array<Anim> = [];
   public key: string;
+  public nameText?: Phaser.GameObjects.Text;
 
   private shadow?: Phaser.GameObjects.Image;
 
@@ -59,6 +60,7 @@ export class Character extends Phaser.GameObjects.GameObject {
       atlasURL: string;
       textureURL: string;
     };
+    name?: string;
   }) {
     const {
       scene,
@@ -70,6 +72,7 @@ export class Character extends Phaser.GameObjects.GameObject {
       spineConfig = {},
       animSuffix = "",
       urls: { atlasURL, textureURL },
+      name = "",
     } = props;
 
     super(scene, "character");
@@ -143,6 +146,25 @@ export class Character extends Phaser.GameObjects.GameObject {
               this.instance.y,
               "char-shadow"
             );
+            if (name) {
+              this.nameText = this.scene.add.text(
+                this.instance.x,
+                this.instance.y,
+                name,
+                {
+                  fontFamily: "Chakra Petch",
+                  fontSize: "0.825rem",
+                  backgroundColor: "rgba(0,0,0,0.7)",
+                  padding: {
+                    top: 5,
+                    bottom: 5,
+                    left: 5,
+                    right: 5,
+                  },
+                  color: "#fff",
+                }
+              );
+            }
             this.shadow.setScale(0.175);
             this.shadow.setAlpha(0.5);
             r(this.instance);
@@ -246,5 +268,10 @@ export class Character extends Phaser.GameObjects.GameObject {
     this.instance.depth = this.instance.y / TILE_SIZE;
     this.shadow.setPosition(this.instance.x, this.instance.y);
     this.shadow.setDepth(this.instance.y / 2 / TILE_SIZE);
+    this.nameText?.setPosition(
+      this.instance.x - this.nameText.width / 2,
+      this.instance.y - this.instance.height * 5 - this.nameText.height * 1.125
+    );
+    this.nameText?.setDepth(this.instance.y);
   }
 }
