@@ -295,6 +295,7 @@ export const useGameState = create<State>((set, get) => ({
 
     if (game) {
       game.input.enabled = false;
+      game.input.keyboard.enabled = false;
     }
 
     set(() => ({ minigame }));
@@ -304,6 +305,7 @@ export const useGameState = create<State>((set, get) => ({
 
     if (game) {
       game.input.enabled = true;
+      game.input.keyboard.enabled = true;
     }
 
     set(() => ({ minigame: undefined }));
