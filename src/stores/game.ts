@@ -24,6 +24,7 @@ import * as Sentry from "@sentry/react";
 import unionBy from "lodash.unionby";
 // @ts-ignore
 import { Socket, Channel } from "phoenix-socket";
+import { Ad } from "types/ads";
 
 export const DEFAULT_PLAYER = {
   id: 0,
@@ -140,6 +141,9 @@ interface State {
     soundKey: string,
     config?: Phaser.Types.Sound.SoundConfig
   ) => void;
+
+  ads?: Ad[];
+  setAds: (ads: Ad[]) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -352,4 +356,7 @@ export const useGameState = create<State>((set, get) => ({
 
   showLoader: false,
   setShowLoader: (showLoader: boolean) => set(() => ({ showLoader })),
+
+  ads: [],
+  setAds: (ads) => set(() => ({ ads })),
 }));
