@@ -139,6 +139,23 @@ export default class GameMap extends Phaser.Scene {
       });
     });
 
+    // Load ads
+    const ads = useGameState.getState().ads || [];
+    this.map.getObjectLayer("Ads").objects.forEach((object) => {
+      const ad = ads.find((ad) => ad.code === object.name);
+
+      if (ad && object.x && object.y && object.width && object.height) {
+        const image = this.add.image(
+          object.x + object.width / 2,
+          object.y + object.height / 2,
+          `ads_${ad.code}`
+        );
+        image.displayWidth = object.width;
+        image.displayHeight = object.height;
+        image.setDepth((image.y + object.height / 2) / TILE_SIZE + 1);
+      }
+    });
+
     // Set world bounds
     this.bounds = {
       min: { x: 0, y: 0 },
