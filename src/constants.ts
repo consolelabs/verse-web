@@ -1,6 +1,3 @@
-// TODO: get this from api
-export const CDN_PATH = "/assets";
-
 export const TILE_SIZE = 16;
 
 export const PROD = process.env.NODE_ENV === "production";

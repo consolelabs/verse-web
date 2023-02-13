@@ -33,41 +33,6 @@ export class Player extends Phaser.GameObjects.GameObject {
     super.destroy(...args);
   }
 
-  // TODO: move this
-  // loadCharacters(
-  //   characters: CharacterType[],
-  //   spriteConfig: SpineGameObjectConfig = {}
-  // ) {
-  //   this.characters = characters.reduce((result, current, currentIndex) => {
-  //     return [
-  //       ...result,
-  //       new Character({
-  //         scene: this.scene,
-  //         type: current,
-  //         follower: currentIndex > 0 ? result[currentIndex - 1] : undefined,
-  //         spriteConfig,
-  //       }),
-  //     ];
-  //   }, [] as Character[]);
-  //
-  //   // Loop and add extra logic
-  //   this.characters.forEach((character, i) => {
-  //     // Add physic object to each character
-  //     this.scene.matter.add.gameObject(character.instance);
-  //     character.instance.setFixedRotation();
-  //
-  //     // Set collision filter so that characters will not collide with themselves
-  //     // but still collide with everything else
-  //     character.instance.setCollisionGroup(-1);
-  //     character.instance.setCollisionCategory(
-  //       i === 0 ? COLLISION_CATEGORY.PLAYER : COLLISION_CATEGORY.MEMBER
-  //     );
-  //     character.instance.setCollidesWith(
-  //       i === 0 ? [-1, COLLISION_CATEGORY.INTERACTION_POINT] : -1
-  //     );
-  //   });
-  // }
-
   update() {
     if (this.idle || !this.character) return;
     const char = this.character;
