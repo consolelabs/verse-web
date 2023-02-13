@@ -3,7 +3,7 @@ import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
 
 const SCALE = 0.1;
-const PADDING = 20;
+const PADDING = -8;
 const MAP_FRAME_SIZE = 200;
 
 export default class Minimap extends Phaser.Scene {
@@ -45,8 +45,8 @@ export default class Minimap extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(0x000000);
 
     this.mapFrame = {
-      x: MAP_FRAME_SIZE / 2 + PADDING,
-      y: window.innerHeight - (MAP_FRAME_SIZE / 2 + PADDING),
+      x: PADDING,
+      y: window.innerHeight - (MAP_FRAME_SIZE + PADDING),
       w: MAP_FRAME_SIZE,
       h: MAP_FRAME_SIZE,
     };
@@ -87,7 +87,7 @@ export default class Minimap extends Phaser.Scene {
       this.mask?.destroy();
 
       // Update the new frame/map position
-      this.mapFrame.y = window.innerHeight - (MAP_FRAME_SIZE / 2 + PADDING);
+      this.mapFrame.y = window.innerHeight - (MAP_FRAME_SIZE + PADDING);
       this.map.y = window.innerHeight - MAP_FRAME_SIZE * 2;
 
       // Create a new mask instance
@@ -107,34 +107,45 @@ export default class Minimap extends Phaser.Scene {
   createMask() {
     const shape = this.make.graphics({});
     shape.fillStyle(0xffffff);
-    shape.arc(
+    shape.fillRoundedRect(
       this.mapFrame.x,
       this.mapFrame.y,
-      this.mapFrame.h / 2,
-      Phaser.Math.DegToRad(0),
-      Phaser.Math.DegToRad(360)
+      this.mapFrame.w,
+      this.mapFrame.h,
+      8
     );
-    shape.fillPath();
+    // shape.arc(
+    //   this.mapFrame.x,
+    //   this.mapFrame.y,
+    //   this.mapFrame.h / 2,
+    //   Phaser.Math.DegToRad(0),
+    //   Phaser.Math.DegToRad(360)
+    // );
+    // shape.fillPath();
     const mask = shape.createGeometryMask();
 
     // decorations
-    const ring1 = this.add.graphics();
-    ring1.lineStyle(4, 0x03ffcf);
-    ring1.strokeCircle(
-      this.mapFrame.x - PADDING,
-      this.mapFrame.h / 2,
-      this.mapFrame.h / 2 - 2
+    const border1 = this.add.graphics();
+    border1.lineStyle(6, 0x02c9a3);
+    border1.strokeRoundedRect(
+      this.mapFrame.x - PADDING + 1,
+      1,
+      this.mapFrame.w - 2,
+      this.mapFrame.h - 2,
+      8
     );
-    ring1.setScrollFactor(0);
+    border1.setScrollFactor(0);
 
-    const ring2 = this.add.graphics();
-    ring2.lineStyle(6, 0x77777f);
-    ring2.strokeCircle(
-      this.mapFrame.x - PADDING,
-      this.mapFrame.h / 2,
-      this.mapFrame.h / 2 - 6
+    const border2 = this.add.graphics();
+    border2.lineStyle(3, 0x77777f);
+    border2.strokeRoundedRect(
+      this.mapFrame.x - PADDING + 4.5,
+      4.5,
+      this.mapFrame.w - 9,
+      this.mapFrame.h - 9,
+      6
     );
-    ring2.setScrollFactor(0);
+    border2.setScrollFactor(0);
 
     return mask;
   }
