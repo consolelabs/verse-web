@@ -18,7 +18,7 @@ export const Message = ({
     <div className="text-xs flex items-start gap-x-1">
       <div className="flex gap-x-1">
         <div className="flex flex-col">
-          <span className="text-white whitespace-pre text-11px">
+          <span className="text-gray-400 whitespace-pre text-11px">
             [{timestamp.toString().slice(0, 4)}][{platform}]
           </span>
           <span className="text-blue font-semibold">

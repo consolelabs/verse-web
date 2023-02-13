@@ -13,10 +13,11 @@ export const Chat = () => {
 
   useEffect(() => {
     function handleEnter(e: KeyboardEvent) {
-      if (e.key.toLowerCase() !== "enter" || !input.current) return;
+      const key = e.key.toLowerCase();
+      if (!["enter", "escape"].includes(key) || !input.current) return;
       const activeScene = getActiveScene() as GameMap;
       if (!activeScene?.player) return;
-      const newState = input.current.disabled;
+      const newState = key === "escape" ? false : input.current.disabled;
       input.current.disabled = !newState;
       activeScene.player.idle = newState;
       setInputting(newState);
