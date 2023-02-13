@@ -5,7 +5,8 @@ import Postmate from "postmate";
 
 export const MinigameIframes = () => {
   const [child, setChild] = useState<Postmate.ParentAPI>();
-  const { minigame, stopMinigame, updateGamePoints } = useGameState();
+  const { minigame, getActiveScene, stopMinigame, updateGamePoints } =
+    useGameState();
 
   const src = useMemo(() => {
     switch (minigame) {
@@ -31,6 +32,8 @@ export const MinigameIframes = () => {
         setChild(child);
 
         child.on("game-point", updateGamePoints);
+
+        document.querySelector("#minigame-frame iframe")?.focus();
       });
     } else {
       child?.destroy();
@@ -52,7 +55,10 @@ export const MinigameIframes = () => {
           <button
             type="button"
             className="border-none outline-none p-0 bg-transparent text-white"
-            onClick={stopMinigame}
+            onClick={() => {
+              getActiveScene()?.sound.play("success-audio", { volume: 0.05 });
+              stopMinigame();
+            }}
           >
             Quit
           </button>

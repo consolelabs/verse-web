@@ -4,7 +4,7 @@ import { GridButtons } from "../GridButtons";
 import { Menu as MenuKey } from "constants/game";
 
 export const MainMenu = () => {
-  const { closeMenu, transitionTo, openMenu } = useGameState();
+  const { closeMenu, transitionTo, openMenu, getActiveScene } = useGameState();
 
   return (
     <GridButtons cols={3} rows={3} gap="md">
@@ -69,6 +69,7 @@ export const MainMenu = () => {
             onClick={() => {
               closeMenu();
               b.onClick?.();
+              getActiveScene()?.sound.play("success-audio", { volume: 0.05 });
             }}
           >
             <img src={`/assets/images/${b.img}`} className="h-80px w-80px" />
