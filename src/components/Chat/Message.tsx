@@ -1,6 +1,5 @@
 type Props = {
   timestamp: number;
-  platform: string;
   sender: string;
   children: React.ReactNode;
   // address mode will auto truncate the sender if not already
@@ -9,7 +8,6 @@ type Props = {
 
 export const Message = ({
   timestamp,
-  platform,
   mode = "raw",
   sender,
   children,
@@ -18,8 +16,8 @@ export const Message = ({
     <div className="text-xs flex items-start gap-x-1">
       <div className="flex gap-x-1">
         <div className="flex flex-col">
-          <span className="text-gray-400 whitespace-pre text-11px">
-            [{timestamp.toString().slice(0, 4)}][{platform}]
+          <span className="text-gray whitespace-pre text-11px">
+            [{timestamp.toString().slice(0, 4)}]
           </span>
           <span className="text-blue font-semibold">
             {mode === "raw"

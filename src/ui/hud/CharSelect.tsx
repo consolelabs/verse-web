@@ -8,6 +8,7 @@ import CharSelectScene from "scenes/CharSelect";
 import { API_POD_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
 import { CharStats } from "components/char-select/CharStats";
 import { CharSelectGridSkeleton } from "components/skeletons/CharSelectGridSkeleton";
+import SimpleBar from "simplebar-react";
 
 const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {
   [NEKO_COL]: "Neko",
@@ -114,8 +115,11 @@ export const CharSelect = () => {
     <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full h-screen md:max-w-700px lg:max-w-1000px text-white flex flex-col">
       <div className="text-3xl font-bold py-12">Select Characters</div>
       <div className="flex-1 overflow-hidden">
-        <div className="flex h-full overflow-hidden">
-          <div className="max-w-1/5 overflow-auto">
+        <div id="char-select" className="flex h-full overflow-hidden">
+          <SimpleBar
+            forceVisible={true}
+            className="max-h-full max-w-1/5 w-full"
+          >
             <div className="mb-12">
               <p className="mb-2 font-semibold text-xl text-typo-secondary">
                 Default Character
@@ -208,7 +212,7 @@ export const CharSelect = () => {
                   );
                 })
             )}
-          </div>
+          </SimpleBar>
           <div className="w-3/5 flex-1 flex flex-col relative">
             <div className="absolute bottom-0 w-full flex flex-col items-center justify-center mb-6">
               <button

@@ -49,6 +49,7 @@ const config: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+    autoRound: true,
   },
   // Boot screen -> Load world & world assets -> Game
   scene: [

@@ -32,6 +32,9 @@ export const Chat = () => {
       const activeScene = getActiveScene() as GameMap;
       if (!activeScene?.player) return;
       const newState = key === "escape" ? false : input.current.disabled;
+      input.current.disabled = !newState;
+      activeScene.player.idle = newState;
+      setInputting(newState);
 
       if (newState) {
         // weird workaround because of phaser
@@ -43,7 +46,12 @@ export const Chat = () => {
         if (key === "enter" && value) {
           setMessages((m) => [
             ...m,
-            <Message mode="address" timestamp={Date.now()} sender={addr}>
+            <Message
+              mode="address"
+              timestamp={Date.now()}
+              sender={addr}
+              platform="discord"
+            >
               {value}
             </Message>,
           ]);
@@ -57,12 +65,6 @@ export const Chat = () => {
           scrollToBottom();
         }, 0);
       }
-
-      if (!newState && key === "enter") return;
-
-      input.current.disabled = !newState;
-      activeScene.player.idle = newState;
-      setInputting(newState);
     }
 
     window.addEventListener("keyup", handleEnter);
@@ -88,41 +90,58 @@ export const Chat = () => {
       >
         <SimpleBar
           ref={chatFrame}
-          className="p-1.5 w-[25vw] bg-transparent max-h-250px"
+          className="p-1 w-[33vw] bg-transparent max-h-250px overflow-auto gap-y-2 flex flex-col"
         >
-          <div className="flex flex-col gap-y-1">
-            <Message mode="address" timestamp={Date.now()} sender={addr}>
-              Testing chat message
-            </Message>
-            <Message mode="address" timestamp={Date.now()} sender={addr}>
-              hello from discord
-            </Message>
-            <Message mode="address" timestamp={Date.now()} sender={addr}>
-              Lorem ipsum dolor sit amet, qui minim labore adipisicing minim
-              sint cillum sint consectetur cupidatat.
-            </Message>
-            <Message mode="address" timestamp={Date.now()} sender={addr}>
-              Lorem ipsum dolor sit amet, officia excepteur ex fugiat
-              reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit
-              ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-              Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet
-              voluptate voluptate dolor minim nulla est proident. Nostrud
-              officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
-              occaecat reprehenderit commodo officia dolor Lorem duis laboris
-              cupidatat officia voluptate. Culpa proident adipisicing id nulla
-              nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-              reprehenderit commodo ex non excepteur duis sunt velit enim.
-              Voluptate laboris sint cupidatat ullamco ut ea consectetur et est
-              culpa et culpa duis.
-            </Message>
-            {...messages}
-          </div>
+          <Message
+            mode="address"
+            timestamp={Date.now()}
+            platform="discord"
+            sender={addr}
+          >
+            Testing chat message
+          </Message>
+          <Message
+            mode="address"
+            timestamp={Date.now()}
+            platform="discord"
+            sender={addr}
+          >
+            hello from discord
+          </Message>
+          <Message
+            mode="address"
+            timestamp={Date.now()}
+            platform="discord"
+            sender={addr}
+          >
+            Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint
+            cillum sint consectetur cupidatat.
+          </Message>
+          <Message
+            mode="address"
+            timestamp={Date.now()}
+            platform="discord"
+            sender={addr}
+          >
+            Lorem ipsum dolor sit amet, officia excepteur ex fugiat
+            reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit
+            ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
+            Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
+            voluptate dolor minim nulla est proident. Nostrud officia pariatur
+            ut officia. Sit irure elit esse ea nulla sunt ex occaecat
+            reprehenderit commodo officia dolor Lorem duis laboris cupidatat
+            officia voluptate. Culpa proident adipisicing id nulla nisi laboris
+            ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo
+            ex non excepteur duis sunt velit enim. Voluptate laboris sint
+            cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+          </Message>
+          {...messages}
         </SimpleBar>
       </div>
       <input
         ref={input}
         disabled={!inputting}
-        className={clsx("rounded-b p-1.5 text-sm outline-none", {
+        className={clsx("rounded-b p-1 text-sm outline-none", {
           "w-full bg-black/85 text-white": inputting,
           "invisible pointer-events-none": !inputting,
         })}
