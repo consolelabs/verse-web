@@ -6,6 +6,7 @@ import GameDialogue from "scenes/Game/Dialogue";
 import GameInteraction from "scenes/Game/Interaction";
 import GameMap from "scenes/Game/Map";
 import type { CharacterSpine } from "types/character";
+import { InteractionPing } from "./InteractionPing";
 
 type Interaction =
   | {
@@ -201,6 +202,7 @@ export class ObjectLayerManager {
             y,
             Phaser.Display.Align.TOP_LEFT
           );
+          new InteractionPing(this.scene, x + w / 2, y + h / 2);
         }
       }
     });
