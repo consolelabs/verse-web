@@ -71,6 +71,7 @@ export const MainMenu = () => {
               b.onClick?.();
               getActiveScene()?.sound.play("success-audio", { volume: 0.05 });
             }}
+            disabled={!b.onClick}
           >
             <img src={`/assets/images/${b.img}`} className="h-80px w-80px" />
             <span className="">{b.text}</span>

@@ -10,13 +10,18 @@ type Props = {
 
 const Button = ({
   children,
+  disabled = false,
   ...rest
 }: { children: React.ReactNode } & React.HTMLProps<HTMLButtonElement>) => {
   return (
     <button
       {...rest}
       type={rest.type as any}
-      className="text-white text-lg font-medium hover:scale-110 hover:brightness-120 transition-all duration-75 ease-in bg-transparent border-none shadow-none flex flex-col items-center outline-none"
+      className={clsx(
+        "text-white text-lg font-medium hover:scale-110 hover:brightness-120 transition-all duration-75 ease-in bg-transparent border-none shadow-none flex flex-col items-center outline-none",
+        { "opacity-50 pointer-events-none": disabled }
+      )}
+      disabled={disabled}
     >
       {children}
     </button>
