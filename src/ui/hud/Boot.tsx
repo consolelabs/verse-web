@@ -11,7 +11,7 @@ export const Boot = () => {
 
   const startGame = () => {
     getNFTs();
-    transitionTo(SceneKey.INTRO, SceneKey.INTRO);
+    transitionTo(SceneKey.INTRO);
 
     // Debug for POD, do not delete
     // activeScene?.cameras.main

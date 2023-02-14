@@ -1,5 +1,4 @@
 export enum SceneKey {
-  BLANK = "blank",
   INTRO = "intro",
   BOOT = "boot",
   CHAR_SELECT = "char-select",

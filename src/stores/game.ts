@@ -123,7 +123,6 @@ interface State {
 
   transitionTo: (
     key: SceneKey,
-    hud: SceneKey,
     scenesToStop?: Array<SceneKey>
   ) => Promise<void>;
 
@@ -157,7 +156,7 @@ export const useGameState = create<State>((set, get) => ({
     if (sound?.isPlaying) return;
     activeScene?.sound.add(soundKey, config).play();
   },
-  transitionTo: (scene, hud, scenesToStop = []) => {
+  transitionTo: (scene, scenesToStop = []) => {
     const { getActiveScene, stopScenes, setActiveSceneKey } = get();
     const activeScene = getActiveScene();
     if (activeScene) {
@@ -167,7 +166,7 @@ export const useGameState = create<State>((set, get) => ({
           .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
             stopScenes(...scenesToStop);
             activeScene.scene.start(scene);
-            setActiveSceneKey(hud);
+            setActiveSceneKey(scene);
             r();
           })
           .fadeOut(500, 0, 0, 0);
@@ -239,7 +238,7 @@ export const useGameState = create<State>((set, get) => ({
     Sentry.setUser(null);
     const { transitionTo } = get();
     localStorage.removeItem("session");
-    transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+    transitionTo(SceneKey.BOOT, [
       SceneKey.GAME_INTERACTION,
       SceneKey.GAME,
       SceneKey.MINIMAP,

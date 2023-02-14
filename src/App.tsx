@@ -83,7 +83,6 @@ const App = () => {
       case SceneKey.POD: {
         return <Pod />;
       }
-      case SceneKey.BLANK:
       default: {
         return null;
       }
@@ -117,7 +116,7 @@ const App = () => {
 
   useEffect(() => {
     if (!isConnected && activeSceneKey !== SceneKey.BOOT) {
-      transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+      transitionTo(SceneKey.BOOT, [
         SceneKey.GAME_INTERACTION,
         SceneKey.GAME,
         SceneKey.MINIMAP,

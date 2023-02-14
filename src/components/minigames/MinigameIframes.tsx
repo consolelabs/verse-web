@@ -33,7 +33,10 @@ export const MinigameIframes = () => {
 
         child.on("game-point", updateGamePoints);
 
-        document.querySelector("#minigame-frame iframe")?.focus();
+        const iframe = document.querySelector<HTMLIFrameElement>(
+          "#minigame-frame iframe"
+        );
+        iframe?.focus();
       });
     } else {
       child?.destroy();

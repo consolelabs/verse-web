@@ -13,7 +13,7 @@ export const MainMenu = () => {
           img: "character.png",
           text: "Character",
           onClick: () =>
-            transitionTo(SceneKey.CHAR_SELECT, SceneKey.BLANK, [
+            transitionTo(SceneKey.CHAR_SELECT, [
               SceneKey.GAME_INTERACTION,
               SceneKey.GAME,
               SceneKey.MINIMAP,
@@ -56,7 +56,7 @@ export const MainMenu = () => {
           img: "quit.png",
           text: "Quit",
           onClick: () =>
-            transitionTo(SceneKey.BOOT, SceneKey.BOOT, [
+            transitionTo(SceneKey.BOOT, [
               SceneKey.GAME_INTERACTION,
               SceneKey.GAME,
               SceneKey.MINIMAP,

@@ -102,7 +102,7 @@ export const CharSelect = () => {
   useEffect(() => {
     if (playGame) {
       playSound("start-game-audio", { volume: 0.5 });
-      transitionTo(SceneKey.CONFIG_LOADER, SceneKey.BLANK);
+      transitionTo(SceneKey.CONFIG_LOADER);
     }
   }, [playGame]);
 
