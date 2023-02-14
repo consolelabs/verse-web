@@ -14,6 +14,11 @@ export default class WorldLoader extends Phaser.Scene {
   }
 
   preload() {
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      this.scene.start(SceneKey.GAME);
+      // this.scene.start(SceneKey.POD);
+    });
+
     new TitleBg({ scene: this });
 
     const config = this.cache.json.get("config");
@@ -40,15 +45,10 @@ export default class WorldLoader extends Phaser.Scene {
       ads.forEach((ad) => {
         this.load.image(`ads_${ad.code}`, ad.image_url);
       });
-
-      this.load.start();
     })();
   }
 
   create() {
-    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
-      this.scene.start(SceneKey.GAME);
-      // this.scene.start(SceneKey.POD);
-    });
+    this.load.start();
   }
 }
