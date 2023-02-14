@@ -23,7 +23,7 @@ export const Game = () => {
           <img src="/assets/images/flag.png" className="w-80px h-80px" />
           <span className="-mt-2">Games</span>
         </GridButtons.Button>
-        <GridButtons.Button>
+        <GridButtons.Button disabled>
           <img src="/assets/images/inventory.png" className="w-80px h-80px" />
           <span className="-mt-2">Inventory</span>
         </GridButtons.Button>
