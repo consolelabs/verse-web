@@ -62,8 +62,7 @@ const App = () => {
     showLoader,
     init,
     getSession,
-    leaderboardChannel,
-    setLeaderboardChannel,
+    addChannel,
   } = useGameState();
 
   const [fps] = useState(-1);
@@ -167,13 +166,11 @@ const App = () => {
         ),
       });
     }
-    if (isConnected && socket && token && !leaderboardChannel) {
-      // subscribe to topics
-
-      const channel = socket.channel("leaderboard", { token });
-      channel.on("leaderboard:updated", addLeaderboardToPSA);
-      channel.join().receive("ok", addLeaderboardToPSA);
-      setLeaderboardChannel(channel);
+    if (isConnected) {
+      addChannel("leaderboard", {}, (channel) => {
+        channel.on("leaderboard:updated", addLeaderboardToPSA);
+        channel.join().receive("ok", addLeaderboardToPSA);
+      });
     }
   }, [isConnected, socket, token]);
 

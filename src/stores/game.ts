@@ -22,9 +22,9 @@ import { Menu, Minigame } from "constants/game";
 import { utils } from "ethers";
 import * as Sentry from "@sentry/react";
 import unionBy from "lodash.unionby";
-// @ts-ignore
-import { Socket, Channel } from "phoenix-socket";
+import { Socket, Channel } from "phoenix";
 import { Ad } from "types/ads";
+import produce from "immer";
 
 export const DEFAULT_PLAYER = {
   name: "Nez",
@@ -76,6 +76,8 @@ const config: Phaser.Types.Core.GameConfig = {
   },
 };
 
+type ChannelName = "leaderboard" | "chat";
+
 interface State {
   psaQueue: Array<{ id: string; element: React.ReactNode }>;
   addToPSAqueue: (
@@ -83,8 +85,14 @@ interface State {
   ) => void;
   removeFromPSAqueue: (id: string) => void;
   clearPSA: () => void;
-  leaderboardChannel?: Channel;
-  setLeaderboardChannel: (c: Channel) => void;
+  channels: {
+    [c in ChannelName]?: Channel;
+  };
+  addChannel: (
+    cn: ChannelName,
+    params: Record<string, string | number>,
+    onAdd: (c: Channel) => void
+  ) => Channel | undefined;
   socket?: Socket;
   token?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
@@ -137,7 +145,21 @@ interface State {
 }
 
 export const useGameState = create<State>((set, get) => ({
-  setLeaderboardChannel: (c) => set({ leaderboardChannel: c }),
+  channels: {},
+  addChannel: (cn, params, cb) => {
+    const { socket, token, channels } = get();
+    if (socket && token && !channels[cn]) {
+      const channel = socket.channel(cn, { ...params, token });
+      set(
+        produce<State>((state) => {
+          state.channels[cn] = channel;
+        })
+      );
+      cb(channel);
+      return channel;
+    }
+    return channels[cn];
+  },
   psaQueue: [],
   addToPSAqueue: (...ele) => {
     set((s) => ({
@@ -253,7 +275,7 @@ export const useGameState = create<State>((set, get) => ({
         players: [],
         activeSceneKey: SceneKey.BOOT,
         psaQueue: [],
-        leaderboardChannel: undefined,
+        channels: {},
       })
     );
     return true;
