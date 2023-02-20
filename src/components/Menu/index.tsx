@@ -5,9 +5,11 @@ import { Menu as MenuKey } from "constants/game";
 import { Leaderboard } from "./Leaderboard";
 import { MainMenu } from "./MainMenu";
 import { MinigameMenu } from "./MinigameMenu";
+import clsx from "clsx";
 
 export const Menu = () => {
   const { menu, closeMenu, getActiveScene } = useGameState();
+  const isMenuOpen = Boolean(menu);
 
   const close = () => {
     const activeScene = getActiveScene();
@@ -42,15 +44,30 @@ export const Menu = () => {
     }
   }, [menu]);
 
-  if (!menu) return null;
-
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center">
+    <div
+      className={clsx(
+        "fixed top-0 left-0 w-screen h-screen flex justify-center items-center",
+        {
+          "pointer-events-none": !isMenuOpen,
+        }
+      )}
+    >
       <div
         onClick={closeMenu}
-        className="fixed w-full h-full bg-black opacity-70"
+        className={clsx(
+          "fixed w-full h-full transition-all duration-200 ease-in-out",
+          {
+            "bg-black/70 backdrop-blur-5": isMenuOpen,
+          }
+        )}
       />
-      <GradientContainer>
+      <GradientContainer
+        className={clsx({
+          "opacity-0": !isMenuOpen,
+          "transition-all duration-200 ease-in-out opacity-100": isMenuOpen,
+        })}
+      >
         <div className="p-10">{menuRender}</div>
       </GradientContainer>
     </div>
