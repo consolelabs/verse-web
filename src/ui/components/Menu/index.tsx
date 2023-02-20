@@ -5,6 +5,7 @@ import { Menu as MenuKey } from "constants/game";
 import { Leaderboard } from "./Leaderboard";
 import { MainMenu } from "./MainMenu";
 import { MinigameMenu } from "./MinigameMenu";
+import { Mails } from "./Mails";
 import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 
@@ -39,6 +40,8 @@ export const Menu = () => {
       }
       case MenuKey.LEADERBOARD:
         return <Leaderboard />;
+      case MenuKey.MAILS:
+        return <Mails />;
       default: {
         return null;
       }
@@ -78,7 +81,7 @@ export const Menu = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Panel as={GradientContainer}>
+          <Dialog.Panel as={menu === MenuKey.MAILS ? "div" : GradientContainer}>
             <div className={menu === MenuKey.PROFILE ? "p-5" : "p-10"}>
               {menuRender}
             </div>
