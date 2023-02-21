@@ -1,11 +1,13 @@
 import { Chat } from "components/Chat";
 import { GridButtons } from "components/GridButtons";
 import { Menu } from "constants/game";
+import { SceneKey } from "constants/scenes";
 import { useEffect } from "react";
 import { useGameState } from "stores/game";
 
 export const Game = () => {
-  const { openMenu, getActiveScene, setShowLoader } = useGameState();
+  const { openMenu, getActiveScene, setShowLoader, setActiveSceneKey } =
+    useGameState();
 
   const open = (menu: Menu) => {
     const activeScene = getActiveScene();
@@ -26,7 +28,9 @@ export const Game = () => {
             <img src="/assets/images/flag.png" className="w-80px h-80px" />
             <span className="-mt-2">Games</span>
           </GridButtons.Button>
-          <GridButtons.Button>
+          <GridButtons.Button
+            onClick={() => setActiveSceneKey(SceneKey.INVENTORY)}
+          >
             <img src="/assets/images/inventory.png" className="w-80px h-80px" />
             <span className="-mt-2">Inventory</span>
           </GridButtons.Button>

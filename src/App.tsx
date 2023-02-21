@@ -15,6 +15,7 @@ import { SiweMessage } from "siwe";
 import clsx from "clsx";
 
 import { PublicServerAnnouncement } from "components/PublicServerAnnouncement";
+import { Inventory } from "components/Inventory";
 
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
@@ -55,7 +56,6 @@ const App = () => {
   const {
     addToPSAqueue,
     socket,
-    token,
     transitionTo,
     activeSceneKey,
     game,
@@ -82,6 +82,8 @@ const App = () => {
       case SceneKey.POD: {
         return <Pod />;
       }
+      case SceneKey.INVENTORY:
+        return <Inventory />;
       default: {
         return null;
       }
@@ -166,13 +168,12 @@ const App = () => {
         ),
       });
     }
-    if (isConnected) {
-      addChannel("leaderboard", {}, (channel) => {
-        channel.on("leaderboard:updated", addLeaderboardToPSA);
-        channel.join().receive("ok", addLeaderboardToPSA);
-      });
-    }
-  }, [isConnected, socket, token]);
+    if (!isConnected) return;
+    addChannel("leaderboard", {}, async (channel) => {
+      channel.on("leaderboard:updated", addLeaderboardToPSA);
+      return (data) => addLeaderboardToPSA(data);
+    });
+  }, [isConnected]);
 
   return (
     <WagmiConfig client={client}>

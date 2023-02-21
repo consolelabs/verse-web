@@ -138,8 +138,14 @@ export const Chat = () => {
   }, [channels[topic]]);
 
   useEffect(() => {
-    if (isConnected) {
-      addChannel(topic, { channel_id, msg_amount: PAGE_SIZE }, (channel) => {
+    if (!isConnected) return;
+    addChannel(
+      topic,
+      {
+        channel_id,
+        msg_amount: PAGE_SIZE,
+      },
+      async (channel) => {
         channel.on("chat:new_msg", ({ message: newMessage }) => {
           setMessages((o) => [...(o || []), newMessage]);
         });
@@ -153,11 +159,12 @@ export const Chat = () => {
             return o.filter((m) => m.id !== newMessage.id);
           });
         });
-        channel.join().receive("ok", () => {
+
+        return () => {
           setChannelConnected(true);
-        });
-      });
-    }
+        };
+      }
+    );
   }, [isConnected]);
 
   useEffect(() => {
