@@ -13,7 +13,7 @@ export const PublicServerAnnouncement = () => {
         gradientWidth={100}
         delay={0.5}
       >
-        <span className="">&#8203;</span>
+        <span>&#8203;</span>
         {psaQueue.map((e) => (
           <React.Fragment key={`marquee_${e.id}`}>{e.element}</React.Fragment>
         ))}

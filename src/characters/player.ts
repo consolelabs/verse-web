@@ -14,7 +14,7 @@ export class Player extends Phaser.GameObjects.GameObject {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys!: any;
   public character?: Character;
-  idle = false;
+  _idle = false;
 
   constructor(public config: PlayerConfig) {
     super(config.scene, "player");
@@ -33,8 +33,18 @@ export class Player extends Phaser.GameObjects.GameObject {
     super.destroy(...args);
   }
 
+  set idle(val: boolean) {
+    this._idle = val;
+    if (val) {
+      this.character?.setVelocity(0, 0);
+      this.scene.input.keyboard.disableGlobalCapture();
+    } else {
+      this.scene.input.keyboard.disableGlobalCapture();
+    }
+  }
+
   update() {
-    if (this.idle || !this.character) return;
+    if (this._idle || !this.character) return;
     const char = this.character;
     const directions: AnimationDirection[] = [];
 
