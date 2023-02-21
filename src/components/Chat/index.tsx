@@ -12,6 +12,7 @@ import { MessageItem } from "types/chat";
 const PAGE_SIZE = 20;
 
 const channel_id = "1076195173454843934";
+const topic = `chat:${channel_id}`;
 
 export const Chat = () => {
   const input = useRef<HTMLInputElement>(null);
@@ -112,7 +113,7 @@ export const Chat = () => {
         const value = input.current.value.trim();
 
         if (key === "enter" && value) {
-          channels[`chat:${channel_id}`]?.push("chat:create_msg:verse", {
+          channels[topic]?.push("chat:create_msg:verse", {
             content: value,
           });
         }
@@ -134,32 +135,28 @@ export const Chat = () => {
     window.addEventListener("keyup", handleKeyUp);
 
     return () => window.removeEventListener("keyup", handleKeyUp);
-  }, [channels[`chat:${channel_id}`]]);
+  }, [channels[topic]]);
 
   useEffect(() => {
     if (isConnected) {
-      addChannel(
-        `chat:${channel_id}`,
-        { channel_id, msg_amount: PAGE_SIZE },
-        (channel) => {
-          channel.on("chat:new_msg", ({ message: newMessage }) => {
-            setMessages((o) => [...(o || []), newMessage]);
+      addChannel(topic, { channel_id, msg_amount: PAGE_SIZE }, (channel) => {
+        channel.on("chat:new_msg", ({ message: newMessage }) => {
+          setMessages((o) => [...(o || []), newMessage]);
+        });
+        channel.on("chat:edit_msg", ({ message: newMessage }) => {
+          setMessages((o = []) => {
+            return o.map((m) => (m.id === newMessage.id ? newMessage : m));
           });
-          channel.on("chat:edit_msg", ({ message: newMessage }) => {
-            setMessages((o = []) => {
-              return o.map((m) => (m.id === newMessage.id ? newMessage : m));
-            });
+        });
+        channel.on("chat:delete_msg", ({ message: newMessage }) => {
+          setMessages((o = []) => {
+            return o.filter((m) => m.id !== newMessage.id);
           });
-          channel.on("chat:delete_msg", ({ message: newMessage }) => {
-            setMessages((o = []) => {
-              return o.filter((m) => m.id !== newMessage.id);
-            });
-          });
-          channel.join().receive("ok", () => {
-            setChannelConnected(true);
-          });
-        }
-      );
+        });
+        channel.join().receive("ok", () => {
+          setChannelConnected(true);
+        });
+      });
     }
   }, [isConnected]);
 
