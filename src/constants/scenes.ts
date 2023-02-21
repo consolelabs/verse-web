@@ -13,4 +13,6 @@ export enum SceneKey {
   POD = "pod",
 
   MINIMAP = "minimap",
+
+  INVENTORY = "inventory",
 }

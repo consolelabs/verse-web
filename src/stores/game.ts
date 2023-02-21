@@ -91,8 +91,8 @@ interface State {
   addChannel: (
     cn: ChannelName,
     params: Record<string, string | number>,
-    onAdd: (c: Channel) => void
-  ) => Channel | undefined;
+    cb: (channel: Channel) => Promise<(data?: any) => void> | Promise<void>
+  ) => Promise<void>;
   socket?: Socket;
   token?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
@@ -146,19 +146,36 @@ interface State {
 
 export const useGameState = create<State>((set, get) => ({
   channels: {},
-  addChannel: (cn, params, cb) => {
+  addChannel: async (cn, params, cb) => {
     const { socket, token, channels } = get();
+    let channel: Channel | undefined;
+    let onJoin;
     if (socket && token && !channels[cn]) {
-      const channel = socket.channel(cn, { ...params, token });
+      channel = socket.channel(cn, { ...params, token });
       set(
         produce<State>((state) => {
           state.channels[cn] = channel;
         })
       );
-      cb(channel);
-      return channel;
+      onJoin = await cb(channel);
+      if (!onJoin) {
+        onJoin = () => {
+          return;
+        };
+      }
+      channel.join().receive("ok", onJoin);
+      return;
     }
-    return channels[cn];
+    channel = channels[cn];
+    if (channel) {
+      onJoin = await cb(channel);
+      if (!onJoin) {
+        onJoin = () => {
+          return;
+        };
+      }
+      onJoin();
+    }
   },
   psaQueue: [],
   addToPSAqueue: (...ele) => {
