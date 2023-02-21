@@ -19,11 +19,9 @@ export const Game = () => {
 
   return (
     <>
-      <div className="fixed left-0 bottom-210px">
-        <Chat />
-      </div>
-      <div className="fixed bottom-0 right-0 mb-4 mr-8 flex space-x-4">
-        <GridButtons rows={1} cols={3}>
+      <Chat />
+      <div className="fixed bottom-0 right-0 mb-4 mr-8 flex">
+        <GridButtons rows={1} cols={3} gap="sm">
           <GridButtons.Button onClick={() => open(Menu.MINIGAME)}>
             <img src="/assets/images/flag.png" className="w-80px h-80px" />
             <span className="-mt-2">Games</span>

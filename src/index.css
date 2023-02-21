@@ -16,5 +16,9 @@ img {
 }
 
 #char-select .simplebar-scrollbar::before {
-  background-color: #3b82f6
+  background-color: #3b82f6;
+}
+
+#chat .simplebar-scrollbar::before {
+  background-color: white;
 }

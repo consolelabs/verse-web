@@ -76,7 +76,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
 };
 
-type ChannelName = "leaderboard" | "chat";
+type ChannelName = "leaderboard" | string;
 
 interface State {
   psaQueue: Array<{ id: string; element: React.ReactNode }>;

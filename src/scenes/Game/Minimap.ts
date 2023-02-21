@@ -2,11 +2,12 @@ import { Player } from "characters/player";
 import { SceneKey } from "constants/scenes";
 import Phaser from "phaser";
 
-const SCALE = 0.1;
 const PADDING = -8;
-const MAP_FRAME_SIZE = 200;
 
 export default class Minimap extends Phaser.Scene {
+  borderGroup!: Phaser.GameObjects.Group;
+  mapScale!: number;
+  mapFrameSize!: number;
   renderTexture?: Phaser.GameObjects.RenderTexture;
   map = {
     x: 0,
@@ -43,22 +44,24 @@ export default class Minimap extends Phaser.Scene {
   }) {
     this.player = player;
     this.cameras.main.setBackgroundColor(0x000000);
+    this.mapFrameSize = window.innerWidth / 5;
+    this.mapScale = 0.1;
 
     this.mapFrame = {
       x: PADDING,
-      y: window.innerHeight - (MAP_FRAME_SIZE + PADDING),
-      w: MAP_FRAME_SIZE,
-      h: MAP_FRAME_SIZE,
+      y: window.innerHeight - (this.mapFrameSize + PADDING),
+      w: this.mapFrameSize,
+      h: this.mapFrameSize,
     };
     this.map = {
       ...this.map,
-      y: window.innerHeight - MAP_FRAME_SIZE * 2,
+      y: window.innerHeight - this.mapFrameSize * 2,
       h,
       w,
     };
 
     this.renderTexture = this.add.renderTexture(0, 0, this.map.w, this.map.h);
-    this.renderTexture.setScale(SCALE);
+    this.renderTexture.setScale(this.mapScale);
     this.renderTexture.draw(layers);
 
     // Create a new mask instance
@@ -68,9 +71,9 @@ export default class Minimap extends Phaser.Scene {
     this.cameras.main.setMask(this.mask);
     this.cameras.main.setViewport(
       PADDING,
-      window.innerHeight - (MAP_FRAME_SIZE + PADDING),
-      MAP_FRAME_SIZE,
-      MAP_FRAME_SIZE
+      window.innerHeight - (this.mapFrameSize + PADDING),
+      this.mapFrameSize,
+      this.mapFrameSize
     );
 
     this.charShape = this.add.graphics({});
@@ -83,12 +86,21 @@ export default class Minimap extends Phaser.Scene {
 
     // Handlers for on-resize
     window.addEventListener("resize", () => {
+      this.mapFrameSize = window.innerWidth / 5;
+      this.mapFrame.w = this.mapFrameSize;
+      this.mapFrame.h = this.mapFrameSize;
+
       // Destroy previous mask instance
       this.mask?.destroy();
+      this.renderTexture?.destroy();
+
+      this.renderTexture = this.add.renderTexture(0, 0, this.map.w, this.map.h);
+      this.renderTexture.setScale(this.mapScale);
+      this.renderTexture.draw(layers);
 
       // Update the new frame/map position
-      this.mapFrame.y = window.innerHeight - (MAP_FRAME_SIZE + PADDING);
-      this.map.y = window.innerHeight - MAP_FRAME_SIZE * 2;
+      this.mapFrame.y = window.innerHeight - (this.mapFrameSize + PADDING);
+      this.map.y = window.innerHeight - this.mapFrameSize * 2;
 
       // Create a new mask instance
       this.mask = this.createMask();
@@ -97,9 +109,9 @@ export default class Minimap extends Phaser.Scene {
       this.cameras.main?.setMask(this.mask);
       this.cameras.main.setViewport(
         PADDING,
-        window.innerHeight - (MAP_FRAME_SIZE + PADDING),
-        MAP_FRAME_SIZE,
-        MAP_FRAME_SIZE
+        window.innerHeight - (this.mapFrameSize + PADDING),
+        this.mapFrameSize,
+        this.mapFrameSize
       );
     });
   }
@@ -114,15 +126,11 @@ export default class Minimap extends Phaser.Scene {
       this.mapFrame.h,
       8
     );
-    // shape.arc(
-    //   this.mapFrame.x,
-    //   this.mapFrame.y,
-    //   this.mapFrame.h / 2,
-    //   Phaser.Math.DegToRad(0),
-    //   Phaser.Math.DegToRad(360)
-    // );
-    // shape.fillPath();
     const mask = shape.createGeometryMask();
+
+    // Destroy previous borders
+    this.borderGroup?.destroy(true);
+    this.borderGroup = this.add.group();
 
     // decorations
     const border1 = this.add.graphics();
@@ -147,14 +155,16 @@ export default class Minimap extends Phaser.Scene {
     );
     border2.setScrollFactor(0);
 
+    this.borderGroup.add(border1).add(border2);
+
     return mask;
   }
 
   update() {
     if (this.player?.character?.instance) {
       const { x, y } = this.player.character.instance;
-      const scaleX = x * SCALE;
-      const scaleY = y * SCALE;
+      const scaleX = x * this.mapScale;
+      const scaleY = y * this.mapScale;
       this.charShape?.setPosition(scaleX, scaleY);
     }
   }

@@ -6,15 +6,15 @@ import GameMap from "scenes/Game/Map";
 import SimpleBar from "simplebar-react";
 import { useAccount } from "wagmi";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import useSWRInfinite from "swr/infinite";
 import { API_BASE_URL } from "envs";
+import { MessageItem } from "types/chat";
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 20;
 
 const channel_id = "1076195173454843934";
 
 export const Chat = () => {
-  const input = useRef<HTMLTextAreaElement>(null);
+  const input = useRef<HTMLInputElement>(null);
   const chatFrame = useRef<any>(null);
 
   const { getActiveScene, addChannel, token, channels } = useGameState();
@@ -23,53 +23,82 @@ export const Chat = () => {
 
   const { isConnected } = useAccount();
 
-  const { data, error, mutate, isLoading, isValidating, size, setSize } =
-    useSWRInfinite<
-      Array<{
-        id: number;
-        author: {
-          address: string;
-          bot: boolean;
-          username: string;
-        };
-        content: string;
-      }>
-    >(
-      (_, previousPageData) => {
-        let before = "";
-        if (Array.isArray(previousPageData) && previousPageData.length) {
-          before = `&before=${previousPageData[0].id}`;
-        }
-        return `${API_BASE_URL}/discord/channels/${channel_id}/messages?limit=${PAGE_SIZE}${before}`;
-      },
-      (url) =>
-        fetch(url, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }).then((res) => res.json())
-    );
-
-  const isEmpty = data?.[0].length === 0;
-  const allData = data ? [...data].reverse().flat() : [];
+  const initialLoad = useRef(true);
+  const [messages, setMessages] = useState<MessageItem[]>();
+  const messagesRef = useRef(messages);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [lastMessage, setLastMessage] = useState<MessageItem>();
+  const [hasLoadedAll, setHasLoadedAll] = useState(false);
 
   const virtualRef = React.useRef<HTMLDivElement>(null);
-
   const virtualizer = useVirtualizer({
-    count: allData.length,
+    count: (messages || []).length,
     getScrollElement: () => virtualRef.current,
     estimateSize: () => 30,
   });
 
   useEffect(() => {
-    function handleEnter(e: KeyboardEvent) {
+    if (!lastMessage && !initialLoad.current) {
+      return;
+    }
+
+    setIsLoading(true);
+    if (!initialLoad.current) {
+      setIsLoadingMore(true);
+    }
+
+    let before = "";
+    if (lastMessage) {
+      before = `&before=${lastMessage.id}`;
+    }
+
+    fetch(
+      `${API_BASE_URL}/discord/channels/${channel_id}/messages?limit=${PAGE_SIZE}${before}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // Mark end of the channel
+        if (data.length < PAGE_SIZE) {
+          setHasLoadedAll(true);
+        }
+
+        setMessages((o) => [...data, ...(o || [])]);
+      })
+      .catch((error) => {
+        setError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+
+        if (initialLoad.current) {
+          initialLoad.current = false;
+        }
+      });
+  }, [lastMessage?.id]);
+
+  useEffect(() => {
+    function handleKeyUp(e: KeyboardEvent) {
       const key = e.key.toLowerCase();
-      if (
-        !["enter", "escape"].includes(key) ||
-        !input.current ||
-        (key === "enter" && e.shiftKey)
-      )
+      if (!["enter", "escape"].includes(key) || (key === "enter" && e.shiftKey))
         return;
+
+      // Scroll to bottom on Enter/Escape
+      virtualRef.current?.scrollTo({
+        top: virtualRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+
+      if (!input.current) {
+        return;
+      }
+
       const activeScene = getActiveScene() as GameMap;
       if (!activeScene?.player) return;
       const newState = key === "escape" ? false : input.current.disabled;
@@ -81,8 +110,11 @@ export const Chat = () => {
         }, 0);
       } else {
         const value = input.current.value.trim();
+
         if (key === "enter" && value) {
-          channels.chat?.push("chat:create_msg:verse", { content: value });
+          channels[`chat:${channel_id}`]?.push("chat:create_msg:verse", {
+            content: value,
+          });
         }
 
         setTimeout(() => {
@@ -99,164 +131,167 @@ export const Chat = () => {
       setInputting(newState);
     }
 
-    window.addEventListener("keyup", handleEnter);
+    window.addEventListener("keyup", handleKeyUp);
 
-    return () => window.removeEventListener("keyup", handleEnter);
-  }, [channels.chat]);
+    return () => window.removeEventListener("keyup", handleKeyUp);
+  }, [channels[`chat:${channel_id}`]]);
 
   useEffect(() => {
     if (isConnected) {
-      addChannel("chat", { channel_id, msg_amount: 50 }, (channel) => {
-        channel.on("chat:new_msg", ({ message: newMessage }) => {
-          mutate(
-            async (pages = []) => {
-              return [[newMessage], ...pages];
-            },
-            {
-              revalidate: false,
-            }
-          ).then(() => {
-            virtualizer.scrollElement?.scrollTo({
-              top: virtualizer.scrollElement.scrollHeight,
-              behavior: "smooth",
+      addChannel(
+        `chat:${channel_id}`,
+        { channel_id, msg_amount: PAGE_SIZE },
+        (channel) => {
+          channel.on("chat:new_msg", ({ message: newMessage }) => {
+            setMessages((o) => [...(o || []), newMessage]);
+          });
+          channel.on("chat:edit_msg", ({ message: newMessage }) => {
+            setMessages((o = []) => {
+              return o.map((m) => (m.id === newMessage.id ? newMessage : m));
             });
           });
-        });
-        channel.on("chat:edit_msg", ({ message: newMessage }) => {
-          mutate(
-            async (pages = []) => {
-              return pages.map((p) =>
-                p.some((m) => m.id === newMessage.id)
-                  ? p.map((m) => (m.id === newMessage.id ? newMessage : m))
-                  : p
-              );
-            },
-            {
-              revalidate: false,
-            }
-          );
-        });
-        channel.on("chat:delete_msg", ({ message: newMessage }) => {
-          mutate(
-            async (pages = []) => {
-              return pages.map((p) =>
-                p.some((m) => m.id === newMessage.id)
-                  ? p.filter((m) => m.id !== newMessage.id)
-                  : p
-              );
-            },
-            {
-              revalidate: false,
-            }
-          );
-        });
-        channel.join().receive("ok", () => {
-          setChannelConnected(true);
-        });
-      });
+          channel.on("chat:delete_msg", ({ message: newMessage }) => {
+            setMessages((o = []) => {
+              return o.filter((m) => m.id !== newMessage.id);
+            });
+          });
+          channel.join().receive("ok", () => {
+            setChannelConnected(true);
+          });
+        }
+      );
     }
-  }, []);
+  }, [isConnected]);
 
   useEffect(() => {
-    if (
-      channelConnected &&
-      virtualizer.scrollElement &&
-      virtualizer.scrollOffset === 0
-    ) {
-      virtualizer.scrollElement?.scrollTo({
-        top: virtualizer.scrollElement.scrollHeight,
-        behavior: "auto",
-      });
+    messagesRef.current = messages;
+
+    if (messages && messages?.length > 0) {
+      // Scroll to bottom on receiving new messages
+      if (!isLoadingMore) {
+        virtualRef.current?.scrollTo({
+          top: virtualRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      } else if (lastMessage) {
+        // Scroll to last message after loading more messages
+        // FIXME: There's a slight flick here. Not sure if it's possible to fix it considering that we are rendering items
+        // with virtualizer :thinking:
+        virtualizer.scrollToIndex(
+          messages.findIndex((m) => m.id === lastMessage?.id)
+        );
+        setIsLoadingMore(false);
+      }
     }
-  }, [channelConnected, virtualizer.scrollElement]);
+  }, [JSON.stringify(messages)]);
 
   const items = virtualizer.getVirtualItems();
 
   if (error || !channelConnected) return null;
 
   return (
-    <div className="flex flex-col">
+    <div className="fixed left-0 bottom-0 ml-[20vw] mb-4">
       <div
-        className={clsx("w-full h-3.5 rounded-t", {
-          "bg-transparent": !inputting,
-          "bg-sky-700": inputting,
-        })}
-      />
-      <div
-        className={clsx("flex flex-col", {
-          "bg-black/45": !inputting,
-          "bg-black/70": inputting,
-        })}
-      >
-        {!isEmpty ? (
-          <button
-            className="text-white/80 text-sm bg-gray-600 mx-auto self-center rounded-b px-1 sticky top-0"
-            type="button"
-            onClick={() => setSize(size + 1)}
-          >
-            {isValidating || isLoading ? "Loading..." : "Load more"}
-          </button>
-        ) : null}
-        <SimpleBar
-          ref={chatFrame}
-          className="px-1.5 w-[25vw] bg-transparent max-h-250px h-full"
-          scrollableNodeProps={{ ref: virtualRef }}
-        >
-          {/* <MessageSkeleton /> */}
-          <div
-            style={{
-              height: `${virtualizer.getTotalSize()}px`,
-            }}
-            className="w-full relative"
-          >
-            <div
-              className="absolute top-0 left-0 w-full"
-              style={{
-                transform: `translateY(${
-                  (items[0]?.start ?? 0) - virtualizer.options.scrollMargin
-                }px)`,
-              }}
-            >
-              {items.map((vrow) => {
-                const msg = allData[vrow.index];
-
-                return (
-                  <div
-                    key={vrow.key}
-                    data-index={vrow.index}
-                    ref={virtualizer.measureElement}
-                    className="my-1.5"
-                  >
-                    <Message
-                      sender={
-                        msg.author.bot
-                          ? `${msg.author.address.slice(
-                              0,
-                              4
-                            )}...${msg.author.address.slice(-4)}`
-                          : msg.author.username
-                      }
-                    >
-                      {msg.content}
-                    </Message>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </SimpleBar>
-      </div>
-      <textarea
-        ref={input}
-        disabled={!inputting}
+        id="chat"
         className={clsx(
-          "min-h-[1.75rem] max-h-[2.75rem] resize-y rounded-b p-1.5 text-xs outline-none",
+          "flex flex-col text-sm text-white/80 bg-#140F29 rounded-lg border border-solid border-#343354 overflow-hidden",
           {
-            "w-full bg-black/85 text-white": inputting,
-            "invisible pointer-events-none": !inputting,
+            "bg-opacity-20 border-transparent": !inputting,
+            "bg-opacity-100": inputting,
           }
         )}
-      />
+      >
+        <div
+          className={clsx("w-full border-b border-solid border-#343354", {
+            "opacity-0": !inputting,
+            "opacity-100": inputting,
+          })}
+        >
+          <div className="flex">
+            <button
+              type="button"
+              className={clsx("px-4 py-2", { "bg-#343354": true })}
+            >
+              Town Hall
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <SimpleBar
+            ref={chatFrame}
+            className={clsx(
+              "px-4 w-[20vw] bg-transparent h-[calc(20vw-100px)] contain-strict",
+              { "pointer-events-none": !inputting }
+            )}
+            scrollableNodeProps={{
+              ref: virtualRef,
+            }}
+            color="white"
+          >
+            {!hasLoadedAll ? (
+              <button
+                className="text-sm bg-gray-600 mx-auto self-center rounded px-2 py-1 block my-4"
+                type="button"
+                onClick={() => setLastMessage(messages?.[0])}
+              >
+                {isLoading ? "Loading..." : "Load more"}
+              </button>
+            ) : null}
+            <div
+              style={{
+                height: `${virtualizer.getTotalSize()}px`,
+              }}
+              className="w-full relative"
+            >
+              <div
+                className="absolute top-0 left-0 w-full"
+                style={{
+                  transform: `translateY(${items[0]?.start || 0}px)`,
+                }}
+              >
+                {items.map((item) => {
+                  const msg = (messages || [])[item.index];
+
+                  return (
+                    <div
+                      key={item.key}
+                      data-index={item.index}
+                      ref={virtualizer.measureElement}
+                      className="py-1"
+                    >
+                      <Message
+                        sender={
+                          msg.author?.bot
+                            ? `${msg.author.address.slice(
+                                0,
+                                4
+                              )}...${msg.author.address.slice(-4)}`
+                            : msg.author.username
+                        }
+                        content={msg.content}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </SimpleBar>
+        </div>
+        <div
+          className={clsx("border-t border-solid border-#343354", {
+            "opacity-0 pointer-events-none": !inputting,
+            "opacity-100": inputting,
+          })}
+        >
+          <input
+            ref={input}
+            type="text"
+            disabled={!inputting}
+            className="w-full px-4 py-2 bg-#A6DAF726 outline-none"
+            placeholder="Enter a message..."
+          />
+        </div>
+      </div>
     </div>
   );
 };
