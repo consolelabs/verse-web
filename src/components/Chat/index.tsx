@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Message } from "./Message";
 import { clsx } from "clsx";
 import { useGameState } from "stores/game";
@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { API_BASE_URL } from "envs";
 import { MessageItem } from "types/chat";
+import debounce from "lodash.debounce";
 
 const PAGE_SIZE = 20;
 
@@ -32,13 +33,37 @@ export const Chat = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [lastMessage, setLastMessage] = useState<MessageItem>();
   const [hasLoadedAll, setHasLoadedAll] = useState(false);
+  const [showLoadedAllButton, setShowLoadedAllButton] = useState(false);
 
   const virtualRef = React.useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
     count: (messages || []).length,
     getScrollElement: () => virtualRef.current,
-    estimateSize: () => 30,
+    estimateSize: () => 20,
   });
+
+  const scrollToBottom = useMemo(
+    () =>
+      debounce(() => {
+        virtualRef.current?.scrollTo({
+          top: virtualRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 300),
+    []
+  );
+
+  const toggleInputting = (newState: boolean) => {
+    const activeScene = getActiveScene() as GameMap;
+
+    if (!input.current || !activeScene) {
+      return;
+    }
+
+    input.current.disabled = !newState;
+    activeScene.player.idle = newState;
+    setInputting(newState);
+  };
 
   useEffect(() => {
     if (!lastMessage && !initialLoad.current) {
@@ -90,12 +115,6 @@ export const Chat = () => {
       if (!["enter", "escape"].includes(key) || (key === "enter" && e.shiftKey))
         return;
 
-      // Scroll to bottom on Enter/Escape
-      virtualRef.current?.scrollTo({
-        top: virtualRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-
       if (!input.current) {
         return;
       }
@@ -127,9 +146,7 @@ export const Chat = () => {
         if (!newState && key === "enter" && value) return;
       }
 
-      input.current.disabled = !newState;
-      activeScene.player.idle = newState;
-      setInputting(newState);
+      toggleInputting(newState);
     }
 
     window.addEventListener("keyup", handleKeyUp);
@@ -173,10 +190,7 @@ export const Chat = () => {
     if (messages && messages?.length > 0) {
       // Scroll to bottom on receiving new messages
       if (!isLoadingMore) {
-        virtualRef.current?.scrollTo({
-          top: virtualRef.current.scrollHeight,
-          behavior: "smooth",
-        });
+        scrollToBottom();
       } else if (lastMessage) {
         // Scroll to last message after loading more messages
         // FIXME: There's a slight flick here. Not sure if it's possible to fix it considering that we are rendering items
@@ -189,27 +203,30 @@ export const Chat = () => {
     }
   }, [JSON.stringify(messages)]);
 
+  useEffect(() => {
+    if (!inputting) {
+      scrollToBottom();
+    }
+  }, [inputting]);
+
   const items = virtualizer.getVirtualItems();
 
   if (error || !channelConnected) return null;
 
   return (
-    <div className="fixed left-0 bottom-0 ml-[20vw] mb-4">
+    <div className="fixed left-1/2 bottom-0 -translate-x-1/2 mb-4">
       <div
         id="chat"
-        className={clsx(
-          "flex flex-col text-sm text-white/80 bg-#140F29 rounded-lg border border-solid border-#343354 overflow-hidden",
-          {
-            "bg-opacity-20 border-transparent": !inputting,
-            "bg-opacity-100": inputting,
-          }
-        )}
+        className="flex flex-col text-xs text-white/80 rounded-lg overflow-hidden"
       >
         <div
-          className={clsx("w-full border-b border-solid border-#343354", {
-            "opacity-0": !inputting,
-            "opacity-100": inputting,
-          })}
+          className={clsx(
+            "w-full border-b border-solid border-#343354 bg-#140F29 transition-all duration-200 relative",
+            {
+              "opacity-0": !inputting,
+              "opacity-100": inputting,
+            }
+          )}
         >
           <div className="flex">
             <button
@@ -219,28 +236,36 @@ export const Chat = () => {
               Town Hall
             </button>
           </div>
+          <button
+            type="button"
+            className="absolute text-red-500 right-0 top-0 mt-1 mr-2"
+            onClick={() => toggleInputting(false)}
+          >
+            <div className="i-heroicons-x-mark-20-solid w-6 h-6" />
+          </button>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col relative">
           <SimpleBar
             ref={chatFrame}
             className={clsx(
-              "px-4 w-[20vw] bg-transparent h-[calc(20vw-100px)] contain-strict",
-              { "pointer-events-none": !inputting }
+              "px-4 w-[30vw] h-[30vh] contain-strict bg-#140F29 transition-all duration-200",
+              { "bg-opacity-20 pointer-events-none rounded-lg": !inputting }
             )}
             scrollableNodeProps={{
               ref: virtualRef,
             }}
-            color="white"
+            onScrollCapture={() => {
+              if (
+                !hasLoadedAll &&
+                virtualRef.current &&
+                virtualRef.current.scrollTop < 100
+              ) {
+                setShowLoadedAllButton(true);
+              } else {
+                setShowLoadedAllButton(false);
+              }
+            }}
           >
-            {!hasLoadedAll ? (
-              <button
-                className="text-sm bg-gray-600 mx-auto self-center rounded px-2 py-1 block my-4"
-                type="button"
-                onClick={() => setLastMessage(messages?.[0])}
-              >
-                {isLoading ? "Loading..." : "Load more"}
-              </button>
-            ) : null}
             <div
               style={{
                 height: `${virtualizer.getTotalSize()}px`,
@@ -261,7 +286,7 @@ export const Chat = () => {
                       key={item.key}
                       data-index={item.index}
                       ref={virtualizer.measureElement}
-                      className="py-1"
+                      className="py-0.5"
                     >
                       <Message
                         sender={
@@ -280,12 +305,24 @@ export const Chat = () => {
               </div>
             </div>
           </SimpleBar>
+          {showLoadedAllButton && !hasLoadedAll ? (
+            <button
+              className="text-sm bg-gray-600 mx-auto self-center rounded px-2 py-1 block my-4 absolute top-0"
+              type="button"
+              onClick={() => setLastMessage(messages?.[0])}
+            >
+              {isLoading ? "Loading..." : "Load more"}
+            </button>
+          ) : null}
         </div>
         <div
-          className={clsx("border-t border-solid border-#343354", {
-            "opacity-0 pointer-events-none": !inputting,
-            "opacity-100": inputting,
-          })}
+          className={clsx(
+            "border-t border-solid border-#343354 bg-#140F29 transition-all duration-200",
+            {
+              "opacity-0 pointer-events-none h-0": !inputting,
+              "opacity-100 h-32px": inputting,
+            }
+          )}
         >
           <input
             ref={input}
