@@ -6,7 +6,7 @@ export const PublicServerAnnouncement = () => {
   const { psaQueue } = useGameState();
 
   return (
-    <div className="top-0 w-screen fixed bg-black/80 py-1 text-white text-lg">
+    <div className="top-0 w-screen fixed z-10 bg-black/80 py-1 text-white text-lg">
       <Marquee
         speed={50}
         gradientColor={[0, 0, 0]}

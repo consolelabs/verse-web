@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useGameState } from "stores/game";
 import { GradientContainer } from "../GradientContainer";
 import { Menu as MenuKey } from "constants/game";
@@ -6,6 +6,8 @@ import { Leaderboard } from "./Leaderboard";
 import { MainMenu } from "./MainMenu";
 import { MinigameMenu } from "./MinigameMenu";
 import clsx from "clsx";
+import { Dialog, Transition } from "@headlessui/react";
+import { Profile } from "./Profile";
 
 export const Menu = () => {
   const { menu, closeMenu, getActiveScene } = useGameState();
@@ -38,6 +40,8 @@ export const Menu = () => {
       }
       case MenuKey.LEADERBOARD:
         return <Leaderboard />;
+      case MenuKey.PROFILE:
+        return <Profile />;
       default: {
         return null;
       }
@@ -45,31 +49,45 @@ export const Menu = () => {
   }, [menu]);
 
   return (
-    <div
-      className={clsx(
-        "fixed top-0 left-0 w-screen h-screen flex justify-center items-center",
-        {
-          "pointer-events-none": !isMenuOpen,
-        }
-      )}
-    >
-      <div
-        onClick={closeMenu}
+    <Transition appear show={isMenuOpen} as={React.Fragment}>
+      <Dialog
+        open={isMenuOpen}
+        onClose={closeMenu}
+        as="div"
         className={clsx(
-          "fixed w-full h-full transition-all duration-200 ease-in-out",
+          "fixed top-0 left-0 w-screen h-screen flex justify-center items-center",
           {
-            "bg-black/70 backdrop-blur-5": isMenuOpen,
+            "pointer-events-none": !isMenuOpen,
           }
         )}
-      />
-      <GradientContainer
-        className={clsx({
-          "opacity-0": !isMenuOpen,
-          "transition-all duration-200 ease-in-out opacity-100": isMenuOpen,
-        })}
       >
-        <div className="p-10">{menuRender}</div>
-      </GradientContainer>
-    </div>
+        <Transition.Child
+          as={React.Fragment}
+          enter="ease-in-out duration-200"
+          enterFrom="bg-transparent backdrop-blur-0"
+          enterTo="bg-black/70 backdrop-blur-5"
+          leave="ease-in-out duration-200"
+          leaveFrom="bg-black/70 backdrop-blur-5"
+          leaveTo="bg-transparent backdrop-blur-0"
+        >
+          <div onClick={closeMenu} className="fixed w-full h-full" />
+        </Transition.Child>
+        <Transition.Child
+          as="div"
+          enter="ease-in-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in-out duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Dialog.Panel as={GradientContainer}>
+            <div className={menu === MenuKey.PROFILE ? "p-5" : "p-10"}>
+              {menuRender}
+            </div>
+          </Dialog.Panel>
+        </Transition.Child>
+      </Dialog>
+    </Transition>
   );
 };

@@ -29,7 +29,7 @@ export const Inventory = () => {
       leaveTo="opacity-0 scale-104"
       as={React.Fragment}
     >
-      <div className="flex flex-col relative w-screen h-screen bg-#151321 p-5">
+      <div className="z-20 flex flex-col relative w-screen h-screen bg-#151321 p-5">
         <div className="flex items-center">
           <div className="flex items-center gap-x-2">
             <button

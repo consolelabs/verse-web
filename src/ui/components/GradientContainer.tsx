@@ -7,15 +7,18 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const GradientContainer = (props: Props) => {
-  return (
-    <div
-      className={clsx("relative p-1.5px rounded-lg", props.className)}
-      style={{ background: "linear-gradient(45deg, #EF3EFF, #2FD4D6)" }}
-    >
-      <div className={clsx("bg-#140F29 rounded-lg", props.contentClassName)}>
-        {props.children}
+export const GradientContainer = React.forwardRef<HTMLDivElement, Props>(
+  (props, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={clsx("relative p-1.5px rounded-lg", props.className)}
+        style={{ background: "linear-gradient(45deg, #EF3EFF, #2FD4D6)" }}
+      >
+        <div className={clsx("bg-#140F29 rounded-lg", props.contentClassName)}>
+          {props.children}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
