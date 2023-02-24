@@ -12,6 +12,8 @@ const rows = Array(5)
   .map((_, i) => `grid-rows-${i + 1}`)
   .join(" ");
 
+const cryptoIcons = ["eth", "avax", "btc", "dai", "matic", "sol"];
+
 export const config = defineConfig({
   presets: [presetIcons(), presetUno()],
   transformers: [transformerVariantGroup()],
@@ -23,7 +25,10 @@ export const config = defineConfig({
     "btn-md": "text-lg px-6 py-1",
     "btn-sm": "text-base px-4 py-1",
   },
-  safelist: `${cols} ${rows}`.split(" "),
+  safelist: [
+    `${cols} ${rows}`.split(" "),
+    cryptoIcons.map((i) => `i-cryptocurrency-color-${i}`),
+  ].flat(),
   theme: {
     colors: {
       typo: {

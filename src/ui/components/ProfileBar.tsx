@@ -22,7 +22,7 @@ export const ProfileBar = () => {
             tabIndex={-1}
           >
             <img src="/assets/images/avatar-frame.png" alt="" />
-            <div className="absolute top-1.8 left-1.8 w-full h-full">
+            <div className="h-43px w-43px absolute top-1.8 left-1.8 w-full h-full">
               <Avatar address={account} size={43} />
             </div>
           </button>
