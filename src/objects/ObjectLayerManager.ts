@@ -7,6 +7,7 @@ import GameInteraction from "scenes/Game/Interaction";
 import GameMap from "scenes/Game/Map";
 import type { CharacterSpine } from "types/character";
 import { InteractionPing } from "./InteractionPing";
+import { useGameState } from "stores/game";
 
 type Interaction =
   | {
@@ -44,11 +45,13 @@ function getInteractHandler(properties: any, scene: GameMap) {
         scene.scene.resume(SceneKey.GAME_INTERACTION);
         break;
       case "dialogue": {
+        useGameState.getState().toggleHud(false);
         const dialogueScene = scene.scene.get(
           SceneKey.GAME_DIALOGUE
         ) as GameDialogue;
         dialogueScene.show(properties.value, () => {
           scene.player.idle = false;
+          useGameState.getState().toggleHud(true);
           scene.scene.resume(SceneKey.GAME_INTERACTION);
         });
         break;

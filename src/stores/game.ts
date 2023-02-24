@@ -142,6 +142,9 @@ interface State {
 
   ads?: Ad[];
   setAds: (ads: Ad[]) => void;
+
+  hudVisible?: boolean;
+  toggleHud: (value?: boolean) => void;
 }
 
 export const useGameState = create<State>((set, get) => ({
@@ -391,4 +394,13 @@ export const useGameState = create<State>((set, get) => ({
 
   ads: [],
   setAds: (ads) => set(() => ({ ads })),
+
+  hudVisible: true,
+  toggleHud: (value?: boolean) => {
+    if (value !== undefined) {
+      set(() => ({ hudVisible: value }));
+    } else {
+      set(() => ({ hudVisible: !get().hudVisible }));
+    }
+  },
 }));

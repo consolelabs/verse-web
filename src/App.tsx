@@ -16,6 +16,7 @@ import { SiweMessage } from "siwe";
 import { PublicServerAnnouncement } from "components/PublicServerAnnouncement";
 import { Inventory } from "components/Inventory";
 import { LoadingText } from "components/LoadingText";
+import { Transition } from "@headlessui/react";
 
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
@@ -63,6 +64,7 @@ const App = () => {
     init,
     getSession,
     addChannel,
+    hudVisible,
   } = useGameState();
 
   const [fps] = useState(-1);
@@ -133,7 +135,7 @@ const App = () => {
           <div className="flex space-x-3 mr-10 text-sm items-center">
             <span className="text-yellow">Games Leaderboard:</span>
             <div className="flex space-x-5">
-              {msg.leaderboard.map((p: any, i: number) => {
+              {msg?.leaderboard.map((p: any, i: number) => {
                 return (
                   <div
                     key={`${p.user_address}_${p.game}`}
@@ -189,7 +191,18 @@ const App = () => {
             </div>
           )}
           <PublicServerAnnouncement />
-          {contentRender}
+          <Transition
+            show={hudVisible}
+            className="fixed top-0 left-0 w-full h-full"
+            enter="transition-all duration-200"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-all duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            {contentRender}
+          </Transition>
           <Menu />
           <Toaster
             position="bottom-center"
