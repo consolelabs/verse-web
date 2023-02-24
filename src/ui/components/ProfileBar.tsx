@@ -18,7 +18,7 @@ export const ProfileBar = () => {
           <button
             onClick={() => openMenu(Menu.PROFILE)}
             type="button"
-            className="relative z-10"
+            className="relative z-10 outline-none"
             tabIndex={-1}
           >
             <img src="/assets/images/avatar-frame.png" alt="" />
