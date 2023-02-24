@@ -9,6 +9,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { API_BASE_URL } from "envs";
 import { MessageItem } from "types/chat";
 import debounce from "lodash.debounce";
+import { Transition } from "@headlessui/react";
 
 const PAGE_SIZE = 20;
 
@@ -34,6 +35,7 @@ export const Chat = () => {
   const [lastMessage, setLastMessage] = useState<MessageItem>();
   const [hasLoadedAll, setHasLoadedAll] = useState(false);
   const [showLoadedAllButton, setShowLoadedAllButton] = useState(false);
+  const [visibleMessageIds, setVisibleMessageIds] = useState<number[]>([]);
 
   const virtualRef = React.useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
@@ -165,6 +167,9 @@ export const Chat = () => {
       async (channel) => {
         channel.on("chat:new_msg", ({ message: newMessage }) => {
           setMessages((o) => [...(o || []), newMessage]);
+          setVisibleMessageIds((o) => {
+            return [...o, newMessage.id].slice(-20);
+          });
         });
         channel.on("chat:edit_msg", ({ message: newMessage }) => {
           setMessages((o = []) => {
@@ -209,25 +214,71 @@ export const Chat = () => {
     }
   }, [inputting]);
 
+  useEffect(() => {
+    let timeout: any;
+
+    if (visibleMessageIds.length > 0) {
+      timeout = setTimeout(() => {
+        setVisibleMessageIds([]);
+      }, 10000);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [visibleMessageIds]);
+
   const items = virtualizer.getVirtualItems();
+
+  const previewMessageRender = useMemo(() => {
+    const visible = visibleMessageIds.length > 0 && !inputting;
+
+    if (!visible) {
+      return null;
+    }
+
+    return (
+      <div className="absolute bottom-0 w-full max-h-full text-xs bg-#140F29/30 rounded-lg px-4 py-2 mt-auto overflow-auto flex flex-col-reverse">
+        {visibleMessageIds.reverse().map((id) => {
+          const msg = (messages || []).find((m) => m.id === id);
+
+          if (!msg) {
+            return null;
+          }
+
+          return (
+            <div key={id} className="py-0.5">
+              <Message
+                sender={
+                  msg.author?.bot
+                    ? `${msg.author.address.slice(
+                        0,
+                        4
+                      )}...${msg.author.address.slice(-4)}`
+                    : msg.author.username
+                }
+                content={msg.content}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [visibleMessageIds, inputting, messages]);
 
   if (error || !channelConnected) return null;
 
   return (
     <div className="fixed left-1/2 bottom-0 -translate-x-1/2 mb-4">
+      {previewMessageRender}
       <div
         id="chat"
-        className="flex flex-col text-xs text-white/80 rounded-lg overflow-hidden"
+        className={clsx(
+          "flex flex-col text-xs text-white/80 rounded-lg overflow-hidden transition-all duration-200",
+          { "opacity-0": !inputting, "opacity-100": inputting }
+        )}
       >
-        <div
-          className={clsx(
-            "w-full border-b border-solid border-#343354 bg-#140F29 transition-all duration-200 relative",
-            {
-              "opacity-0": !inputting,
-              "opacity-100": inputting,
-            }
-          )}
-        >
+        <div className="w-full border-b border-solid border-#343354 bg-#140F29 relative">
           <div className="flex">
             <button
               type="button"
@@ -248,8 +299,8 @@ export const Chat = () => {
           <SimpleBar
             ref={chatFrame}
             className={clsx(
-              "px-4 w-[30vw] h-[30vh] contain-strict bg-#140F29 transition-all duration-200",
-              { "bg-opacity-20 pointer-events-none rounded-lg": !inputting }
+              "px-4 w-[30vw] h-[30vh] contain-strict bg-#140F29",
+              { "pointer-events-none": !inputting }
             )}
             scrollableNodeProps={{
               ref: virtualRef,
@@ -319,8 +370,8 @@ export const Chat = () => {
           className={clsx(
             "border-t border-solid border-#343354 bg-#140F29 transition-all duration-200",
             {
-              "opacity-0 pointer-events-none h-0": !inputting,
-              "opacity-100 h-32px": inputting,
+              "pointer-events-none h-0": !inputting,
+              "h-32px": inputting,
             }
           )}
         >
