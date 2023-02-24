@@ -12,10 +12,10 @@ import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
 import { MinigameIframes } from "components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
-import clsx from "clsx";
 
 import { PublicServerAnnouncement } from "components/PublicServerAnnouncement";
 import { Inventory } from "components/Inventory";
+import { LoadingText } from "components/LoadingText";
 
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
@@ -200,15 +200,11 @@ const App = () => {
               },
             }}
           />
-          <div
-            className={clsx(
-              "absolute bottom-0 right-0 mr-8 mb-8 i-svg-spinners-tadpole w-12 h-12 text-white transition-opacity",
-              {
-                "opacity-100": showLoader,
-                "opacity-0 pointer-events-none": !showLoader,
-              }
-            )}
-          />
+          {showLoader ? (
+            <div className="absolute bottom-0 right-0 mr-8 mb-8">
+              <LoadingText />
+            </div>
+          ) : null}
           <MinigameIframes />
         </ConnectKitProvider>
       </SIWEProvider>
