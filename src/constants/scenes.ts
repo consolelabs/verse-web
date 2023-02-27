@@ -14,5 +14,5 @@ export enum SceneKey {
 
   MINIMAP = "minimap",
 
-  INVENTORY = "inventory",
+  PROFILE = "profile",
 }

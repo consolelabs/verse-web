@@ -31,7 +31,7 @@ export const Game = () => {
             <span className="-mt-2">Games</span>
           </GridButtons.Button>
           <GridButtons.Button
-            onClick={() => setActiveSceneKey(SceneKey.INVENTORY)}
+            onClick={() => setActiveSceneKey(SceneKey.PROFILE)}
           >
             <img src="/assets/images/inventory.png" className="w-80px h-80px" />
             <span className="-mt-2">Inventory</span>

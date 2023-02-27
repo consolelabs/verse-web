@@ -1724,13 +1724,6 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify-json/svg-spinners@^1.1.0":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@iconify-json/svg-spinners/-/svg-spinners-1.1.1.tgz#3e693f81f3b948de83819ff2a4548bfa7d58f80a"
-  integrity sha512-Zoe9Pw8Ljfx4dYX5+7Bl8VrerReqJfv1OGee0+Tclg9FWw0Bqrd5TfNseRvXYWNXVIHt+V13uzcTfzpfSTi9Lw==
-  dependencies:
-    "@iconify/types" "*"
-
 "@iconify/types@*", "@iconify/types@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@iconify/types/-/types-2.0.0.tgz#ab0e9ea681d6c8a1214f30cd741fe3a20cc57f57"

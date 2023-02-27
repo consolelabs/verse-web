@@ -7,7 +7,6 @@ import { MainMenu } from "./MainMenu";
 import { MinigameMenu } from "./MinigameMenu";
 import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
-import { Profile } from "./Profile";
 
 export const Menu = () => {
   const { menu, closeMenu, getActiveScene } = useGameState();
@@ -40,8 +39,6 @@ export const Menu = () => {
       }
       case MenuKey.LEADERBOARD:
         return <Leaderboard />;
-      case MenuKey.PROFILE:
-        return <Profile />;
       default: {
         return null;
       }
