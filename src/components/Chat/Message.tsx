@@ -1,15 +1,25 @@
 import clsx from "clsx";
-import { utils } from "ethers";
 import React, { useMemo } from "react";
+import { MessageItem } from "types/chat";
 
 const DISCORD_CDN = "https://cdn.discordapp.com";
 
-type Props = {
-  sender: string;
-  content: string;
-};
+function Divider({ text }: Extract<MessageItem, { isDivider: true }>) {
+  return (
+    <div className="flex items-center relative pt-5 pb-4">
+      <div className="rounded h-1px w-full bg-gray-600" />
+      <span className="px-1 bg-#140F29 text-11px absolute left-1/2 -translate-x-1/2 text-gray-400 font-semibold">
+        {text}
+      </span>
+    </div>
+  );
+}
 
-export const Message = ({ sender, content }: Props) => {
+export const Message = (messageItem: MessageItem) => {
+  if (messageItem.isDivider) return <Divider {...messageItem} />;
+  const { author, content, timestamp } = messageItem;
+  const localeTime = new Date(timestamp);
+
   const contentRender = useMemo(() => {
     let tempContent = content;
     const fragments: any[] = [];
@@ -64,7 +74,7 @@ export const Message = ({ sender, content }: Props) => {
             }?size=96&quality=lossless`}
             className={clsx("inline-block", {
               "w-6 h-6": emojiSize === "small",
-              "w-12 h-12": emojiSize === "large",
+              "w-10 h-10": emojiSize === "large",
             })}
           />
         );
@@ -77,23 +87,24 @@ export const Message = ({ sender, content }: Props) => {
   return (
     <div className="flex items-start gap-x-1">
       <div className="flex flex-col max-w-full leading-normal">
-        <div className="flex gap-x-1 items-start">
-          <span className="text-blue font-semibold">
-            {utils.isAddress(sender)
-              ? `${sender.slice(0, 5)}...${sender.slice(-5)}`
-              : sender}
-            :
+        <div className="flex flex-wrap gap-x-1 items-start">
+          <span className="text-white whitespace-pre-wrap break-words max-w-full">
+            <span className="text-gray whitespace-pre text-11px">
+              [{String(localeTime.getHours()).padStart(2, "0")}:
+              {String(localeTime.getMinutes()).padStart(2, "0")}]{" "}
+            </span>
+            <span className="flex-shrink-0 text-blue font-semibold">
+              {author.bot && author.address
+                ? `${author.address.slice(0, 4)}...${author.address.slice(-4)}`
+                : author.username
+                ? author.username
+                : `Unknown`}
+              :{" "}
+            </span>
+            {contentRender.map((f, index) => (
+              <React.Fragment key={index}>{f}</React.Fragment>
+            ))}
           </span>
-          {/* <span className="text-gray whitespace-pre text-11px"> */}
-          {/*   [{timestamp.toString().slice(0, 4)}] */}
-          {/* </span> */}
-          <div className="flex flex-col min-w-0">
-            <p className="text-white whitespace-pre-wrap break-words">
-              {contentRender.map((f, index) => (
-                <React.Fragment key={index}>{f}</React.Fragment>
-              ))}
-            </p>
-          </div>
         </div>
       </div>
     </div>
