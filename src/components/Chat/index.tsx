@@ -14,6 +14,34 @@ const PAGE_SIZE = 20;
 
 const topic = `chat:${CHAT_CHANNEL_ID}`;
 
+function injectDates(data: Array<MessageItem>) {
+  const insertIndex = new Map<number, string>();
+  for (let i = 0; i < data.length; i++) {
+    const d = data[i];
+    const nextD = data[i + 1];
+    if (d?.isDivider || nextD?.isDivider || !nextD) continue;
+    const { timestamp } = d;
+    const { timestamp: nextTimestamp } = nextD;
+    const localeTime = new Date(timestamp);
+    const nextLocaleTime = new Date(nextTimestamp);
+    console.log(localeTime, nextLocaleTime);
+    if (localeTime.getDate() !== nextLocaleTime.getDate())
+      insertIndex.set(
+        i + 1,
+        `${new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+          nextLocaleTime
+        )} ${nextLocaleTime.getDate()} ${nextLocaleTime.getFullYear()}`
+      );
+  }
+
+  const newData = [...data];
+  insertIndex.forEach((text, idx) => {
+    newData.splice(idx, 0, { isDivider: true, text });
+  });
+
+  return newData;
+}
+
 export const Chat = () => {
   const input = useRef<HTMLInputElement>(null);
   const chatFrame = useRef<any>(null);
@@ -30,7 +58,8 @@ export const Chat = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [lastMessage, setLastMessage] = useState<MessageItem>();
+  const [lastMessage, setLastMessage] =
+    useState<Extract<MessageItem, { isDivider: false }>>();
   const [hasLoadedAll, setHasLoadedAll] = useState(false);
   const [showLoadedAllButton, setShowLoadedAllButton] = useState(false);
   const [visibleMessageIds, setVisibleMessageIds] = useState<number[]>([]);
@@ -99,7 +128,9 @@ export const Chat = () => {
           setHasLoadedAll(true);
         }
 
-        setMessages((o) => [...data, ...(o || [])]);
+        const dataWithDates = injectDates(data);
+
+        setMessages((o) => [...dataWithDates, ...(o || [])]);
       })
       .catch((error) => {
         setError(error);
@@ -175,12 +206,14 @@ export const Chat = () => {
         });
         channel.on("chat:edit_msg", ({ message: newMessage }) => {
           setMessages((o = []) => {
-            return o.map((m) => (m.id === newMessage.id ? newMessage : m));
+            return o.map((m) =>
+              m.isDivider ? m : m.id === newMessage.id ? newMessage : m
+            );
           });
         });
         channel.on("chat:delete_msg", ({ message: newMessage }) => {
           setMessages((o = []) => {
-            return o.filter((m) => m.id !== newMessage.id);
+            return o.filter((m) => (m.isDivider ? m : m.id !== newMessage.id));
           });
         });
 
@@ -203,7 +236,7 @@ export const Chat = () => {
         // FIXME: There's a slight flick here. Not sure if it's possible to fix it considering that we are rendering items
         // with virtualizer :thinking:
         virtualizer.scrollToIndex(
-          messages.findIndex((m) => m.id === lastMessage?.id)
+          messages.findIndex((m) => !m.isDivider && m.id === lastMessage?.id)
         );
         setIsLoadingMore(false);
       }
@@ -242,7 +275,7 @@ export const Chat = () => {
     return (
       <div className="absolute bottom-0 w-full max-h-full text-xs bg-#140F29/30 rounded-lg px-4 py-2 mt-auto overflow-auto flex flex-col-reverse">
         {visibleMessageIds.reverse().map((id) => {
-          const msg = (messages || []).find((m) => m.id === id);
+          const msg = (messages || []).find((m) => !m.isDivider && m.id === id);
 
           if (!msg) {
             return null;
@@ -250,17 +283,7 @@ export const Chat = () => {
 
           return (
             <div key={id} className="py-0.5">
-              <Message
-                sender={
-                  msg.author?.bot
-                    ? `${msg.author.address.slice(
-                        0,
-                        4
-                      )}...${msg.author.address.slice(-4)}`
-                    : msg.author.username
-                }
-                content={msg.content}
-              />
+              <Message {...msg} />
             </div>
           );
         })}
@@ -341,17 +364,7 @@ export const Chat = () => {
                       ref={virtualizer.measureElement}
                       className="py-0.5"
                     >
-                      <Message
-                        sender={
-                          msg.author?.bot
-                            ? `${msg.author.address.slice(
-                                0,
-                                4
-                              )}...${msg.author.address.slice(-4)}`
-                            : msg.author.username
-                        }
-                        content={msg.content}
-                      />
+                      <Message {...msg} />
                     </div>
                   );
                 })}
@@ -362,7 +375,14 @@ export const Chat = () => {
             <button
               className="text-sm bg-gray-600 mx-auto self-center rounded px-2 py-1 block my-4 absolute top-0"
               type="button"
-              onClick={() => setLastMessage(messages?.[0])}
+              onClick={() =>
+                setLastMessage(
+                  messages?.find((m) => !m.isDivider) as Extract<
+                    MessageItem,
+                    { isDivider: false }
+                  >
+                )
+              }
             >
               {isLoading ? "Loading..." : "Load more"}
             </button>
