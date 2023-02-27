@@ -69,8 +69,6 @@ export class Character extends Phaser.GameObjects.GameObject {
   public nameText?: Phaser.GameObjects.Text;
   private originalHeight = 0;
 
-  private shadow?: Phaser.GameObjects.Image;
-
   constructor(props: Config) {
     const {
       scene,
@@ -148,12 +146,6 @@ export class Character extends Phaser.GameObjects.GameObject {
               this.instance.depth = this.instance.y / TILE_SIZE;
             }
 
-            // Create a shadow
-            this.shadow = this.scene.add.image(
-              this.instance.x,
-              this.instance.y,
-              "char-shadow"
-            );
             if (name) {
               this.nameText = this.scene.add.text(
                 this.instance.x,
@@ -173,8 +165,6 @@ export class Character extends Phaser.GameObjects.GameObject {
                 }
               );
             }
-            this.shadow.setScale(0.175);
-            this.shadow.setAlpha(0.5);
             r(this.instance);
           }
         }
@@ -196,7 +186,6 @@ export class Character extends Phaser.GameObjects.GameObject {
 
   destroy(...args: any) {
     this.instance?.destroy(...args);
-    this.shadow?.destroy(...args);
     super.destroy(...args);
   }
 
@@ -221,20 +210,18 @@ export class Character extends Phaser.GameObjects.GameObject {
   }
 
   hide() {
-    if (!this.instance || !this.shadow) return;
+    if (!this.instance) return;
     this.instance.setActive(false).setVisible(false);
-    this.shadow.setVisible(false);
   }
 
   show() {
-    if (!this.instance || !this.shadow) return;
+    if (!this.instance) return;
     this.instance.setActive(true).setVisible(true);
-    this.shadow.setVisible(true);
   }
 
   // Update this character as a followee
   update() {
-    if (!this.instance || !this.shadow) return;
+    if (!this.instance) return;
     const followee = this.followee;
 
     if (followee?.instance) {
@@ -274,8 +261,6 @@ export class Character extends Phaser.GameObjects.GameObject {
 
     // Update object depth based on y
     this.instance.depth = this.instance.y / TILE_SIZE;
-    this.shadow.setPosition(this.instance.x, this.instance.y);
-    this.shadow.setDepth(this.instance.y / 2 / TILE_SIZE);
     this.nameText?.setPosition(
       this.instance.x - this.nameText.width / 2,
       this.instance.y - this.originalHeight - this.nameText.height * 1.125

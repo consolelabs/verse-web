@@ -24,7 +24,6 @@ function injectDates(data: Array<MessageItem>) {
     const { timestamp: nextTimestamp } = nextD;
     const localeTime = new Date(timestamp);
     const nextLocaleTime = new Date(nextTimestamp);
-    console.log(localeTime, nextLocaleTime);
     if (localeTime.getDate() !== nextLocaleTime.getDate())
       insertIndex.set(
         i + 1,

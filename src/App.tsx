@@ -1,22 +1,39 @@
 import { WagmiConfig, createClient, useAccount } from "wagmi";
 import { ConnectKitProvider, getDefaultClient, SIWEProvider } from "connectkit";
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { Game } from "ui/hud/Game";
-import { Pod } from "ui/hud/Pod";
-import { Menu } from "./components/Menu";
-import { CharSelect } from "ui/hud/CharSelect";
+import { Menu } from "components/Menu";
 import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
 import { MinigameIframes } from "components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
 
 import { PublicServerAnnouncement } from "components/PublicServerAnnouncement";
-import { Inventory } from "components/Inventory";
 import { LoadingText } from "components/LoadingText";
 import { Transition } from "@headlessui/react";
+
+const CharSelect = React.lazy(() =>
+  import("./ui/hud/CharSelect.js").then(({ CharSelect }) => ({
+    default: CharSelect,
+  }))
+);
+const Game = React.lazy(() =>
+  import("./ui/hud/Game.js").then(({ Game }) => ({
+    default: Game,
+  }))
+);
+const Pod = React.lazy(() =>
+  import("./ui/hud/Pod/index.js").then(({ Pod }) => ({
+    default: Pod,
+  }))
+);
+const Inventory = React.lazy(() =>
+  import("./components/Inventory.js").then(({ Inventory }) => ({
+    default: Inventory,
+  }))
+);
 
 const siweConfig = {
   getNonce: async () => Date.now().toString(),
@@ -201,7 +218,7 @@ const App = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            {contentRender}
+            <React.Suspense>{contentRender}</React.Suspense>
           </Transition>
           <Menu />
           <Toaster

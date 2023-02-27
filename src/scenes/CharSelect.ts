@@ -26,8 +26,6 @@ export default class CharSelect extends Phaser.Scene {
       "/assets/images/char-select/light.png"
     );
     this.load.image("TV-head-base.png", "/characters/tv-head/TV-head-base.png");
-    // Load character shadow
-    this.load.image("char-shadow", "/characters/shadow.png");
   }
 
   loadPlayer() {
