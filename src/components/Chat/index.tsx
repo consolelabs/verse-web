@@ -6,15 +6,13 @@ import GameMap from "scenes/Game/Map";
 import SimpleBar from "simplebar-react";
 import { useAccount } from "wagmi";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { API_BASE_URL } from "envs";
+import { API_BASE_URL, CHAT_CHANNEL_ID } from "envs";
 import { MessageItem } from "types/chat";
 import debounce from "lodash.debounce";
-import { Transition } from "@headlessui/react";
 
 const PAGE_SIZE = 20;
 
-const channel_id = "1076195173454843934";
-const topic = `chat:${channel_id}`;
+const topic = `chat:${CHAT_CHANNEL_ID}`;
 
 export const Chat = () => {
   const input = useRef<HTMLInputElement>(null);
@@ -83,13 +81,17 @@ export const Chat = () => {
     }
 
     fetch(
-      `${API_BASE_URL}/discord/channels/${channel_id}/messages?limit=${PAGE_SIZE}${before}`,
+      `${API_BASE_URL}/discord/channels/${CHAT_CHANNEL_ID}/messages?limit=${PAGE_SIZE}${before}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
         },
       }
     )
+      .then((res) => {
+        if (res.ok) return res;
+        throw new Error();
+      })
       .then((res) => res.json())
       .then((data) => {
         // Mark end of the channel
@@ -161,7 +163,7 @@ export const Chat = () => {
     addChannel(
       topic,
       {
-        channel_id,
+        channel_id: CHAT_CHANNEL_ID,
         msg_amount: PAGE_SIZE,
       },
       async (channel) => {
