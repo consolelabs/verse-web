@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 export class TitleBg {
   instance!: Phaser.GameObjects.Image;
+  logo!: Phaser.GameObjects.Image;
 
   constructor(props: { scene: Phaser.Scene }) {
     const { scene } = props;
@@ -21,16 +22,19 @@ export class TitleBg {
         cameraHeight / this.instance.height
       )
     );
+    this.instance.setDepth(9999);
 
-    const logo = scene.add.image(0, 0, "logo");
+    this.logo = scene.add.image(0, 0, "logo");
 
-    logo.setScale(
+    this.logo.setScale(
       Math.max(
         cameraWidth / this.instance.width,
         cameraHeight / this.instance.height
-      ) * 0.85
+      ) * 0.75
     );
 
-    logo.setPosition(window.innerWidth / 2, logo.height / 1.5);
+    this.logo.setDepth(9999);
+
+    this.logo.setPosition(window.innerWidth / 2, this.logo.height / 2);
   }
 }

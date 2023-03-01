@@ -3,12 +3,11 @@ import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
-
-const Overview = React.lazy(() => import("./Overview/index.js"));
-const Inventory = React.lazy(() => import("./Inventory.js"));
+import Overview from "./Overview";
+import Inventory from "./Inventory";
 
 export const Profile = () => {
-  const { activeSceneKey, setActiveSceneKey } = useGameState();
+  const { setActiveSceneKey } = useGameState();
   const [close, setClose] = useState(false);
   const [viewKey, setViewKey] = useState<"overview" | "inventory">("overview");
 
@@ -34,7 +33,7 @@ export const Profile = () => {
 
   return (
     <Transition
-      show={activeSceneKey === SceneKey.PROFILE && !close}
+      show={!close}
       appear
       enter="transition-all duration-150"
       enterFrom="opacity-0 scale-104"
@@ -64,6 +63,7 @@ export const Profile = () => {
               className="text-white -mt-16 pt-20 px-12 text-xl flex-1 flex justify-evenly items-center"
             >
               <button
+                type="button"
                 onClick={() => setClose(true)}
                 className="flex flex-col items-center flex-1 opacity-30 hover:opacity-100 transition-opacity duration-75 ease-in-out"
               >
@@ -86,6 +86,7 @@ export const Profile = () => {
                   <React.Fragment key={`profile-${b.id}`}>
                     <div className="w-1px bg-gray h-1/2" />
                     <button
+                      type="button"
                       onClick={() => setViewKey(b.id as any)}
                       className={clsx(
                         "flex flex-col items-center flex-1 transition-opacity duration-75 ease-in-out",

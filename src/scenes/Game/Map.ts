@@ -39,7 +39,6 @@ export default class GameMap extends Phaser.Scene {
 
   preload() {
     this.bg = new TitleBg({ scene: this });
-    this.bg.instance.setDepth(9999);
     // Launch interaction scene
     const interactionScene = this.scene.get(
       SceneKey.GAME_INTERACTION
@@ -241,28 +240,38 @@ export default class GameMap extends Phaser.Scene {
         this.matter.add.gameObject(instance);
         instance.setFixedRotation();
 
-        this.cameras.main
-          .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-            this.bg.instance.destroy(true);
-
-            // Follow the first character
-            this.cameras.main.startFollow(instance, true, 0.05, 0.05);
-
-            // Fade in
-            this.cameras.main
-              .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
-                useGameState.setState({ activeSceneKey: SceneKey.GAME });
-
-                this.scene.launch(SceneKey.MINIMAP, {
-                  player: this.player,
-                  layers: createdLayers,
-                  w: this.map.widthInPixels,
-                  h: this.map.heightInPixels,
-                });
-              })
-              .fadeIn(200);
+        this.tweens
+          .create({
+            targets: this.bg.logo,
+            props: {
+              alpha: 0,
+            },
+            duration: 200,
+            ease: "easeInOut",
           })
-          .fadeOut(200);
+          .once(Phaser.Tweens.Events.TWEEN_COMPLETE, () => {
+            this.cameras.main
+              .once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                // Follow the first character
+                this.cameras.main.startFollow(instance, true, 0.05, 0.05);
+
+                // Fade in
+                this.cameras.main
+                  .once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
+                    useGameState.setState({ activeSceneKey: SceneKey.GAME });
+
+                    this.scene.launch(SceneKey.MINIMAP, {
+                      player: this.player,
+                      layers: createdLayers,
+                      w: this.map.widthInPixels,
+                      h: this.map.heightInPixels,
+                    });
+                  })
+                  .fadeIn(200);
+              })
+              .fadeOut(200);
+          })
+          .play();
       });
     }
   }
