@@ -1,5 +1,5 @@
-import { Chat } from "components/Chat";
-import { GridButtons } from "components/GridButtons";
+import { Chat } from "ui/components/Chat";
+import { GridButtons } from "ui/components/GridButtons";
 import { Menu } from "constants/game";
 import { SceneKey } from "constants/scenes";
 import { useEffect } from "react";

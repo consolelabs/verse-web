@@ -4,14 +4,14 @@ import { ConnectKitProvider, getDefaultClient, SIWEProvider } from "connectkit";
 import React, { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { Menu } from "components/Menu";
+import { Menu } from "ui/components/Menu";
 import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
-import { MinigameIframes } from "components/minigames/MinigameIframes";
+import { MinigameIframes } from "ui/components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
 
-import { PublicServerAnnouncement } from "components/PublicServerAnnouncement";
-import { LoadingText } from "components/LoadingText";
+import { PublicServerAnnouncement } from "ui/components/PublicServerAnnouncement";
+import { LoadingText } from "ui/components/LoadingText";
 import { Transition } from "@headlessui/react";
 
 const CharSelect = React.lazy(() =>
@@ -30,7 +30,7 @@ const Pod = React.lazy(() =>
   }))
 );
 const Inventory = React.lazy(() =>
-  import("./components/Inventory.js").then(({ Inventory }) => ({
+  import("./ui/components/Inventory.js").then(({ Inventory }) => ({
     default: Inventory,
   }))
 );
@@ -101,8 +101,9 @@ const App = () => {
       case SceneKey.POD: {
         return <Pod />;
       }
-      case SceneKey.INVENTORY:
+      case SceneKey.INVENTORY: {
         return <Inventory />;
+      }
       default: {
         return null;
       }

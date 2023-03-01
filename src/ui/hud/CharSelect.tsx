@@ -6,8 +6,8 @@ import { NFT } from "types/nfts";
 import { CharacterSpine } from "types/character";
 import CharSelectScene from "scenes/CharSelect";
 import { API_POD_BASE_URL, NEKO_COL, RABBY_COL } from "envs";
-import { CharStats } from "components/char-select/CharStats";
-import { CharSelectGridSkeleton } from "components/skeletons/CharSelectGridSkeleton";
+import { CharStats } from "ui/components/char-select/CharStats";
+import { CharSelectGridSkeleton } from "ui/components/skeletons/CharSelectGridSkeleton";
 import SimpleBar from "simplebar-react";
 
 const COLLECTION_TO_SPINE: Record<string, CharacterSpine> = {

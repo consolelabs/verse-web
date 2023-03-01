@@ -1,6 +1,6 @@
 import { useGameState } from "stores/game";
-import { GradientContainer } from "components/GradientContainer";
-import { useEffect, useMemo, useState } from "react";
+import { GradientContainer } from "ui/components/GradientContainer";
+import { useEffect, useState } from "react";
 import Postmate from "postmate";
 
 export const MinigameIframes = () => {
@@ -8,23 +8,12 @@ export const MinigameIframes = () => {
   const { minigame, getActiveScene, stopMinigame, updateGamePoints } =
     useGameState();
 
-  const src = useMemo(() => {
-    switch (minigame) {
-      case "tripod": {
-        return "https://tripod-web.vercel.app/";
-      }
-      default: {
-        return "";
-      }
-    }
-  }, [minigame]);
-
   useEffect(() => {
-    if (src) {
+    if (minigame) {
       const hs = new Postmate({
         container: document.getElementById("minigame-frame"),
-        url: src,
-        name: minigame,
+        url: minigame.src,
+        name: minigame.name,
         classListArray: ["flex-1"],
       });
 
@@ -41,9 +30,9 @@ export const MinigameIframes = () => {
     } else {
       child?.destroy();
     }
-  }, [src]);
+  }, [minigame]);
 
-  if (!src) {
+  if (!minigame) {
     return null;
   }
 
@@ -54,7 +43,10 @@ export const MinigameIframes = () => {
         contentClassName="h-full flex flex-col overflow-hidden"
       >
         <div className="h-12 flex justify-between items-center p-4">
-          <span className="capitalize text-white">{minigame}</span>
+          <div className="flex space-x-2">
+            <img src={minigame.logoSrc} className="w-6 h-6" />
+            <span className="capitalize text-white">{minigame.name}</span>
+          </div>
           <button
             type="button"
             className="border-none outline-none p-0 bg-transparent text-white"

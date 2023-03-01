@@ -3,7 +3,7 @@ import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
 import PodMap from "scenes/Pod/Map";
 import { PodBuilderPanel } from "./PodBuilderPanel";
-import { GridButtons } from "components/GridButtons";
+import { GridButtons } from "ui/components/GridButtons";
 
 export const Pod = () => {
   const { getActiveScene, setActiveSceneKey } = useGameState();

@@ -18,13 +18,14 @@ import { API_BASE_URL, API_POD_BASE_URL, API_WEBSOCKET_URL } from "envs";
 import { CharacterSpine } from "types/character";
 import { toast } from "react-hot-toast";
 import Minimap from "scenes/Game/Minimap";
-import { Menu, Minigame } from "constants/game";
+import { Menu } from "constants/game";
 import { utils } from "ethers";
 import * as Sentry from "@sentry/react";
 import unionBy from "lodash.unionby";
 import { Socket, Channel } from "phoenix";
 import { Ad } from "types/ads";
 import produce from "immer";
+import { Minigame } from "types/games";
 
 export const DEFAULT_PLAYER = {
   name: "Nez",
@@ -361,9 +362,23 @@ export const useGameState = create<State>((set, get) => ({
 
   menu: undefined,
   openMenu: (m: Menu) => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = false;
+      game.input.keyboard.enabled = false;
+    }
+
     set(() => ({ menu: m }));
   },
   closeMenu: () => {
+    const game = get().game;
+
+    if (game) {
+      game.input.enabled = true;
+      game.input.keyboard.enabled = true;
+    }
+
     set(() => ({ menu: undefined }));
   },
 

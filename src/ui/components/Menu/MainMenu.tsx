@@ -1,4 +1,4 @@
-import { SceneKey } from "../../constants/scenes";
+import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
 import { GridButtons } from "../GridButtons";
 import { Menu as MenuKey } from "constants/game";
