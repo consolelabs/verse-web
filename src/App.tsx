@@ -13,6 +13,7 @@ import { SiweMessage } from "siwe";
 import { PublicServerAnnouncement } from "ui/components/PublicServerAnnouncement";
 import { LoadingText } from "ui/components/LoadingText";
 import { Transition } from "@headlessui/react";
+import clsx from "clsx";
 
 const CharSelect = React.lazy(() =>
   import("./ui/hud/CharSelect.js").then(({ CharSelect }) => ({
@@ -29,9 +30,10 @@ const Pod = React.lazy(() =>
     default: Pod,
   }))
 );
-const Inventory = React.lazy(() =>
-  import("./ui/components/Inventory.js").then(({ Inventory }) => ({
-    default: Inventory,
+
+const Profile = React.lazy(() =>
+  import("./components/Profile/index.js").then(({ Profile }) => ({
+    default: Profile,
   }))
 );
 
@@ -101,9 +103,8 @@ const App = () => {
       case SceneKey.POD: {
         return <Pod />;
       }
-      case SceneKey.INVENTORY: {
-        return <Inventory />;
-      }
+      case SceneKey.PROFILE:
+        return <Profile />;
       default: {
         return null;
       }
@@ -211,7 +212,9 @@ const App = () => {
           <PublicServerAnnouncement />
           <Transition
             show={hudVisible}
-            className="fixed top-0 left-0 w-full h-full"
+            className={clsx("fixed top-0 left-0 w-full h-full", {
+              "z-10": activeSceneKey === SceneKey.PROFILE,
+            })}
             enter="transition-all duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"

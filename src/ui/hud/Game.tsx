@@ -1,5 +1,6 @@
 import { Chat } from "ui/components/Chat";
 import { GridButtons } from "ui/components/GridButtons";
+import { ProfileBar } from "ui/components/ProfileBar";
 import { Menu } from "constants/game";
 import { SceneKey } from "constants/scenes";
 import { useEffect } from "react";
@@ -21,6 +22,7 @@ export const Game = () => {
 
   return (
     <>
+      <ProfileBar />
       <Chat />
       <div className="fixed bottom-0 right-0 mb-4 mr-8 flex">
         <GridButtons rows={1} cols={3} gap="sm">
@@ -29,7 +31,7 @@ export const Game = () => {
             <span className="-mt-2">Games</span>
           </GridButtons.Button>
           <GridButtons.Button
-            onClick={() => setActiveSceneKey(SceneKey.INVENTORY)}
+            onClick={() => setActiveSceneKey(SceneKey.PROFILE)}
           >
             <img src="/assets/images/inventory.png" className="w-80px h-80px" />
             <span className="-mt-2">Inventory</span>

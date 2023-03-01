@@ -96,6 +96,7 @@ interface State {
   ) => Promise<void>;
   socket?: Socket;
   token?: string;
+  userDiscordId?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
   getSession: () => Promise<void>;
   login: (signature: `0x${string}`, message: string) => Promise<void>;
@@ -240,6 +241,7 @@ export const useGameState = create<State>((set, get) => ({
       set({
         token: session.token,
         account: session.address,
+        userDiscordId: session.user_discord_id,
         socket,
       });
       Sentry.setUser({ id: session.address });
@@ -265,6 +267,7 @@ export const useGameState = create<State>((set, get) => ({
       set({
         token: data.token,
         account: address,
+        userDiscordId: data.user.discord_id,
         socket,
       });
       localStorage.setItem(
@@ -272,6 +275,7 @@ export const useGameState = create<State>((set, get) => ({
         JSON.stringify({
           token: data.token,
           address,
+          user_discord_id: data.user.discord_id,
           chainId: 1,
         })
       );
@@ -290,6 +294,7 @@ export const useGameState = create<State>((set, get) => ({
       set({
         minigame: undefined,
         token: undefined,
+        userDiscordId: undefined,
         account: undefined,
         nfts: undefined,
         previewChar: DEFAULT_PLAYER,
@@ -301,6 +306,7 @@ export const useGameState = create<State>((set, get) => ({
     );
     return true;
   },
+  userDiscordId: undefined,
   account: undefined,
 
   nfts: undefined,
