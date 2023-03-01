@@ -4,6 +4,7 @@ import Phaser from "phaser";
 import { Ad } from "types/ads";
 import { SceneKey } from "../constants/scenes";
 import { useGameState } from "stores/game";
+import { parse } from "zipson";
 
 export default class WorldLoader extends Phaser.Scene {
   constructor() {
@@ -25,14 +26,15 @@ export default class WorldLoader extends Phaser.Scene {
     )
       return;
 
-    Object.entries<string>(config.maps).forEach((entry) => {
-      this.load.tilemapTiledJSON(entry[0], entry[1]);
+    Object.entries<{ compress: string }>(config.maps).forEach((entry) => {
+      this.load.text(entry[0], entry[1].compress);
     });
 
     this.load.json("ads", `${API_BASE_URL}/ads?map_id=${0}`);
   }
 
   create() {
+    const config = this.cache.json.get("config");
     this.load.once(Phaser.Loader.Events.COMPLETE, () => {
       this.cache.json.remove("ads");
       this.scene.start(SceneKey.GAME);
@@ -45,6 +47,12 @@ export default class WorldLoader extends Phaser.Scene {
     ads.forEach((ad: Ad) => {
       this.load.image(`ads_${ad.code}`, ad.image_url);
     });
+
+    Object.keys(config.maps).forEach((mapId) => {
+      const jsonMap = this.cache.text.get(mapId);
+      this.load.tilemapTiledJSON(mapId, parse(jsonMap));
+    });
+
     this.load.start();
   }
 }

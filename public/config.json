@@ -1,6 +1,9 @@
 {
   "main": "map",
   "maps": {
-    "map": "/tiles/map.json"
+    "map": {
+      "raw": "/tiles/map.json",
+      "compress": "/tiles/map-compressed.json"
+    }
   }
 }

@@ -26,26 +26,6 @@ export const ProfileBar = () => {
               <Avatar address={account} size={43} />
             </div>
           </button>
-          <div
-            style={{
-              background:
-                "linear-gradient(to bottom, #B0B0B0, #858485, #717071, #494949)",
-            }}
-            className="flex items-center shadow-xl rounded-r-md relative border-1.5 border-#424343 w-100px h-20px -ml-1 pl-1"
-          >
-            <div
-              style={{
-                background:
-                  "linear-gradient(to bottom, #D8C2FD, #9656FF, #8049D9, #563093)",
-              }}
-              className="absolute top-0 h-full left-0 w-2/3"
-            />
-            <img
-              src="/assets/images/xp.png"
-              className="z-10 absolute h-8 -left-1"
-              alt=""
-            />
-          </div>
         </div>
       </div>
     </>
