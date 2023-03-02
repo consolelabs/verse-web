@@ -1,5 +1,10 @@
 import { WagmiConfig, createClient, useAccount } from "wagmi";
-import { ConnectKitProvider, getDefaultClient, SIWEProvider } from "connectkit";
+import {
+  useSIWE,
+  ConnectKitProvider,
+  getDefaultClient,
+  SIWEProvider,
+} from "connectkit";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
@@ -14,6 +19,7 @@ import { PublicServerAnnouncement } from "ui/components/PublicServerAnnouncement
 import { LoadingText } from "ui/components/LoadingText";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
+import useSWR from "swr";
 
 const CharSelect = React.lazy(() =>
   import("./ui/hud/CharSelect.js").then(({ CharSelect }) => ({
@@ -53,15 +59,7 @@ const siweConfig = {
     await useGameState.getState().login(signature, message);
     return true;
   },
-  getSession: async () => {
-    const sessionStr = localStorage.getItem("session");
-    if (sessionStr) {
-      const session = JSON.parse(sessionStr);
-      useGameState.setState({ token: session.token });
-      return session;
-    }
-    return null;
-  },
+  getSession: useGameState.getState().getSession,
   signOut: useGameState.getState().logout,
   signOutOnNetworkChange: false,
 };
@@ -81,10 +79,17 @@ const App = () => {
     game,
     showLoader,
     init,
-    getSession,
     addChannel,
     hudVisible,
+    logout,
+    getSession,
+    token,
   } = useGameState();
+
+  const { signOut: signOutSIWE } = useSIWE();
+  const { data: stillValid } = useSWR(["current-user", token], async () =>
+    getSession()
+  );
 
   const [fps] = useState(-1);
   const { isConnected } = useAccount();
@@ -128,13 +133,19 @@ const App = () => {
   useEffect(() => {
     if (!game) {
       init();
-      getSession();
     }
 
     return () => {
       socket?.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (stillValid === null && token) {
+      logout();
+      signOutSIWE?.();
+    }
+  }, [stillValid]);
 
   useEffect(() => {
     if (!isConnected && activeSceneKey !== SceneKey.BOOT) {
@@ -197,53 +208,58 @@ const App = () => {
   }, [isConnected]);
 
   return (
+    <>
+      <div className="fixed top-0 left-0 w-full h-full bg-black" id="game" />
+      {game && fps >= 0 && (
+        <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
+          {Math.floor(fps)}
+        </div>
+      )}
+      <PublicServerAnnouncement />
+      <Transition
+        show={hudVisible}
+        className={clsx("fixed top-0 left-0 w-full h-full", {
+          "z-10": activeSceneKey === SceneKey.PROFILE,
+        })}
+        enter="transition-all duration-200"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-all duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <React.Suspense>{contentRender}</React.Suspense>
+      </Transition>
+      <Menu />
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: "#151321",
+            color: "#FFFFFF",
+          },
+        }}
+      />
+      {showLoader ? (
+        <div className="absolute bottom-0 right-0 mr-8 mb-8">
+          <LoadingText />
+        </div>
+      ) : null}
+      <MinigameIframes />
+    </>
+  );
+};
+
+function AppWrapper() {
+  return (
     <WagmiConfig client={client}>
       <SIWEProvider {...siweConfig}>
         <ConnectKitProvider>
-          <div
-            className="fixed top-0 left-0 w-full h-full bg-black"
-            id="game"
-          />
-          {game && fps >= 0 && (
-            <div className="fixed top-0 left-0 w-12 h-8 flex items-center justify-center color-white text-xl font-bold bg-black/50">
-              {Math.floor(fps)}
-            </div>
-          )}
-          <PublicServerAnnouncement />
-          <Transition
-            show={hudVisible}
-            className={clsx("fixed top-0 left-0 w-full h-full", {
-              "z-10": activeSceneKey === SceneKey.PROFILE,
-            })}
-            enter="transition-all duration-200"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-all duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <React.Suspense>{contentRender}</React.Suspense>
-          </Transition>
-          <Menu />
-          <Toaster
-            position="bottom-center"
-            toastOptions={{
-              style: {
-                background: "#151321",
-                color: "#FFFFFF",
-              },
-            }}
-          />
-          {showLoader ? (
-            <div className="absolute bottom-0 right-0 mr-8 mb-8">
-              <LoadingText />
-            </div>
-          ) : null}
-          <MinigameIframes />
+          <App />
         </ConnectKitProvider>
       </SIWEProvider>
     </WagmiConfig>
   );
-};
+}
 
-export default App;
+export default AppWrapper;
