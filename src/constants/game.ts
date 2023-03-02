@@ -3,4 +3,5 @@ export enum Menu {
   MINIGAME = "minigame",
   LEADERBOARD = "leaderboard",
   PROFILE = "profile",
+  MAILS = "mails",
 }
