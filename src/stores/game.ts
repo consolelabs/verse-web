@@ -98,7 +98,7 @@ interface State {
   token?: string;
   userDiscordId?: string;
   updateGamePoints: (d: { game: string; point: number }) => Promise<void>;
-  getSession: () => Promise<void>;
+  getSession: () => Promise<any>;
   login: (signature: `0x${string}`, message: string) => Promise<void>;
   logout: () => Promise<boolean>;
   account?: `0x${string}`;
@@ -236,16 +236,27 @@ export const useGameState = create<State>((set, get) => ({
     const sessionStr = localStorage.getItem("session");
     if (sessionStr) {
       const session = JSON.parse(sessionStr);
-      const socket = new Socket(API_WEBSOCKET_URL);
-      socket.connect();
-      set({
-        token: session.token,
-        account: session.address,
-        userDiscordId: session.user_discord_id,
-        socket,
+      const res = await fetch(`${API_BASE_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
       });
-      Sentry.setUser({ id: session.address });
+      if (res.ok) {
+        const currentUser = await res.json();
+        const { wallet, discord_id } = currentUser;
+        const socket = new Socket(API_WEBSOCKET_URL);
+        socket.connect();
+        set({
+          token: session.token,
+          account: wallet,
+          userDiscordId: discord_id,
+          socket,
+        });
+        Sentry.setUser({ id: session.address });
+        return session;
+      }
     }
+    return null;
   },
   login: async (signature: `0x${string}`, message: string) => {
     const res = await fetch(`${API_BASE_URL}/users/login`, {
