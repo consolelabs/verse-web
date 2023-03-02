@@ -20,6 +20,7 @@ import { LoadingText } from "ui/components/LoadingText";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import useSWR from "swr";
+import Avatar from "ui/components/Avatar";
 
 const CharSelect = React.lazy(() =>
   import("./ui/hud/CharSelect.js").then(({ CharSelect }) => ({
@@ -254,7 +255,11 @@ function AppWrapper() {
   return (
     <WagmiConfig client={client}>
       <SIWEProvider {...siweConfig}>
-        <ConnectKitProvider>
+        <ConnectKitProvider
+          options={{
+            customAvatar: Avatar,
+          }}
+        >
           <App />
         </ConnectKitProvider>
       </SIWEProvider>

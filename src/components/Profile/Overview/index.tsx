@@ -6,6 +6,7 @@ import { Watchlist } from "./Watchlist";
 import { Wallets } from "./Wallets";
 import { NFTs } from "./NFTs";
 import clsx from "clsx";
+import { getAvatarString } from "ui/components/Avatar";
 
 const qrCode = new QRCode({
   dotsOptions: {
@@ -95,12 +96,10 @@ export default function Profile() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ensAvatar) {
-      qrCode.update({
-        image: ensAvatar,
-        data: `https://wallet.pod.town/${account ?? ""}`,
-      });
-    }
+    qrCode.update({
+      image: ensAvatar ?? getAvatarString(account ?? ""),
+      data: `https://wallet.pod.town/${account ?? ""}`,
+    });
     if (ref.current) {
       if (ref.current.firstChild) {
         ref.current.removeChild(ref.current.firstChild);
@@ -126,21 +125,21 @@ export default function Profile() {
           <div className="flex flex-col gap-y-3">
             <Card right={<Wallets />}>
               <img
-                className="absolute h-32 opacity-20 -bottom-1/2 left-12"
+                className="absolute h-32 opacity-20 -bottom-1/4 left-12"
                 src="/assets/images/wallet.png"
                 alt=""
               />
               <p className="relative text-white whitespace-nowrap font-semibold">
                 Tracking Wallets
               </p>
-              <p className="relative text-gray text-sm">
+              <p className="relative text-gray text-sm mb-14">
                 See your favorite wallets here
               </p>
             </Card>
             <Card right={<NFTs />}>
               <img
                 className="absolute h-32 opacity-20 -bottom-1/3 left-12 -scale-x-full"
-                src="/assets/images/diamond.png"
+                src="/assets/images/nft.png"
                 alt=""
               />
               <p className="relative text-white whitespace-nowrap font-semibold">
@@ -152,13 +151,13 @@ export default function Profile() {
           <Card right={<Watchlist />} col>
             <img
               className="absolute h-32 opacity-20 top-0 right-0"
-              src="/assets/images/chart-increase.png"
+              src="/assets/images/watchlist.png"
               alt=""
             />
             <p className="relative text-white whitespace-nowrap font-semibold">
               Watchlist
             </p>
-            <p className="relative text-gray text-sm">
+            <p className="relative text-gray text-sm mb-6">
               Be updated on price changes
             </p>
           </Card>
