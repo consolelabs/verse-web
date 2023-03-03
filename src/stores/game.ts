@@ -244,7 +244,10 @@ export const useGameState = create<State>((set, get) => ({
       if (res.ok) {
         const currentUser = await res.json();
         const { wallet, discord_id } = currentUser;
-        const socket = new Socket(API_WEBSOCKET_URL);
+        let { socket } = get();
+        if (!socket) {
+          socket = new Socket(API_WEBSOCKET_URL);
+        }
         socket.connect();
         set({
           token: session.token,

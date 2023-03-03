@@ -9,13 +9,10 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { SceneKey } from "constants/scenes";
 import { useGameState } from "stores/game";
-import { Menu } from "ui/components/Menu";
 import { Boot } from "ui/hud/Boot";
 import { Toaster } from "react-hot-toast";
-import { MinigameIframes } from "ui/components/minigames/MinigameIframes";
 import { SiweMessage } from "siwe";
 
-import { PublicServerAnnouncement } from "ui/components/PublicServerAnnouncement";
 import { LoadingText } from "ui/components/LoadingText";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
@@ -42,6 +39,28 @@ const Profile = React.lazy(() =>
   import("./components/Profile/index.js").then(({ Profile }) => ({
     default: Profile,
   }))
+);
+
+const Menu = React.lazy(() =>
+  import("./ui/components/Menu/index.js").then(({ Menu }) => ({
+    default: Menu,
+  }))
+);
+
+const MinigameIframes = React.lazy(() =>
+  import("./ui/components/minigames/MinigameIframes.js").then(
+    ({ MinigameIframes }) => ({
+      default: MinigameIframes,
+    })
+  )
+);
+
+const PublicServerAnnouncement = React.lazy(() =>
+  import("./ui/components/PublicServerAnnouncement.js").then(
+    ({ PublicServerAnnouncement }) => ({
+      default: PublicServerAnnouncement,
+    })
+  )
 );
 
 const siweConfig = {
@@ -116,20 +135,6 @@ const App = () => {
       }
     }
   }, [activeSceneKey]);
-
-  // useEffect(() => {
-  //   let interval: any;
-  //
-  //   if (game) {
-  //     interval = setInterval(() => {
-  //       setFPS(game?.loop.actualFps ?? -1);
-  //     }, 1000);
-  //   }
-  //
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [game]);
 
   useEffect(() => {
     if (!game) {
@@ -206,7 +211,7 @@ const App = () => {
       channel.on("leaderboard:updated", addLeaderboardToPSA);
       return (data) => addLeaderboardToPSA(data);
     });
-  }, [isConnected]);
+  }, [isConnected, socket]);
 
   return (
     <>
@@ -216,7 +221,9 @@ const App = () => {
           {Math.floor(fps)}
         </div>
       )}
-      <PublicServerAnnouncement />
+      <React.Suspense>
+        <PublicServerAnnouncement />
+      </React.Suspense>
       <Transition
         show={hudVisible}
         className={clsx("fixed top-0 left-0 w-full h-full", {
@@ -231,7 +238,9 @@ const App = () => {
       >
         <React.Suspense>{contentRender}</React.Suspense>
       </Transition>
-      <Menu />
+      <React.Suspense>
+        <Menu />
+      </React.Suspense>
       <Toaster
         position="bottom-center"
         toastOptions={{
@@ -246,7 +255,9 @@ const App = () => {
           <LoadingText />
         </div>
       ) : null}
-      <MinigameIframes />
+      <React.Suspense>
+        <MinigameIframes />
+      </React.Suspense>
     </>
   );
 };
