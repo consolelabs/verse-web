@@ -8,7 +8,7 @@ export const ConnectButton = () => {
           <button
             onClick={show}
             type="button"
-            className="btn btn-primary-pink btn-md"
+            className="flex-1 justify-center btn btn-primary-pink btn-md"
           >
             {isConnected ? ensName ?? truncatedAddress : "connect wallet"}
           </button>
