@@ -45,6 +45,8 @@ export const Boot = () => {
     //   .fadeOut(200);
   };
 
+  return null;
+
   return (
     <div className="flex fixed flex-col justify-start items-center space-y-4 w-screen h-screen">
       <div className="flex flex-col gap-2 mt-32vh">

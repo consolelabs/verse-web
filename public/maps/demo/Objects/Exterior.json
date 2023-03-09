@@ -1,0 +1,160 @@
+{
+    "objectData": [
+        {
+            "name": "boxes_1",
+            "SpriteName": "Boxes_1"
+        },
+        {
+            "name": "cross_walk",
+            "SpriteName": "Cross walk"
+        },
+        {
+            "name": "cyber_box_a_3",
+            "SpriteName": "Cyber box A_3"
+        },
+        {
+            "name": "cyber_cube_1",
+            "SpriteName": "Cyber cube_1"
+        },
+        {
+            "name": "cyber_post",
+            "SpriteName": "Cyber post"
+        },
+        {
+            "name": "cyber_sign_blue_2",
+            "SpriteName": "Cyber sign blue_2"
+        },
+        {
+            "name": "cyber_sign_red_2",
+            "SpriteName": "Cyber sign red_2"
+        },
+        {
+            "name": "cyber_street_sign_2",
+            "SpriteName": "Cyber-street-sign_2"
+        },
+        {
+            "name": "exterior1",
+            "SpriteName": "Exterior 1_0"
+        },
+        {
+            "name": "fire_hydrant",
+            "SpriteName": "Fire hydrant"
+        },
+        {
+            "name": "garbage_bin_large_2",
+            "SpriteName": "Garbage bin large_2"
+        },
+        {
+            "name": "gate",
+            "SpriteName": "Gate"
+        },
+        {
+            "name": "junk_box_1",
+            "SpriteName": "Junk box_1"
+        },
+        {
+            "name": "layer3",
+            "SpriteName": "Layer 3"
+        },
+        {
+            "name": "layer4",
+            "SpriteName": "Layer 4"
+        },
+        {
+            "name": "layer5",
+            "SpriteName": "Layer 5"
+        },
+        {
+            "name": "layer6",
+            "SpriteName": "Layer 6"
+        },
+        {
+            "name": "layer7",
+            "SpriteName": "Layer 7"
+        },
+        {
+            "name": "light_post_blue_1",
+            "SpriteName": "Light post blue_1"
+        },
+        {
+            "name": "light_post_green_1",
+            "SpriteName": "Light post green_1"
+        },
+        {
+            "name": "light_post_pink_1",
+            "SpriteName": "Light post pink_1"
+        },
+        {
+            "name": "light_post_yellow_1",
+            "SpriteName": "Light post yellow_1"
+        },
+        {
+            "name": "random_machine_b_3",
+            "SpriteName": "Random-machine-B_3"
+        },
+        {
+            "name": "random_machine_c_2",
+            "SpriteName": "Random-machine-C_2"
+        },
+        {
+            "name": "round_reactor_2",
+            "SpriteName": "Round reactor_2"
+        },
+        {
+            "name": "stone_bench_1",
+            "SpriteName": "Stone bench_1"
+        },
+        {
+            "name": "stone_chair_2",
+            "SpriteName": "Stone chair_2"
+        },
+        {
+            "name": "traffic_cone_1",
+            "SpriteName": "Traffic cone_1"
+        },
+        {
+            "name": "traffic_light",
+            "SpriteName": "Traffic-light-1"
+        },
+        {
+            "name": "trash_can_1",
+            "SpriteName": "Trash-can_1"
+        },
+        {
+            "name": "trash_can_2",
+            "SpriteName": "Trash-can_2"
+        },
+        {
+            "name": "trash_paper_a_1",
+            "SpriteName": "Trash paper A_1"
+        },
+        {
+            "name": "trash_paper_b_2",
+            "SpriteName": "Trash paper B_2"
+        },
+        {
+            "name": "trash_paper_c_1",
+            "SpriteName": "Trash paper C_1"
+        },
+        {
+            "name": "trash_paper_d_2",
+            "SpriteName": "Trash paper D_2"
+        },
+        {
+            "name": "under_construction_sign_2",
+            "SpriteName": "Under construction sign_2"
+        },
+        {
+            "name": "underconstruction_side_1",
+            "SpriteName": "Under construction barrier 1_side_1"
+        },
+        {
+            "name": "vending_machine_2",
+            "SpriteName": "Vending-Machine_2"
+        },
+        {
+            "name": "zen_cube",
+            "SpriteName": "Zen cube"
+        }
+    ]
+}

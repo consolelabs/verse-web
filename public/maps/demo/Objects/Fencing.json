@@ -1,0 +1,16 @@
+{
+    "objectData": [
+        {
+            "name": "fencing0",
+            "SpriteName": "Fencing0_0"
+        },
+        {
+            "name": "fencing1",
+            "SpriteName": "Fencing1"
+        },
+        {
+            "name": "fencing2",
+            "SpriteName": "Fencing2"
+        }
+    ]
+}

@@ -1,0 +1,132 @@
+{
+    "objectData": [
+        {
+            "name": "apartment",
+            "SpriteName": "Apartment"
+        },
+        {
+            "name": "blueneon1",
+            "SpriteName": "BlueNeon_1"
+        },
+        {
+            "name": "blueneon2",
+            "SpriteName": "BlueNeon_2"
+        },
+        {
+            "name": "business",
+            "SpriteName": "Business"
+        },
+        {
+            "name": "chimaeak",
+            "SpriteName": "Chimaek"
+        },
+        {
+            "name": "crocodile",
+            "SpriteName": "Crocodile"
+        },
+        {
+            "name": "cyberspace",
+            "SpriteName": "CyberSpace"
+        },
+        {
+            "name": "georgamaci",
+            "SpriteName": "Georgamaci"
+        },
+        {
+            "name": "hotel",
+            "SpriteName": "Hotel"
+        },
+        {
+            "name": "japanesetext",
+            "SpriteName": "JapaneseText"
+        },
+        {
+            "name": "leftarrow",
+            "SpriteName": "LeftArrow"
+        },
+        {
+            "name": "massage",
+            "SpriteName": "Massage"
+        },
+        {
+            "name": "noodles",
+            "SpriteName": "Noodles"
+        },
+        {
+            "name": "open1",
+            "SpriteName": "Open_1"
+        },
+        {
+            "name": "open2",
+            "SpriteName": "Open_2"
+        },
+        {
+            "name": "pizza",
+            "SpriteName": "Pizza"
+        },
+        {
+            "name": "ramen",
+            "SpriteName": "Ramen"
+        },
+        {
+            "name": "rightarrow",
+            "SpriteName": "RightArrow"
+        },
+        {
+            "name": "shop1",
+            "SpriteName": "Shop_1"
+        },
+        {
+            "name": "shop2",
+            "SpriteName": "Shop_2"
+        },
+        {
+            "name": "signclose",
+            "SpriteName": "Close"
+        },
+        {
+            "name": "streetsign0",
+            "SpriteName": "StreetSign_0_0"
+        },
+        {
+            "name": "streetsign1",
+            "SpriteName": "StreetSign_1_0"
+        },
+        {
+            "name": "streetsign2",
+            "SpriteName": "StreetSign_2_0"
+        },
+        {
+            "name": "streetsign3",
+            "SpriteName": "StreetSign_3_0"
+        },
+        {
+            "name": "streetsign4",
+            "SpriteName": "StreetSign_4_0"
+        },
+        {
+            "name": "streetsign5",
+            "SpriteName": "StreetSign_5_0"
+        },
+        {
+            "name": "streetsign41",
+            "SpriteName": "StreetSign_4_1"
+        },
+        {
+            "name": "streetsign51",
+            "SpriteName": "StreetSign_5_1"
+        },
+        {
+            "name": "undercross_sign",
+            "SpriteName": "UnderCons_signboard"
+        },
+        {
+            "name": "weaponarmor",
+            "SpriteName": "WeaponArmor"
+        },
+        {
+            "name": "workshop",
+            "SpriteName": "Workshop"
+        }
+    ]
+}

@@ -1,0 +1,136 @@
+{
+    "objectData": [
+        {
+            "name": "big_grass_darker",
+            "SpriteName": "1-tree"
+        },
+        {
+            "name": "cyber_tree_blue1",
+            "SpriteName": "Cyber glowing tree blue_1"
+        },
+        {
+            "name": "cyber_tree_green1",
+            "SpriteName": "Cyber glowing tree greem_1"
+        },
+        {
+            "name": "cyber_tree_pink1",
+            "SpriteName": "Cyber glowing tree pink_1"
+        },
+        {
+            "name": "cyber_tree_yellow1",
+            "SpriteName": "Cyber glowing tree yellow_1"
+        },
+        {
+            "name": "flower_bed_2",
+            "SpriteName": "Flower bed_2"
+        },
+        {
+            "name": "flower_large7",
+            "SpriteName": "Empty flower bed_large_7"
+        },
+        {
+            "name": "flower_spot1",
+            "SpriteName": "Flowers pot 1"
+        },
+        {
+            "name": "flower_spot2",
+            "SpriteName": "Flowers pot 2"
+        },
+        {
+            "name": "glower_small3",
+            "SpriteName": "Emty flower bed_small_3"
+        },
+        {
+            "name": "large_bonsai2",
+            "SpriteName": "Large Bonsai_3"
+        },
+        {
+            "name": "levitating_blue1",
+            "SpriteName": "Levitating-potted-bonsai-blue_1"
+        },
+        {
+            "name": "levitating_bonsai1",
+            "SpriteName": "Levitating Bonsai_1"
+        },
+        {
+            "name": "levitating_pink1",
+            "SpriteName": "Levitating potted bonsai pink_1"
+        },
+        {
+            "name": "lily_pad1",
+            "SpriteName": "Lily-pads-type-A_1"
+        },
+        {
+            "name": "lily_pad2",
+            "SpriteName": "Lily pad type B_1"
+        },
+        {
+            "name": "little_flower1",
+            "SpriteName": "Little flower_1"
+        },
+        {
+            "name": "luminescent_blue1",
+            "SpriteName": "Luminescent grass - Blue_1"
+        },
+        {
+            "name": "luminescent_green1",
+            "SpriteName": "Luminescent grass - Green_1"
+        },
+        {
+            "name": "luminescent_pink1",
+            "SpriteName": "Luminescent grass - Pink_1"
+        },
+        {
+            "name": "luminescent_yellow1",
+            "SpriteName": "Luminescent grass - Yellow_1"
+        },
+        {
+            "name": "potted_bonsai_blue2",
+            "SpriteName": "Potted bonsai blue_2"
+        },
+        {
+            "name": "potted_bonsai_pink2",
+            "SpriteName": "Potted bonsai pink_2"
+        },
+        {
+            "name": "potted_plant1",
+            "SpriteName": "Potted-plant_1"
+        },
+        {
+            "name": "potted_plant2",
+            "SpriteName": "Potted-plant-B_1"
+        },
+        {
+            "name": "small_grass_bush",
+            "SpriteName": "Small grass bush"
+        },
+        {
+            "name": "stone_lotus1",
+            "SpriteName": "Stone lotus_1"
+        },
+        {
+            "name": "tree_darker1",
+            "SpriteName": "Big-tree-1"
+        },
+        {
+            "name": "tree_darker2",
+            "SpriteName": "Tree-02_Darker_1"
+        },
+        {
+            "name": "tree_darker4",
+            "SpriteName": "Tree-04_darker_2"
+        },
+        {
+            "name": "water_lily1",
+            "SpriteName": "Water-lily_1"
+        },
+        {
+            "name": "zen_sand3",
+            "SpriteName": "Zen sand_3"
+        },
+        {
+            "name": "zen_sand_stone3",
+            "SpriteName": "Zen sand with stone_3"
+        }
+    ]
+}

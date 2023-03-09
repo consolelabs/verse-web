@@ -1,0 +1,68 @@
+{
+    "objectData": [
+        {
+            "name": "ad_building_1_main",
+            "SpriteName": "Ad-Building-1_Main-building"
+        },
+        {
+            "name": "ad_building_1_signboard",
+            "SpriteName": "Ad-Building-1_Signboard"
+        },
+        {
+            "name": "ad_building_2_main",
+            "SpriteName": "Ad-Building-2_Main-Building"
+        },
+        {
+            "name": "black_market",
+            "SpriteName": "Black-Market_0"
+        },
+        {
+            "name": "lottery_tower",
+            "SpriteName": "Lottery-Tower_2"
+        },
+        {
+            "name": "pod",
+            "SpriteName": "Pod_1"
+        },
+        {
+            "name": "pod_arena",
+            "SpriteName": "Pod-Arena_0"
+        },
+        {
+            "name": "pod_auction",
+            "SpriteName": "Pod-Auction_1"
+        },
+        {
+            "name": "pod_council",
+            "SpriteName": "Tower-1"
+        },
+        {
+            "name": "pod_launcher",
+            "SpriteName": "Pod-Launcher_0"
+        },
+        {
+            "name": "pod_market1",
+            "SpriteName": "Pod-Market_4"
+        },
+        {
+            "name": "pod_vault",
+            "SpriteName": "Pod-Vault_0"
+        },
+        {
+            "name": "restaurant",
+            "SpriteName": "Restaurant"
+        },
+        {
+            "name": "small_store",
+            "SpriteName": "Small-store"
+        },
+        {
+            "name": "tarpaulin_7",
+            "SpriteName": "Tarpaulin_7"
+        },
+        {
+            "name": "triple_pod_tower",
+            "SpriteName": "Triple-Pod-Tower_1"
+        }
+    ]
+}

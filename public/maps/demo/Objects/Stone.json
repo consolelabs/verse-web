@@ -1,0 +1,52 @@
+{
+    "objectData": [
+        {
+            "name": "garden_stone_a_1",
+            "SpriteName": "Garden stone A_1"
+        },
+        {
+            "name": "garden_stone_b_2",
+            "SpriteName": "Garden stone B_2"
+        },
+        {
+            "name": "garden_stone_c_1",
+            "SpriteName": "Garden stone C_1"
+        },
+        {
+            "name": "garden_stone_d_2",
+            "SpriteName": "Garden stone D_2"
+        },
+        {
+            "name": "levitating_stone_1",
+            "SpriteName": "Levitating stone_1"
+        },
+        {
+            "name": "paving _tone_e_2",
+            "SpriteName": "Paving stone E_2"
+        },
+        {
+            "name": "paving_stone_a_1",
+            "SpriteName": "Paving stone A_1"
+        },
+        {
+            "name": "paving_stone_b_1",
+            "SpriteName": "Paving stone B_1"
+        },
+        {
+            "name": "paving_stone_c_1",
+            "SpriteName": "Paving stone C_1"
+        },
+        {
+            "name": "paving_stone_d_2",
+            "SpriteName": "Paving stone D_2"
+        },
+        {
+            "name": "paving_stone_f_1",
+            "SpriteName": "Paving stone F_1"
+        },
+        {
+            "name": "sleeping_cat_stone_1",
+            "SpriteName": "Sleeping cat stone_1"
+        }
+    ]
+}

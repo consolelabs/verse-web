@@ -1,0 +1,56 @@
+{
+    "objectData": [
+        {
+            "name": "billboard1",
+            "SpriteName": "Billboard-1"
+        },
+        {
+            "name": "billboard2",
+            "SpriteName": "Billboard-2"
+        },
+        {
+            "name": "billboard3",
+            "SpriteName": "Billboard-3"
+        },
+        {
+            "name": "billboard4",
+            "SpriteName": "Billboard-4"
+        },
+        {
+            "name": "billboard5",
+            "SpriteName": "Billboard-5"
+        },
+        {
+            "name": "billboard6",
+            "SpriteName": "Billboard-6"
+        },
+        {
+            "name": "billboard7",
+            "SpriteName": "Billboard-7"
+        },
+        {
+            "name": "billboard8",
+            "SpriteName": "Billboard-8"
+        },
+        {
+            "name": "billboard9",
+            "SpriteName": "Billboard-9"
+        },
+        {
+            "name": "billboard10",
+            "SpriteName": "Billboard-10"
+        },
+        {
+            "name": "billboard11",
+            "SpriteName": "Billboard-11"
+        },
+        {
+            "name": "billboard12",
+            "SpriteName": "Billboard-12"
+        },
+        {
+            "name": "billboard14",
+            "SpriteName": "Billboard-14"
+        }
+    ]
+}

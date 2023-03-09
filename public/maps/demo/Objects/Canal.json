@@ -1,0 +1,28 @@
+{
+    "objectData": [
+        {
+            "name": "dam_canal0",
+            "SpriteName": "DamCanal0"
+        },
+        {
+            "name": "dam_canal1",
+            "SpriteName": "DamCanal1"
+        },
+        {
+            "name": "dam_canal2",
+            "SpriteName": "DamCanal2"
+        },
+        {
+            "name": "dam_canal3",
+            "SpriteName": "DamCanal3"
+        },
+        {
+            "name": "dam_canal4",
+            "SpriteName": "DamCanal4"
+        },
+        {
+            "name": "dam_canal5",
+            "SpriteName": "DamCanal5"
+        }
+    ]
+}

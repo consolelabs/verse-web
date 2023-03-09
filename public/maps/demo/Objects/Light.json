@@ -1,0 +1,24 @@
+{
+    "objectData": [
+        {
+            "name": "japanese_garden_lamp_1",
+            "SpriteName": "Japanese garden lamp_1"
+        },
+        {
+            "name": "japanese_street_light_1",
+            "SpriteName": "Japanese Street light_1"
+        },
+        {
+            "name": "japanese_zen_lamp_1",
+            "SpriteName": "Japanese zen lamp_1"
+        },
+        {
+            "name": "random_machine_a_1",
+            "SpriteName": "Random-machine-A_1"
+        },
+        {
+            "name": "street_light_1_light",
+            "SpriteName": "Street-light_1_light"
+        }
+    ]
+}
