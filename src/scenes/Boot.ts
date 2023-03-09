@@ -100,7 +100,7 @@ export default class Boot extends Phaser.Scene {
           );
           worldBounds.max.x = Math.max(
             worldBounds.max.x,
-            tilemap.bounds_size.x
+            tilemap.bounds_position.x + tilemap.bounds_size.x
           );
           worldBounds.min.y = Math.min(
             worldBounds.min.y,
@@ -108,7 +108,7 @@ export default class Boot extends Phaser.Scene {
           );
           worldBounds.max.y = Math.max(
             worldBounds.max.y,
-            tilemap.bounds_size.y
+            tilemap.bounds_position.y + tilemap.bounds_size.y
           );
 
           // Each tilemap has an array of tile_data, which is actually the tiles
