@@ -128,7 +128,7 @@ interface State {
 
   minigame?: Minigame;
   getMinigames: (
-    params: Partial<Pagination>
+    params: Partial<Pagination> & { query?: string }
   ) => Promise<FullResponse<Minigame>>;
   startMinigame: (game: Minigame) => void;
   stopMinigame: () => void;

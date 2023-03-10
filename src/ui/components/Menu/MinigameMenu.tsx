@@ -14,11 +14,14 @@ const PAGE_SIZE = 12;
 export const MinigameMenu = () => {
   const { closeMenu, startMinigame, getActiveScene, getMinigames } =
     useGameState();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState({
+    page: 1,
+    size: PAGE_SIZE,
+    query: "",
+  });
 
-  const [page, setPage] = useState(1);
-  const { data, isLoading } = useSWR(["minigames", page], () =>
-    getMinigames({ page, size: PAGE_SIZE })
+  const { data, isLoading } = useSWR(["minigames", filter], () =>
+    getMinigames(filter)
   );
   const minigames = data?.data ?? [];
   const isLastPage = minigames.length < PAGE_SIZE;
@@ -130,7 +133,9 @@ export const MinigameMenu = () => {
         <GradientContainer className="overflow-hidden">
           <input
             id="search"
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) =>
+              setFilter((o) => ({ ...o, query: e.target.value, page: 1 }))
+            }
             placeholder="Search..."
             className="bg-black/30 px-4 py-2 !border-none !outline-none"
           />
@@ -169,8 +174,8 @@ export const MinigameMenu = () => {
         </div>
         <Pagination
           className="mt-auto"
-          page={page}
-          onChange={(v) => setPage(v)}
+          page={filter.page}
+          onChange={(v) => setFilter((o) => ({ ...o, page: v }))}
           hideOnSinglePage
           isLastPage={isLastPage}
         />
