@@ -2,37 +2,26 @@ import { useGameState } from "stores/game";
 import { GradientContainer } from "../GradientContainer";
 import { Minigame } from "types/games";
 import { Fragment, useMemo, useState } from "react";
+import useSWR from "swr";
+import Tippy from "@tippyjs/react";
+import { Pagination } from "../Pagination";
+import { MinigameGridSkeleton } from "../skeletons/MinigameGridSkeleton";
+import "tippy.js/dist/tippy.css";
 
 const CACHE_KEY = "pod-minigame-cache";
-
-const mockData: Minigame[] = [
-  {
-    thumbnailSrc: "/assets/images/title-screen-bg.jpeg",
-    logoSrc: "/minigames/tripod.png",
-    name: "Tripod",
-    description:
-      "A match-3 game where players progress by combining 3 pieces of the same type to get the next piece, all the way to the top!",
-    id: "tripod",
-    src: "https://tripod-web.vercel.app/",
-    type: "browser",
-    tags: ["puzzle", "strategy"],
-  },
-  {
-    thumbnailSrc: "/assets/images/title-screen-bg.jpeg",
-    logoSrc: "/minigames/hunger-game.webp",
-    name: "Hunger Game",
-    description:
-      "Collect points while racing to find the portal before your opponents. Just watch out for explosions!",
-    id: "hunger-game",
-    src: "https://the-hunger-game.vercel.app/",
-    type: "browser",
-    tags: ["puzzle", "team"],
-  },
-];
+const PAGE_SIZE = 12;
 
 export const MinigameMenu = () => {
-  const { closeMenu, startMinigame, getActiveScene } = useGameState();
+  const { closeMenu, startMinigame, getActiveScene, getMinigames } =
+    useGameState();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useSWR(["minigames", page], () =>
+    getMinigames({ page, size: PAGE_SIZE })
+  );
+  const minigames = data?.data ?? [];
+  const isLastPage = minigames.length < PAGE_SIZE;
 
   const updateCache = (game: Minigame) => {
     const cache = JSON.parse(window.localStorage.getItem(CACHE_KEY) || "{}");
@@ -54,13 +43,26 @@ export const MinigameMenu = () => {
     });
   };
 
+  const renderTags = (tags: string[]) => {
+    return tags.map((tag) => {
+      return (
+        <span
+          key={tag}
+          className="text-[10px] px-1.5 py-0.5 rounded text-black bg-white uppercase font-bold flex-shrink-0"
+        >
+          {tag}
+        </span>
+      );
+    });
+  };
+
   const renderGameCard = (game: Minigame) => {
     return (
-      <div className="grid-cols-1 transition-all rounded border border-#1f1f42 hover:(shadow-md shadow-#2FD4D6/30 border-#2FD4D6/30 -translate-y-[0.2rem]) overflow-hidden">
-        <img src={game.thumbnailSrc} className="aspect-16/9" />
+      <div className="grid-cols-1 transition-all rounded border border-#1f1f42 hover:(shadow-md shadow-#2FD4D6/30 border-#2FD4D6/30) overflow-hidden">
+        <img src={game.thumbnail} className="aspect-16/9 bg-white/30 w-full" />
         <div className="p-2 2xl:p-4 flex flex-col space-y-2">
           <div className="flex gap-2 items-center">
-            <img src={game.logoSrc} className="w-8 h-8" />
+            <img src={game.icon} className="w-8 h-8" />
             <div className="text-base font-bold">{game.name}</div>
           </div>
           <div
@@ -77,19 +79,21 @@ export const MinigameMenu = () => {
             Play on browser
           </div>
           <div className="flex justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-1 flex-1">
-              {game.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[10px] px-1.5 py-0.5 rounded text-black bg-white uppercase font-bold"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <Tippy
+              placement="bottom"
+              content={
+                <div className="flex flex-wrap items-center gap-1 flex-1 max-w-96 py-1">
+                  {renderTags(game.tags)}
+                </div>
+              }
+            >
+              <div className="flex items-center gap-1 flex-1 overflow-hidden relative after:block after:content-none after:absolute after:(w-16 h-full right-0 top-0 bg-gradient-linear bg-gradient-from-transparent bg-gradient-to-#140F29 bg-gradient-to-r)">
+                {renderTags(game.tags)}
+              </div>
+            </Tippy>
             <button
               type="button"
-              className="btn btn-primary-blue btn-sm text-xs 2xl:text-sm"
+              className="btn btn-primary-blue btn-sm text-xs 2xl:text-sm flex-shrink-0"
               onClick={() => {
                 play(game);
               }}
@@ -103,22 +107,18 @@ export const MinigameMenu = () => {
   };
 
   const { allGames, recentlyPlayedGames } = useMemo(() => {
-    const filteredGames = mockData.filter((game) =>
-      game.name.match(searchQuery)
-    );
-
     const cache = JSON.parse(window.localStorage.getItem(CACHE_KEY) || "{}");
-    const recentlyPlayedGames = filteredGames.filter(
+    const recentlyPlayedGames = minigames.filter(
       (game) =>
         Array.isArray(cache.recentlyPlayedGames) &&
         cache.recentlyPlayedGames.includes(game.id)
     );
 
     return {
-      allGames: filteredGames,
+      allGames: minigames,
       recentlyPlayedGames,
     };
-  }, [searchQuery]);
+  }, [minigames]);
 
   return (
     <div className="lg:w-800px 2xl:w-1200px text-white flex flex-col h-80vh overflow-hidden">
@@ -136,7 +136,7 @@ export const MinigameMenu = () => {
           />
         </GradientContainer>
       </div>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto flex flex-col">
         {recentlyPlayedGames.length > 0 && (
           <div className="mb-8">
             <div className="font-bold mb-4 uppercase text-white text-opacity-50">
@@ -155,12 +155,25 @@ export const MinigameMenu = () => {
           <div className="font-bold mb-4 uppercase text-white text-opacity-50">
             All Games
           </div>
-          <div className="grid grid-cols-2 2xl:grid-cols-3 gap-6">
-            {allGames.map((game) => {
-              return <Fragment key={game.id}>{renderGameCard(game)}</Fragment>;
-            })}
-          </div>
+          {isLoading ? (
+            <MinigameGridSkeleton />
+          ) : (
+            <div className="grid grid-cols-2 2xl:grid-cols-3 gap-6">
+              {allGames.map((game) => {
+                return (
+                  <Fragment key={game.id}>{renderGameCard(game)}</Fragment>
+                );
+              })}
+            </div>
+          )}
         </div>
+        <Pagination
+          className="mt-auto"
+          page={page}
+          onChange={(v) => setPage(v)}
+          hideOnSinglePage
+          isLastPage={isLastPage}
+        />
       </div>
     </div>
   );

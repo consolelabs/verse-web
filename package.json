@@ -41,6 +41,7 @@
     "@sentry/react": "^7.36.0",
     "@sentry/tracing": "^7.36.0",
     "@tanstack/react-virtual": "^3.0.0-beta.48",
+    "@tippyjs/react": "^4.2.6",
     "@unocss/preset-uno": "^0.48.3",
     "@unocss/transformer-variant-group": "^0.48.3",
     "@unocss/vite": "^0.48.3",

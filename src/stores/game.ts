@@ -26,6 +26,7 @@ import { Socket, Channel } from "phoenix";
 import { Ad } from "types/ads";
 import produce from "immer";
 import { Minigame } from "types/games";
+import { Pagination } from "types/apis";
 
 export const DEFAULT_PLAYER = {
   name: "Nez",
@@ -126,6 +127,9 @@ interface State {
   closeMenu: () => void;
 
   minigame?: Minigame;
+  getMinigames: (
+    params: Partial<Pagination>
+  ) => Promise<FullResponse<Minigame>>;
   startMinigame: (game: Minigame) => void;
   stopMinigame: () => void;
 
@@ -403,6 +407,12 @@ export const useGameState = create<State>((set, get) => ({
   },
 
   minigame: undefined,
+  getMinigames: (params) => {
+    const queryString = new URLSearchParams(params as any);
+    return fetch(
+      `https://game-store-api.console.so/api/v1/games?${queryString.toString()}`
+    ).then((res) => res.json());
+  },
   startMinigame: (minigame: Minigame) => {
     const game = get().game;
 

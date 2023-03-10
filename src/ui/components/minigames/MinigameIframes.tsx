@@ -12,7 +12,7 @@ export const MinigameIframes = () => {
     if (minigame) {
       const hs = new Postmate({
         container: document.getElementById("minigame-frame"),
-        url: minigame.src,
+        url: minigame.runner_url,
         name: minigame.name,
         classListArray: ["flex-1"],
       });
@@ -44,7 +44,7 @@ export const MinigameIframes = () => {
       >
         <div className="h-12 flex justify-between items-center p-4">
           <div className="flex space-x-2">
-            <img src={minigame.logoSrc} className="w-6 h-6" />
+            <img src={minigame.icon} className="w-6 h-6" />
             <span className="capitalize text-white">{minigame.name}</span>
           </div>
           <button
